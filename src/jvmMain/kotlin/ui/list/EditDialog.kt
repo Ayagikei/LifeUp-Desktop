@@ -17,7 +17,7 @@ internal fun EditDialog(
     onTextChanged: (String) -> Unit,
     onDoneChanged: (Boolean) -> Unit,
 ) {
-    Window(
+    Dialog(
         title = "Edit todo",
         onCloseRequest = onCloseClicked,
     ) {

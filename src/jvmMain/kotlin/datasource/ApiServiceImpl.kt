@@ -16,6 +16,10 @@ object ApiServiceImpl : ApiService {
     private val okHttpClient
         get() = OkHttpClientHolder.okHttpClient
 
+    override suspend fun getAppInfo(): List<Task> {
+        TODO()
+    }
+
     override suspend fun getToDoItems(): List<Task> {
         return withContext(Dispatchers.IO) {
             val request = Request.Builder().url(OkHttpClientHolder.host + "/tasks").build()

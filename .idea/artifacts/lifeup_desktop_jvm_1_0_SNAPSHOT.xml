@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="lifeup-desktop-jvm-1.0-SNAPSHOT">
+    <output-path>$PROJECT_DIR$/build/libs</output-path>
+    <root id="archive" name="lifeup-desktop-jvm-1.0-SNAPSHOT.jar">
+      <element id="module-output" name="lifeup-desktop.jvmMain" />
+    </root>
+  </artifact>
+</component>
