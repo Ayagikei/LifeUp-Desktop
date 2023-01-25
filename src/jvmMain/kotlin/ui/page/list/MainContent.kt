@@ -8,7 +8,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -19,10 +20,14 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import net.lifeupapp.lifeup.api.content.tasks.category.TaskCategory
 
 @Composable
 internal fun MainContent(
     modifier: Modifier = Modifier,
+    categoryExpanded: Boolean,
+    categories: List<TaskCategory>,
+    selectedCategory: TaskCategory?,
     items: List<TodoItem>,
     inputText: String,
     onItemClicked: (id: Long) -> Unit,
@@ -30,9 +35,46 @@ internal fun MainContent(
     onItemDeleteClicked: (id: Long) -> Unit,
     onAddItemClicked: () -> Unit,
     onInputTextChanged: (String) -> Unit,
+    onCategoryClicked: (Long) -> Unit,
+    onCategoryExpended: () -> Unit,
+    onCategoryDismissed: () -> Unit,
+    onRefreshClick: () -> Unit
 ) {
+
     Column(modifier) {
-        TopAppBar(title = { Text(text = "Todo List") })
+        TopAppBar(title = {
+            Row(
+                modifier = Modifier.clickable(
+                    onClick =
+                    onCategoryExpended
+                )
+            ) {
+                if (selectedCategory == null) {
+                    Text(text = "Todo List")
+                    Icon(Icons.Default.ArrowDropDown, "")
+                } else {
+                    Text(text = selectedCategory.name)
+                    Icon(Icons.Default.ArrowDropDown, "")
+                }
+            }
+            DropdownMenu(
+                expanded = categoryExpanded,
+                onDismissRequest = onCategoryDismissed,
+                modifier = Modifier.wrapContentSize()
+            ) {
+                categories.forEachIndexed { index, s ->
+                    DropdownMenuItem(onClick = {
+                        onCategoryClicked(s.id ?: return@DropdownMenuItem)
+                    }) {
+                        Text(text = s.name)
+                    }
+                }
+            }
+        }, backgroundColor = MaterialTheme.colors.primarySurface, elevation = 0.dp, actions = {
+            IconButton(onRefreshClick) {
+                Icon(Icons.Default.Refresh, "Refresh")
+            }
+        })
 
         Box(Modifier.weight(1F)) {
             ListContent(
@@ -108,12 +150,12 @@ private fun Item(
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        IconButton(onClick = onDeleteClicked) {
-            Icon(
-                imageVector = Icons.Default.Delete,
-                contentDescription = null
-            )
-        }
+//        IconButton(onClick = onDeleteClicked) {
+//            Icon(
+//                imageVector = Icons.Default.Delete,
+//                contentDescription = null
+//            )
+//        }
 
         Spacer(modifier = Modifier.width(MARGIN_SCROLLBAR))
     }

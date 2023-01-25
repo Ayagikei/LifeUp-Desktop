@@ -4,33 +4,62 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import datasource.ApiServiceImpl
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import kotlinx.coroutines.*
+import logger
+import net.lifeupapp.lifeup.api.content.tasks.category.TaskCategory
+import ui.GlobalStore
 import java.util.logging.Level
 import java.util.logging.Logger
 
-internal class RootStore {
+internal class RootStore(
+    private val coroutineScope: CoroutineScope
+) {
 
     init {
-        fetchTasks()
+        fetchCategories()
+    }
+
+    private fun fetchCategories() {
+        coroutineScope.launch(Dispatchers.IO) {
+            while (GlobalStore.isReadyToCall.not()) {
+                delay(1000L)
+            }
+            kotlin.runCatching {
+                ApiServiceImpl.getTaskCategories()
+            }.onSuccess {
+                it.onSuccess {
+                    if (state.currentCategoryId == null || state.currentCategoryId !in (it?.map { it.id }
+                            ?: emptyList())) {
+                        setState {
+                            copy(categories = it ?: emptyList(), currentCategoryId = it?.firstOrNull()?.id)
+                        }
+                    }
+                    fetchTasks()
+                }
+            }.onFailure {
+                logger.log(Level.SEVERE, it.stackTraceToString())
+                delay(2000L)
+            }
+        }
     }
 
     private fun fetchTasks() {
-        GlobalScope.launch {
-            kotlin.runCatching {
-                ApiServiceImpl.getToDoItems()
-            }.onSuccess {
-                Logger.getLogger("ApiServiceImpl").log(Level.FINE, Json.encodeToString(it))
-                val tasks = it.map { TodoItem(it.id ?: 0L, it.name, false) }
-                setState {
-                    copy(items = tasks)
+        coroutineScope.launch {
+            withContext(Dispatchers.IO) {
+                val currentCategoryId = state.currentCategoryId ?: return@withContext
+                kotlin.runCatching {
+                    ApiServiceImpl.getTasks(currentCategoryId)
+                }.onSuccess {
+                    it.onSuccess {
+                        val tasks = it?.map { TodoItem(it.id ?: 0L, it.name, false) } ?: emptyList()
+                        setState {
+                            copy(items = tasks)
+                        }
+                    }
+                }.onFailure {
+                    logger.log(Level.SEVERE, it.stackTraceToString())
+                    delay(2000L)
                 }
-            }.onFailure {
-                Logger.getLogger("ApiServiceImpl").log(Level.SEVERE, it.stackTraceToString())
-                delay(2000L)
             }
         }
     }
@@ -49,11 +78,12 @@ internal class RootStore {
             }
         }
         if (isDone) {
-            GlobalScope.launch {
+            coroutineScope.launch {
                 kotlin.runCatching {
                     ApiServiceImpl.completeTask(id)
                 }.onSuccess {
-                    onItemDeleteClicked(id)
+                    delay(300)
+                    fetchTasks()
                 }.onFailure {
                     Logger.getLogger("ApiServiceImpl").log(Level.SEVERE, it.stackTraceToString())
                     onItemDoneChanged(id, false)
@@ -109,18 +139,44 @@ internal class RootStore {
 
     private fun initialState(): RootState =
         RootState(
-            items = (1L..5L).map { id ->
-                TodoItem(id = id, text = "Some text $id")
-            }
+            items = emptyList()
         )
 
     private inline fun setState(update: RootState.() -> RootState) {
         state = state.update()
     }
 
+    fun onCategoryClicked(id: Long) {
+        setState {
+            copy(categoryExpanded = false, currentCategoryId = id, items = emptyList())
+        }
+        fetchTasks()
+    }
+
+    fun onCategoryExpended() {
+        setState {
+            copy(categoryExpanded = true)
+        }
+    }
+
+    fun onCategoryDismissed() {
+        setState {
+            copy(categoryExpanded = false)
+        }
+    }
+
+    fun onRefresh() {
+        fetchCategories()
+    }
+
+
     data class RootState(
+        val categories: List<TaskCategory> = emptyList(),
+        val currentCategoryId: Long? = null,
+        val categoryExpanded: Boolean = false,
         val items: List<TodoItem> = emptyList(),
         val inputText: String = "",
         val editingItemId: Long? = null,
+        val snackbarText: String? = null,
     )
 }

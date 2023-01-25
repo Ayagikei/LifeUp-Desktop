@@ -1,4 +1,3 @@
-import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
@@ -16,6 +15,7 @@ repositories {
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
 }
 
+@OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
 kotlin {
     jvm {
         compilations.all {
@@ -27,6 +27,10 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 implementation(compose.desktop.currentOs)
+                implementation(compose.materialIconsExtended)
+
+                // TODO: md3 migration
+                // implementation(compose.material3)
                 // define a BOM and its version
                 implementation("com.squareup.okhttp3:okhttp:4.10.0")
                 implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")

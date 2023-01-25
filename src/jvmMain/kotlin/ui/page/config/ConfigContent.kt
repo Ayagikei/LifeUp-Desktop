@@ -7,21 +7,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import ui.GlobalStore
 import ui.Strings
-import ui.page.list.RootStore
 import ui.theme.unimportantText
 
 @Composable
 fun ConfigContent(modifier: Modifier = Modifier) {
-    val model = remember { RootStore() }
-    val state = model.state
-
     Column(
         modifier.padding(24.dp)
     ) {

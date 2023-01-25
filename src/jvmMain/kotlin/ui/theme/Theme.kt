@@ -91,6 +91,16 @@ private val LightColors = Colors(
     secondaryVariant = md_theme_light_tertiary
 )
 
+private val Typography = androidx.compose.material.Typography(
+//    defaultFontFamily = FontFamily(
+//        Font(
+//            resource = "font/SourceHanSans-VF.ttf",
+//            weight = FontWeight.Bold,
+//            style = FontStyle.Normal
+//        )
+//    )
+)
+
 @OptIn(ExperimentalUnitApi::class)
 @get:Composable
 val androidx.compose.material.Typography.dialogTitle: TextStyle

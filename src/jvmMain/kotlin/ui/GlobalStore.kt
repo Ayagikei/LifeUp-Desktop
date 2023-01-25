@@ -14,6 +14,7 @@ import ui.text.EnStrings
 import ui.text.StringText
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.logging.Level
+import java.util.prefs.Preferences
 
 object GlobalStore {
 
@@ -29,9 +30,13 @@ object GlobalStore {
     var coinValue: Long? by mutableStateOf(null)
         private set
 
-    var ip by mutableStateOf("")
-    var port by mutableStateOf("13276")
+    val preferences = Preferences.userRoot()
 
+    var ip by mutableStateOf(preferences.get("ip", ""))
+    var port by mutableStateOf(preferences.get("port", "13276"))
+
+    var isReadyToCall = false
+        private set
 
     private var fetchCoin: Boolean = false
     private val fetchCoinFlow = flow {
@@ -50,6 +55,10 @@ object GlobalStore {
         }
     }.flowOn(AppScope.coroutineContext)
 
+    init {
+        updateIpOrPort()
+    }
+
 
     fun updateIpOrPort(ip: String = GlobalStore.ip, port: String = GlobalStore.port) {
         this.ip = ip
@@ -61,7 +70,13 @@ object GlobalStore {
             logger.log(Level.SEVERE, "update ip or port error", it)
         }.isSuccess
 
-        // fetchCoin = validHost
+        isReadyToCall = validHost
+        if (isReadyToCall) {
+            Preferences.userRoot().apply {
+                put("ip", ip)
+                put("port", port)
+            }
+        }
     }
 
     private var fetching = AtomicBoolean(false)

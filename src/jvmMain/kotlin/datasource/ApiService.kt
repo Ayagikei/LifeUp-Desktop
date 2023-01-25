@@ -1,6 +1,8 @@
 package datasource
 
 import datasource.data.Task
+import datasource.net.HttpResponse
+import net.lifeupapp.lifeup.api.content.tasks.category.TaskCategory
 
 interface ApiService {
 
@@ -11,7 +13,9 @@ interface ApiService {
 
     suspend fun getAppInfo(): List<Task>
 
-    suspend fun getToDoItems(): List<Task>
+    suspend fun getTasks(categoryId: Long): HttpResponse<List<Task>>
+
+    suspend fun getTaskCategories(): HttpResponse<List<TaskCategory>>
 
     suspend fun completeTask(id: Long)
 
