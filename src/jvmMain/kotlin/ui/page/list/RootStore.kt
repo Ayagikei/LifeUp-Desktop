@@ -1,4 +1,4 @@
-package ui.list
+package ui.page.list
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

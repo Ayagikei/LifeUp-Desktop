@@ -3,13 +3,11 @@ package ui.theme
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
-import androidx.compose.ui.unit.dp
 
 
 //private val LightColors = lightColorScheme(
@@ -102,6 +100,9 @@ val androidx.compose.material.Typography.dialogTitle: TextStyle
 @get:Composable
 val androidx.compose.material.Typography.dialogMessage: TextStyle
     get() = TextStyle(fontSize = TextUnit(14f, TextUnitType.Sp))
+
+val androidx.compose.material.Colors.unimportantText: androidx.compose.ui.graphics.Color
+    get() = onSurface.copy(alpha = 0.6f)
 
 @Composable
 fun AppTheme(

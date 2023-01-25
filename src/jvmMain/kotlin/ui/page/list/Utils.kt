@@ -1,6 +1,6 @@
 @file:JvmName("Utils")
 
-package ui.list
+package ui.page.list
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

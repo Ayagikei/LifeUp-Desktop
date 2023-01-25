@@ -6,10 +6,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import okhttp3.HttpUrl
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.long
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Request
-import ui.list.TodoItem
 
 object ApiServiceImpl : ApiService {
 
@@ -35,6 +36,14 @@ object ApiServiceImpl : ApiService {
                 .build()
             val request = Request.Builder().url(url).build()
             val response = okHttpClient.newCall(request).execute()
+        }
+    }
+
+    override suspend fun getCoin(): Long {
+        return withContext(Dispatchers.IO) {
+            val request = Request.Builder().url(OkHttpClientHolder.host + "/coin").build()
+            val response = okHttpClient.newCall(request).execute()
+            Json.decodeFromString<JsonObject>(response.body?.string() ?: "").getValue("value").jsonPrimitive.long
         }
     }
 }

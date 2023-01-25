@@ -1,9 +1,9 @@
-package ui.list
+package ui.page.list
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import ui.list.RootStore.RootState
+import ui.page.list.RootStore.RootState
 
 @Composable
 fun RootContent(modifier: Modifier = Modifier) {

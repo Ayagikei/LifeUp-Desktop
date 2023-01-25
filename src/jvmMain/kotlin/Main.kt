@@ -1,11 +1,6 @@
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.Typography
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
@@ -13,16 +8,15 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.ExperimentalUnitApi
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
-import ui.DialogStatus
+import kotlinx.coroutines.GlobalScope
 import ui.GlobalStore
-import ui.list.RootContent
+import ui.page.config.ConfigContent
+import ui.page.list.RootContent
 import ui.theme.AppTheme
-import ui.theme.dialogTitle
+import ui.view.fakeDialog
+import java.util.logging.Logger
 
 @ExperimentalUnitApi
 @Composable
@@ -47,6 +41,10 @@ fun app() {
                 Box(Modifier.fillMaxSize()) {
                     RootContent()
                 }
+            } else if (selectedItem == 2) {
+                Box(Modifier.fillMaxSize()) {
+                    ConfigContent()
+                }
             }
         }
         val dialogStatus = model.dialogStatus
@@ -56,57 +54,6 @@ fun app() {
     }
 }
 
-@ExperimentalUnitApi
-@Composable
-fun fakeDialog(dialogStatus: DialogStatus) {
-    val interactionSource = remember { MutableInteractionSource() }
-    Box(
-        modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.3f))
-            .clickable(interactionSource = interactionSource, indication = null) {
-
-            }, contentAlignment = Alignment.Center
-    ) {
-        Box(
-            modifier = Modifier.fillMaxWidth(0.55f).wrapContentSize()
-                .background(Color.White, shape = RoundedCornerShape(16.dp))
-        ) {
-            Column(
-                Modifier.wrapContentSize().padding(16.dp),
-            ) {
-                Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        dialogStatus.title,
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.dialogTitle
-                    )
-                }
-                Spacer(Modifier.height(24.dp))
-                Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        dialogStatus.message,
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.body2
-                    )
-                }
-                Spacer(Modifier.height(24.dp))
-                Row(
-                    horizontalArrangement = Arrangement.SpaceAround,
-                    verticalAlignment = Alignment.Bottom,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    TextButton(onClick = dialogStatus.negativeAction, modifier = Modifier.wrapContentSize()) {
-                        Text(dialogStatus.negativeButton)
-                    }
-                    TextButton(onClick = dialogStatus.positiveAction, modifier = Modifier.wrapContentSize()) {
-                        Text(dialogStatus.positiveButton)
-                    }
-                }
-            }
-        }
-    }
-}
 
 @OptIn(ExperimentalUnitApi::class)
 fun main() = application {
@@ -120,3 +67,8 @@ fun main() = application {
         app()
     }
 }
+
+val AppScope = GlobalScope
+
+val Any?.logger: Logger
+    get() = Logger.getLogger((this?.javaClass ?: Any::class.java).toGenericString())

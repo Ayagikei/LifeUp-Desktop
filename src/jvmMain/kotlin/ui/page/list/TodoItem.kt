@@ -1,4 +1,4 @@
-package ui.list
+package ui.page.list
 
 import kotlinx.serialization.Serializable
 

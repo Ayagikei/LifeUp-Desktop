@@ -1,33 +1,96 @@
 package ui
 
+import AppScope
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import ui.list.RootStore
+import datasource.ApiService
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.launch
+import logger
+import okhttp3.HttpUrl
 import ui.text.EnStrings
+import ui.text.StringText
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.logging.Level
 
 object GlobalStore {
 
+    private val apiService = ApiService.instance
+
     var strings = EnStrings()
+        private set
 
 
     var dialogStatus: DialogStatus? by mutableStateOf(null)
         private set
-    init {
-        showDialog("test") {
 
+    var coinValue: Long? by mutableStateOf(null)
+        private set
+
+    var ip by mutableStateOf("")
+    var port by mutableStateOf("13276")
+
+
+    private var fetchCoin: Boolean = false
+    private val fetchCoinFlow = flow {
+        while (true) {
+            if (fetchCoin) {
+                kotlin.runCatching {
+                    apiService.getCoin()
+                }.onSuccess {
+                    emit(it)
+                }.onFailure {
+                    emit(null)
+                    logger.log(Level.SEVERE, "get coin error", it)
+                }
+            }
+            kotlinx.coroutines.delay(1500)
+        }
+    }.flowOn(AppScope.coroutineContext)
+
+
+    fun updateIpOrPort(ip: String = GlobalStore.ip, port: String = GlobalStore.port) {
+        this.ip = ip
+        this.port = port
+
+        val validHost = kotlin.runCatching {
+            HttpUrl.Builder().scheme("http").host(ip).port(port = port.toIntOrNull() ?: 13276).build()
+        }.onFailure {
+            logger.log(Level.SEVERE, "update ip or port error", it)
+        }.isSuccess
+
+        // fetchCoin = validHost
+    }
+
+    private var fetching = AtomicBoolean(false)
+    fun fetchCoin() {
+        if (fetching.get()) {
+            return
+        }
+        AppScope.launch {
+            kotlin.runCatching {
+                fetching.set(true)
+                apiService.getCoin()
+            }.onSuccess {
+                coinValue = it
+            }.onFailure {
+                coinValue = null
+                logger.log(Level.SEVERE, "get coin error", it)
+            }
+            fetching.set(false)
         }
     }
 
 
-
     fun showDialog(
         title: String,
-        message: String = "这是message这是message这是message这是message这是message这是message这是message",
+        message: String = "",
         positiveButton: String = strings.yes,
         negativeButton: String = strings.cancel,
         negativeAction: () -> Unit = {
-          dialogStatus = null
+            dialogStatus = null
         },
         positiveAction: () -> Unit
     ) {
@@ -36,3 +99,6 @@ object GlobalStore {
         )
     }
 }
+
+val Strings: StringText
+    get() = GlobalStore.strings
