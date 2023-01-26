@@ -1,13 +1,17 @@
 package ui.page.list
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.Checkbox
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import base.json
+import kotlinx.serialization.encodeToString
+import ui.Strings
+import ui.page.config.Spacer8dpH
 
 @Composable
 internal fun EditDialog(
@@ -21,23 +25,28 @@ internal fun EditDialog(
         onCloseRequest = onCloseClicked,
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            TextField(
-                value = item.text,
-                modifier = Modifier.weight(1F).fillMaxWidth().sizeIn(minHeight = 192.dp),
-                label = { Text("Todo text") },
-                onValueChange = onTextChanged,
-            )
+            Text(Strings.oops_wip)
+
+            Spacer8dpH()
+
+            Text(json.encodeToString(item.task))
+//            TextField(
+//                value = item.text,
+//                modifier = Modifier.weight(1F).fillMaxWidth().sizeIn(minHeight = 192.dp),
+//                label = { Text("Todo text") },
+//                onValueChange = onTextChanged,
+//            )
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Row {
-                Text(text = "Completed", Modifier.padding(15.dp))
-
-                Checkbox(
-                    checked = item.isDone,
-                    onCheckedChange = onDoneChanged,
-                )
-            }
+//            Row {
+//                Text(text = "Completed", Modifier.padding(15.dp))
+//
+//                Checkbox(
+//                    checked = item.isDone,
+//                    onCheckedChange = onDoneChanged,
+//                )
+//            }
         }
     }
 }

@@ -85,11 +85,11 @@ internal fun MainContent(
             )
         }
 
-        Input(
-            text = inputText,
-            onAddClicked = onAddItemClicked,
-            onTextChanged = onInputTextChanged
-        )
+//        Input(
+//            text = inputText,
+//            onAddClicked = onAddItemClicked,
+//            onTextChanged = onInputTextChanged
+//        )
     }
 }
 

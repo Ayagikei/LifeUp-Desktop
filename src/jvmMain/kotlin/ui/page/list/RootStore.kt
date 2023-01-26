@@ -53,7 +53,10 @@ internal class RootStore(
                     ApiServiceImpl.getTasks(currentCategoryId)
                 }.onSuccess {
                     it.onSuccess {
-                        val tasks = it?.map { TodoItem(it.id ?: 0L, it.name, false) } ?: emptyList()
+                        val tasks = it?.filterNot {
+                            // drop the not started tasks
+                            it.startTime >= System.currentTimeMillis()
+                        }?.map { TodoItem(it.id ?: 0L, it.name, it, false) } ?: emptyList()
                         setState {
                             copy(items = tasks)
                         }
@@ -99,15 +102,15 @@ internal class RootStore(
     }
 
     fun onAddItemClicked() {
-        setState {
-            val newItem =
-                TodoItem(
-                    id = items.maxOfOrNull(TodoItem::id)?.plus(1L) ?: 1L,
-                    text = inputText,
-                )
-
-            copy(items = items + newItem, inputText = "")
-        }
+//        setState {
+//            val newItem =
+//                TodoItem(
+//                    id = items.maxOfOrNull(TodoItem::id)?.plus(1L) ?: 1L,
+//                    text = inputText,
+//                )
+//
+//            copy(items = items + newItem, inputText = "")
+//        }
     }
 
     fun onInputTextChanged(text: String) {

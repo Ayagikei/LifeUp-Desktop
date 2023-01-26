@@ -58,4 +58,7 @@ class EnStrings : StringText {
 
     override val coin: String
         get() = "Coin"
+
+    override val oops_wip: String
+        get() = "Oops, this feature is still in development"
 }

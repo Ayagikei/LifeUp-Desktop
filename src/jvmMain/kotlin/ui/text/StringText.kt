@@ -2,7 +2,6 @@ package ui.text
 
 interface StringText {
 
-
     val language: String
 
     val appName: String
@@ -45,4 +44,5 @@ interface StringText {
 
     val coin: String
 
+    val oops_wip: String
 }

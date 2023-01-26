@@ -59,4 +59,7 @@ class ZhCNStrings : StringText {
 
     override val coin: String
         get() = "金币"
+
+    override val oops_wip: String
+        get() = "糟糕，小开发还没做这个功能！\n（欢迎前往 Github 贡献代码）"
 }
