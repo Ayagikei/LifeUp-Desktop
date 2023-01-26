@@ -18,6 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import ui.AppStore
 import ui.AppStoreImpl
+import ui.Strings
 import ui.page.Screen
 import ui.page.config.ConfigScreen
 import ui.page.list.TasksScreen
@@ -31,31 +32,40 @@ import java.util.logging.Logger
 @Preview
 fun app() {
     AppTheme {
-        var selectedItem by remember { mutableStateOf(0) }
-        val items = listOf("Home", "Status", "Shop", "Achi.", " Settings")
-        val icons = listOf(
-            Icons.Filled.List,
-            Icons.Filled.Person,
-            Icons.Filled.ShoppingCart,
-            Icons.Filled.Star,
-            Icons.Filled.Settings,
-        )
+
         val coroutineScope: CoroutineScope = rememberCoroutineScope()
         val globalStore = remember { AppStoreImpl(coroutineScope) }
         val scaffoldState: ScaffoldState = rememberScaffoldState()
 
         val navController by rememberNavController(startDestination = Screen.Tasks.route)
+        var selectedItem by remember { mutableStateOf(0) }
 
         CompositionLocalProvider(
             AppStore provides globalStore
         ) {
+            val items = listOf(
+                Strings.module_tasks,
+                Strings.module_status,
+                Strings.module_shop,
+                Strings.module_achievements,
+                Strings.module_settings
+            )
+            val icons = listOf(
+                Icons.Filled.List,
+                Icons.Filled.Person,
+                Icons.Filled.ShoppingCart,
+                Icons.Filled.Star,
+                Icons.Filled.Settings,
+            )
+
             Scaffold(
                 scaffoldState = scaffoldState
             ) {
                 Row {
                     NavigationRail {
                         items.forEachIndexed { index, item ->
-                            NavigationRailItem(icon = { Icon(icons[index], contentDescription = item) },
+                            NavigationRailItem(
+                                icon = { Icon(icons[index], contentDescription = item) },
                                 label = { Text(item) },
                                 selected = selectedItem == index,
                                 onClick = {

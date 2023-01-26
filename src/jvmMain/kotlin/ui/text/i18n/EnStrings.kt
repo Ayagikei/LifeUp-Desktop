@@ -1,4 +1,6 @@
-package ui.text
+package ui.text.i18n
+
+import ui.text.StringText
 
 class EnStrings : StringText {
 
@@ -11,6 +13,16 @@ class EnStrings : StringText {
     override val yes: String
         get() = "Yes"
 
+    override val module_tasks: String
+        get() = "Tasks"
+    override val module_status: String
+        get() = "Status"
+    override val module_shop: String
+        get() = "Shop"
+    override val module_achievements: String
+        get() = "Achi."
+    override val module_settings: String
+        get() = "Settings"
     override val base_config: String
         get() = "Base"
 
@@ -43,4 +55,7 @@ class EnStrings : StringText {
 
     override val total_exp_display: String
         get() = "Total exp: %d"
+
+    override val coin: String
+        get() = "Coin"
 }

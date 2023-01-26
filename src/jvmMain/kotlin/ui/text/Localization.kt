@@ -1,17 +1,21 @@
 package ui.text
 
+import logger
+import ui.text.i18n.EnStrings
+import ui.text.i18n.ZhCNStrings
 import java.util.*
+import java.util.logging.Level
 
 object Localization {
+
+    private fun getAllLanguage(): List<StringText> {
+        return listOf(EnStrings(), ZhCNStrings())
+    }
+
     fun get(): StringText {
-        Locale.getDefault().language.let {
-            if (it == "zh") {
-                // TODO
-                return EnStrings()
-            } else {
-                return EnStrings()
-            }
-        }
+        val preferLanguage = Locale.getDefault().language
+        logger.log(Level.INFO, "prefer language: $preferLanguage")
+        return getAllLanguage().firstOrNull { it.language == preferLanguage } ?: EnStrings()
     }
 
 

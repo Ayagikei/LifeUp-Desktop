@@ -127,7 +127,7 @@ private fun CoinRow(
         Spacer(modifier = Modifier.width(8.dp))
 
         Text(
-            text = AnnotatedString("Coin"),
+            text = AnnotatedString(Strings.coin),
             modifier = Modifier.weight(1F).align(Alignment.CenterVertically),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis

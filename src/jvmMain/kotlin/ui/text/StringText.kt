@@ -2,9 +2,20 @@ package ui.text
 
 interface StringText {
 
+
     val language: String
 
     val appName: String
+
+    val module_tasks: String
+
+    val module_status: String
+
+    val module_shop: String
+
+    val module_achievements: String
+
+    val module_settings: String
 
     val cancel: String
 
@@ -31,4 +42,7 @@ interface StringText {
     val to_next_exp_display: String
 
     val total_exp_display: String
+
+    val coin: String
+
 }
