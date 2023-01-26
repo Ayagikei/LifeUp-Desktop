@@ -1,10 +1,10 @@
 package ui
 
-import AppScope
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.*
+import base.OkHttpClientHolder
 import datasource.ApiService
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
@@ -16,7 +16,9 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.logging.Level
 import java.util.prefs.Preferences
 
-object GlobalStore {
+class AppStoreImpl(
+    private val coroutineScope: CoroutineScope
+) {
 
     private val apiService = ApiService.instance
 
@@ -26,6 +28,7 @@ object GlobalStore {
 
     var dialogStatus: DialogStatus? by mutableStateOf(null)
         private set
+
 
     var coinValue: Long? by mutableStateOf(null)
         private set
@@ -53,14 +56,14 @@ object GlobalStore {
             }
             kotlinx.coroutines.delay(1500)
         }
-    }.flowOn(AppScope.coroutineContext)
+    }.flowOn(kotlinx.coroutines.Dispatchers.IO)
 
     init {
         updateIpOrPort()
     }
 
 
-    fun updateIpOrPort(ip: String = GlobalStore.ip, port: String = GlobalStore.port) {
+    fun updateIpOrPort(ip: String = this.ip, port: String = this.port) {
         this.ip = ip
         this.port = port
 
@@ -72,6 +75,7 @@ object GlobalStore {
 
         isReadyToCall = validHost
         if (isReadyToCall) {
+            OkHttpClientHolder.updateHost(ip, port)
             Preferences.userRoot().apply {
                 put("ip", ip)
                 put("port", port)
@@ -84,7 +88,7 @@ object GlobalStore {
         if (fetching.get()) {
             return
         }
-        AppScope.launch {
+        coroutineScope.launch {
             kotlin.runCatching {
                 fetching.set(true)
                 apiService.getCoin()
@@ -112,8 +116,12 @@ object GlobalStore {
         dialogStatus = DialogStatus(
             title, message, positiveButton, negativeButton, positiveAction, negativeAction
         )
+        MaterialTheme
     }
 }
 
+val AppStore = compositionLocalOf<AppStoreImpl> { error("AppStore error") }
+
 val Strings: StringText
-    get() = GlobalStore.strings
+    @Composable
+    get() = AppStore.current.strings

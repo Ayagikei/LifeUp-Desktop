@@ -4,12 +4,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import ui.AppStore
 import ui.page.list.RootStore.RootState
 
 @Composable
 fun RootContent(modifier: Modifier = Modifier) {
     val coroutineScope = rememberCoroutineScope()
-    val model = remember { RootStore(coroutineScope) }
+    val globalStore = AppStore.current
+    val model = remember { RootStore(coroutineScope, globalStore) }
     val state = model.state
 
     MainContent(

@@ -7,12 +7,13 @@ import datasource.ApiServiceImpl
 import kotlinx.coroutines.*
 import logger
 import net.lifeupapp.lifeup.api.content.tasks.category.TaskCategory
-import ui.GlobalStore
+import ui.AppStoreImpl
 import java.util.logging.Level
 import java.util.logging.Logger
 
 internal class RootStore(
-    private val coroutineScope: CoroutineScope
+    private val coroutineScope: CoroutineScope,
+    private val globalStore: AppStoreImpl
 ) {
 
     init {
@@ -21,7 +22,7 @@ internal class RootStore(
 
     private fun fetchCategories() {
         coroutineScope.launch(Dispatchers.IO) {
-            while (GlobalStore.isReadyToCall.not()) {
+            while (globalStore.isReadyToCall.not()) {
                 delay(1000L)
             }
             kotlin.runCatching {

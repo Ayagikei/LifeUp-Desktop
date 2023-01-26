@@ -11,12 +11,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import ui.GlobalStore
+import ui.AppStore
 import ui.Strings
 import ui.theme.unimportantText
 
 @Composable
 fun ConfigContent(modifier: Modifier = Modifier) {
+    val globalStore = AppStore.current
     Column(
         modifier.padding(24.dp)
     ) {
@@ -26,15 +27,15 @@ fun ConfigContent(modifier: Modifier = Modifier) {
             text = Strings.base_config_desc, color = MaterialTheme.colors.unimportantText
         )
         Spacer16dp()
-        TextField(modifier = modifier.fillMaxWidth(), value = GlobalStore.ip, onValueChange = {
-            GlobalStore.updateIpOrPort(ip = it)
+        TextField(modifier = modifier.fillMaxWidth(), value = globalStore.ip, onValueChange = {
+            globalStore.updateIpOrPort(ip = it)
         }, label = { Text(Strings.ip_address) })
         Spacer16dp()
-        TextField(modifier = modifier.fillMaxWidth(), value = GlobalStore.port, onValueChange = {
-            GlobalStore.updateIpOrPort(port = it)
+        TextField(modifier = modifier.fillMaxWidth(), value = globalStore.port, onValueChange = {
+            globalStore.updateIpOrPort(port = it)
         }, label = { Text(Strings.server_port) })
         Spacer16dp()
-        val coin = GlobalStore.coinValue
+        val coin = globalStore.coinValue
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -51,7 +52,7 @@ fun ConfigContent(modifier: Modifier = Modifier) {
                     Text(modifier = Modifier.padding(start = 8.dp), text = Strings.not_connected)
                 }
                 Button(onClick = {
-                    GlobalStore.fetchCoin()
+                    globalStore.fetchCoin()
                 }, modifier = Modifier.padding(start = 8.dp)) {
                     Text(Strings.test_connection)
                 }
@@ -65,7 +66,7 @@ fun ConfigContent(modifier: Modifier = Modifier) {
                     Text(modifier = Modifier.padding(start = 8.dp), text = Strings.connected.format(coin))
                 }
                 OutlinedButton(onClick = {
-                    GlobalStore.fetchCoin()
+                    globalStore.fetchCoin()
                 }, modifier = Modifier.padding(start = 8.dp)) {
                     Text(Strings.test_connection)
                 }

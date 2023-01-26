@@ -12,7 +12,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
-import ui.GlobalStore
+import ui.AppStore
+import ui.AppStoreImpl
 import ui.page.config.ConfigContent
 import ui.page.list.RootContent
 import ui.theme.AppTheme
@@ -33,37 +34,40 @@ fun app() {
             Icons.Filled.Star,
             Icons.Filled.Settings,
         )
-        val model = remember { GlobalStore }
-        val scaffoldState: ScaffoldState = rememberScaffoldState()
         val coroutineScope: CoroutineScope = rememberCoroutineScope()
-
-        Scaffold(
-            scaffoldState = scaffoldState
+        val globalStore = remember { AppStoreImpl(coroutineScope) }
+        val scaffoldState: ScaffoldState = rememberScaffoldState()
+        CompositionLocalProvider(
+            AppStore provides globalStore
         ) {
-            Row {
-                NavigationRail {
-                    items.forEachIndexed { index, item ->
-                        NavigationRailItem(icon = { Icon(icons[index], contentDescription = item) },
-                            label = { Text(item) },
-                            selected = selectedItem == index,
-                            onClick = { selectedItem = index })
+            Scaffold(
+                scaffoldState = scaffoldState
+            ) {
+                Row {
+                    NavigationRail {
+                        items.forEachIndexed { index, item ->
+                            NavigationRailItem(icon = { Icon(icons[index], contentDescription = item) },
+                                label = { Text(item) },
+                                selected = selectedItem == index,
+                                onClick = { selectedItem = index })
+                        }
                     }
-                }
-                if (selectedItem == 0) {
-                    Box(Modifier.fillMaxSize()) {
-                        RootContent()
-                    }
-                } else if (selectedItem == 4) {
-                    Box(Modifier.fillMaxSize()) {
-                        ConfigContent()
+                    if (selectedItem == 0) {
+                        Box(Modifier.fillMaxSize()) {
+                            RootContent()
+                        }
+                    } else if (selectedItem == 4) {
+                        Box(Modifier.fillMaxSize()) {
+                            ConfigContent()
+                        }
                     }
                 }
             }
-        }
 
-        val dialogStatus = model.dialogStatus
-        if (dialogStatus != null) {
-            fakeDialog(dialogStatus)
+            val dialogStatus = globalStore.dialogStatus
+            if (dialogStatus != null) {
+                fakeDialog(dialogStatus)
+            }
         }
     }
 }
