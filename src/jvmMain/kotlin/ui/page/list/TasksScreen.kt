@@ -8,7 +8,7 @@ import ui.AppStore
 import ui.page.list.RootStore.RootState
 
 @Composable
-fun RootContent(modifier: Modifier = Modifier) {
+fun TasksScreen(modifier: Modifier = Modifier) {
     val coroutineScope = rememberCoroutineScope()
     val globalStore = AppStore.current
     val model = remember { RootStore(coroutineScope, globalStore) }

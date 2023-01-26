@@ -1,6 +1,9 @@
 package ui.text
 
 class EnStrings : StringText {
+
+    override val language: String
+        get() = "en"
     override val appName: String
         get() = "LifeUp desktop"
     override val cancel: String
@@ -28,4 +31,16 @@ class EnStrings : StringText {
 
     override val test_connection: String
         get() = "Test"
+
+    override val status: String
+        get() = "Status"
+
+    override val level_display: String
+        get() = "Level %d"
+
+    override val to_next_exp_display: String
+        get() = "To next level: %d"
+
+    override val total_exp_display: String
+        get() = "Total exp: %d"
 }

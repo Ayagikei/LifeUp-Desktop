@@ -16,25 +16,25 @@ import ui.Strings
 import ui.theme.unimportantText
 
 @Composable
-fun ConfigContent(modifier: Modifier = Modifier) {
+fun ConfigScreen(modifier: Modifier = Modifier) {
     val globalStore = AppStore.current
     Column(
         modifier.padding(24.dp)
     ) {
         Subtitle(Strings.base_config)
-        Spacer16dp()
+        Spacer16dpH()
         Text(
             text = Strings.base_config_desc, color = MaterialTheme.colors.unimportantText
         )
-        Spacer16dp()
+        Spacer16dpH()
         TextField(modifier = modifier.fillMaxWidth(), value = globalStore.ip, onValueChange = {
             globalStore.updateIpOrPort(ip = it)
         }, label = { Text(Strings.ip_address) })
-        Spacer16dp()
+        Spacer16dpH()
         TextField(modifier = modifier.fillMaxWidth(), value = globalStore.port, onValueChange = {
             globalStore.updateIpOrPort(port = it)
         }, label = { Text(Strings.server_port) })
-        Spacer16dp()
+        Spacer16dpH()
         val coin = globalStore.coinValue
 
         Row(
@@ -85,13 +85,23 @@ fun Subtitle(text: String) {
 }
 
 @Composable
-fun Spacer16dp() {
+fun Spacer16dpH() {
     Spacer(Modifier.height(16.dp))
+}
+
+@Composable
+fun Spacer4dpH() {
+    Spacer(Modifier.height(4.dp))
+}
+
+@Composable
+fun Spacer8dpH() {
+    Spacer(Modifier.height(8.dp))
 }
 
 
 @Preview
 @Composable
 fun configContentPreview() {
-    ConfigContent()
+    ConfigScreen()
 }

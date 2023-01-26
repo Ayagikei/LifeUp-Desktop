@@ -27,6 +27,13 @@ data class HttpResponse<T>(
 
     }
 
+    fun dataOrThrow(): T {
+        if (code != SUCCESS || data == null) {
+            throw HttpException(this)
+        }
+        return data
+    }
+
     fun onSuccess(block: (T?) -> Unit): HttpResponse<T> {
         if (code == SUCCESS) {
             block(data)

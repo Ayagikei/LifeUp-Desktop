@@ -19,8 +19,9 @@ import kotlinx.coroutines.GlobalScope
 import ui.AppStore
 import ui.AppStoreImpl
 import ui.page.Screen
-import ui.page.config.ConfigContent
-import ui.page.list.RootContent
+import ui.page.config.ConfigScreen
+import ui.page.list.TasksScreen
+import ui.page.status.StatusScreen
 import ui.theme.AppTheme
 import ui.view.fakeDialog
 import java.util.logging.Logger
@@ -64,6 +65,10 @@ fun app() {
                                             navController.navigate(Screen.Tasks.route)
                                         }
 
+                                        1 -> {
+                                            navController.navigate(Screen.Status.route)
+                                        }
+
                                         4 -> {
                                             navController.navigate(Screen.Config.route)
                                         }
@@ -95,11 +100,15 @@ fun CustomNavigationHost(
 ) {
     NavigationHost(navController) {
         composable(Screen.Tasks.route) {
-            RootContent()
+            TasksScreen()
+        }
+
+        composable(Screen.Status.route) {
+            StatusScreen()
         }
 
         composable(Screen.Config.route) {
-            ConfigContent()
+            ConfigScreen()
         }
 
     }.build()

@@ -5,5 +5,7 @@ sealed class Screen(val route: String) {
 
     object Config : Screen("config")
 
+    object Status : Screen("status")
+
     object Empty : Screen("empty")
 }

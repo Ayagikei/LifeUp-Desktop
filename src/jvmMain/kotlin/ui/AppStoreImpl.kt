@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import logger
 import okhttp3.HttpUrl
-import ui.text.EnStrings
+import ui.text.Localization
 import ui.text.StringText
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.logging.Level
@@ -22,7 +22,7 @@ class AppStoreImpl(
 
     private val apiService = ApiService.instance
 
-    var strings = EnStrings()
+    var strings = initStrings()
         private set
 
 
@@ -40,6 +40,10 @@ class AppStoreImpl(
 
     var isReadyToCall = false
         private set
+
+    private fun initStrings(): StringText {
+        return Localization.get()
+    }
 
     private var fetchCoin: Boolean = false
     private val fetchCoinFlow = flow {

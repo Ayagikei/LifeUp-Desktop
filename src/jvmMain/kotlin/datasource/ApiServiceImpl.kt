@@ -1,12 +1,13 @@
 package datasource
 
 import base.OkHttpClientHolder
+import base.json
+import datasource.data.Skill
 import datasource.data.Task
 import datasource.net.HttpResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.long
@@ -27,7 +28,7 @@ object ApiServiceImpl : ApiService {
         return withContext(Dispatchers.IO) {
             val request = Request.Builder().url(OkHttpClientHolder.host + "/tasks/${categoryId}").build()
             val response = okHttpClient.newCall(request).execute()
-            Json.decodeFromString(response.body?.string() ?: "")
+            json.decodeFromString(response.body?.string() ?: "")
         }
     }
 
@@ -35,7 +36,7 @@ object ApiServiceImpl : ApiService {
         return withContext(Dispatchers.IO) {
             val request = Request.Builder().url(OkHttpClientHolder.host + "/tasks_categories").build()
             val response = okHttpClient.newCall(request).execute()
-            Json.decodeFromString(response.body?.string() ?: "")
+            json.decodeFromString(response.body?.string() ?: "")
         }
     }
 
@@ -53,9 +54,26 @@ object ApiServiceImpl : ApiService {
         return withContext(Dispatchers.IO) {
             val request = Request.Builder().url(OkHttpClientHolder.host + "/coin").build()
             val response = okHttpClient.newCall(request).execute()
-            Json.decodeFromString<HttpResponse<JsonObject>>(
+            json.decodeFromString<HttpResponse<JsonObject>>(
                 response.body?.string() ?: ""
             ).data!!.getValue("value").jsonPrimitive.long
         }
+    }
+
+    override suspend fun getSkills(): List<Skill> {
+        return withContext(Dispatchers.IO) {
+            val request = Request.Builder().url(OkHttpClientHolder.host + "/skills").build()
+            val response = okHttpClient.newCall(request).execute()
+            json.decodeFromString<HttpResponse<List<Skill>>>(response.body?.string() ?: "").dataOrThrow()
+        }
+    }
+
+    override fun getIconUrl(icon: String): String {
+        val host = OkHttpClientHolder.host
+        val url = (host).toHttpUrl().newBuilder()
+            .addPathSegment("files")
+            .addPathSegment(icon)
+            .build()
+        return url.toString()
     }
 }

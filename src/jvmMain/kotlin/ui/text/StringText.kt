@@ -2,6 +2,8 @@ package ui.text
 
 interface StringText {
 
+    val language: String
+
     val appName: String
 
     val cancel: String
@@ -21,4 +23,12 @@ interface StringText {
     val connected: String
 
     val test_connection: String
+
+    val status: String
+
+    val level_display: String
+
+    val to_next_exp_display: String
+
+    val total_exp_display: String
 }
