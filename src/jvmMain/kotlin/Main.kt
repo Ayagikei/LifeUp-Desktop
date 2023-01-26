@@ -10,10 +10,15 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
+import base.navcontroller.NavController
+import base.navcontroller.NavigationHost
+import base.navcontroller.composable
+import base.navcontroller.rememberNavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import ui.AppStore
 import ui.AppStoreImpl
+import ui.page.Screen
 import ui.page.config.ConfigContent
 import ui.page.list.RootContent
 import ui.theme.AppTheme
@@ -37,6 +42,9 @@ fun app() {
         val coroutineScope: CoroutineScope = rememberCoroutineScope()
         val globalStore = remember { AppStoreImpl(coroutineScope) }
         val scaffoldState: ScaffoldState = rememberScaffoldState()
+
+        val navController by rememberNavController(startDestination = Screen.Tasks.route)
+
         CompositionLocalProvider(
             AppStore provides globalStore
         ) {
@@ -49,17 +57,26 @@ fun app() {
                             NavigationRailItem(icon = { Icon(icons[index], contentDescription = item) },
                                 label = { Text(item) },
                                 selected = selectedItem == index,
-                                onClick = { selectedItem = index })
+                                onClick = {
+                                    selectedItem = index
+                                    when (selectedItem) {
+                                        0 -> {
+                                            navController.navigate(Screen.Tasks.route)
+                                        }
+
+                                        4 -> {
+                                            navController.navigate(Screen.Config.route)
+                                        }
+
+                                        else -> {
+                                            navController.navigate(Screen.Empty.route)
+                                        }
+                                    }
+                                })
                         }
                     }
-                    if (selectedItem == 0) {
-                        Box(Modifier.fillMaxSize()) {
-                            RootContent()
-                        }
-                    } else if (selectedItem == 4) {
-                        Box(Modifier.fillMaxSize()) {
-                            ConfigContent()
-                        }
+                    Box(Modifier.fillMaxSize()) {
+                        CustomNavigationHost(navController)
                     }
                 }
             }
@@ -70,6 +87,22 @@ fun app() {
             }
         }
     }
+}
+
+@Composable
+fun CustomNavigationHost(
+    navController: NavController
+) {
+    NavigationHost(navController) {
+        composable(Screen.Tasks.route) {
+            RootContent()
+        }
+
+        composable(Screen.Config.route) {
+            ConfigContent()
+        }
+
+    }.build()
 }
 
 

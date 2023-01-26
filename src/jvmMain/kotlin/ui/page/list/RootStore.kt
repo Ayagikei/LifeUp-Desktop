@@ -3,6 +3,7 @@ package ui.page.list
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import base.launchSafely
 import datasource.ApiServiceImpl
 import kotlinx.coroutines.*
 import logger
@@ -21,7 +22,7 @@ internal class RootStore(
     }
 
     private fun fetchCategories() {
-        coroutineScope.launch(Dispatchers.IO) {
+        coroutineScope.launchSafely(Dispatchers.IO) {
             while (globalStore.isReadyToCall.not()) {
                 delay(1000L)
             }

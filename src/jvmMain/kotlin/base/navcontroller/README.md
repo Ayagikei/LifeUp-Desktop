@@ -1,0 +1,1 @@
+A simple NavController solution from: https://github.com/ithamc/navigation-for-compose-for-desktop
