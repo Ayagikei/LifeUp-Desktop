@@ -4,6 +4,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.TextUnit
@@ -113,6 +114,14 @@ val androidx.compose.material.Typography.dialogMessage: TextStyle
 
 val androidx.compose.material.Colors.unimportantText: androidx.compose.ui.graphics.Color
     get() = onSurface.copy(alpha = 0.6f)
+
+val Colors.important: Color
+    get() = Color(0xFF474747)
+
+@OptIn(ExperimentalUnitApi::class)
+val androidx.compose.material.Typography.subTitle3: TextStyle
+    @Composable
+    get() = TextStyle(fontSize = TextUnit(16f, TextUnitType.Sp), color = MaterialTheme.colors.important)
 
 @Composable
 fun AppTheme(

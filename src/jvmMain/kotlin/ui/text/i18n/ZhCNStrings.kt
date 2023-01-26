@@ -15,7 +15,10 @@ class ZhCNStrings : StringText {
         get() = "状态"
     override val module_shop: String
         get() = "商店"
+
     override val module_achievements: String
+        get() = "成就"
+    override val module_achievements_short: String
         get() = "成就"
     override val module_settings: String
         get() = "设置"

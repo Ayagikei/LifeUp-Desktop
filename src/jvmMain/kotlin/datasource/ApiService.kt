@@ -1,9 +1,11 @@
 package datasource
 
+import datasource.data.Achievement
 import datasource.data.Skill
 import datasource.data.Task
+import datasource.data.TaskCategory
 import datasource.net.HttpResponse
-import net.lifeupapp.lifeup.api.content.tasks.category.TaskCategory
+import net.lifeupapp.lifeup.api.content.achievements.category.AchievementCategory
 
 interface ApiService {
 
@@ -27,4 +29,8 @@ interface ApiService {
     suspend fun getSkills(): List<Skill>
 
     fun getIconUrl(icon: String): String
+
+    suspend fun getAchievementCategories(): List<AchievementCategory>
+
+    suspend fun getAchievement(categoryId: Long): List<Achievement>
 }

@@ -20,7 +20,8 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import net.lifeupapp.lifeup.api.content.tasks.category.TaskCategory
+import datasource.data.TaskCategory
+import ui.Strings
 
 @Composable
 internal fun MainContent(
@@ -50,7 +51,7 @@ internal fun MainContent(
                 )
             ) {
                 if (selectedCategory == null) {
-                    Text(text = "Todo List")
+                    Text(text = Strings.module_tasks)
                     Icon(Icons.Default.ArrowDropDown, "")
                 } else {
                     Text(text = selectedCategory.name)

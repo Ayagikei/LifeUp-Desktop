@@ -19,8 +19,11 @@ class EnStrings : StringText {
         get() = "Status"
     override val module_shop: String
         get() = "Shop"
-    override val module_achievements: String
+    override val module_achievements_short: String
         get() = "Achi."
+
+    override val module_achievements: String
+        get() = "Achievements"
     override val module_settings: String
         get() = "Settings"
     override val base_config: String

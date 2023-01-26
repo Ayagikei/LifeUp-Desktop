@@ -12,6 +12,8 @@ interface StringText {
 
     val module_shop: String
 
+    val module_achievements_short: String
+
     val module_achievements: String
 
     val module_settings: String

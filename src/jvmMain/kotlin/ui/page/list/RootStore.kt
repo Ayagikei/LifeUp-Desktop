@@ -5,9 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import base.launchSafely
 import datasource.ApiServiceImpl
+import datasource.data.TaskCategory
 import kotlinx.coroutines.*
 import logger
-import net.lifeupapp.lifeup.api.content.tasks.category.TaskCategory
 import ui.AppStoreImpl
 import java.util.logging.Level
 import java.util.logging.Logger

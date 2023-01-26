@@ -2,8 +2,10 @@ package datasource
 
 import base.OkHttpClientHolder
 import base.json
+import datasource.data.Achievement
 import datasource.data.Skill
 import datasource.data.Task
+import datasource.data.TaskCategory
 import datasource.net.HttpResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -11,7 +13,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.long
-import net.lifeupapp.lifeup.api.content.tasks.category.TaskCategory
+import net.lifeupapp.lifeup.api.content.achievements.category.AchievementCategory
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Request
 
@@ -65,6 +67,22 @@ object ApiServiceImpl : ApiService {
             val request = Request.Builder().url(OkHttpClientHolder.host + "/skills").build()
             val response = okHttpClient.newCall(request).execute()
             json.decodeFromString<HttpResponse<List<Skill>>>(response.body?.string() ?: "").dataOrThrow()
+        }
+    }
+
+    override suspend fun getAchievementCategories(): List<AchievementCategory> {
+        return withContext(Dispatchers.IO) {
+            val request = Request.Builder().url(OkHttpClientHolder.host + "/achievement_categories").build()
+            val response = okHttpClient.newCall(request).execute()
+            json.decodeFromString<HttpResponse<List<AchievementCategory>>>(response.body?.string() ?: "").dataOrThrow()
+        }
+    }
+
+    override suspend fun getAchievement(categoryId: Long): List<Achievement> {
+        return withContext(Dispatchers.IO) {
+            val request = Request.Builder().url(OkHttpClientHolder.host + "/achievements/${categoryId}").build()
+            val response = okHttpClient.newCall(request).execute()
+            json.decodeFromString<HttpResponse<List<Achievement>>>(response.body?.string() ?: "").dataOrThrow()
         }
     }
 

@@ -20,6 +20,7 @@ import ui.AppStore
 import ui.AppStoreImpl
 import ui.Strings
 import ui.page.Screen
+import ui.page.achievement.AchievementScreen
 import ui.page.config.ConfigScreen
 import ui.page.list.TasksScreen
 import ui.page.status.StatusScreen
@@ -47,7 +48,7 @@ fun app() {
                 Strings.module_tasks,
                 Strings.module_status,
                 Strings.module_shop,
-                Strings.module_achievements,
+                Strings.module_achievements_short,
                 Strings.module_settings
             )
             val icons = listOf(
@@ -77,6 +78,10 @@ fun app() {
 
                                         1 -> {
                                             navController.navigate(Screen.Status.route)
+                                        }
+
+                                        3 -> {
+                                            navController.navigate(Screen.Achievements.route)
                                         }
 
                                         4 -> {
@@ -115,6 +120,10 @@ fun CustomNavigationHost(
 
         composable(Screen.Status.route) {
             StatusScreen()
+        }
+
+        composable(Screen.Achievements.route) {
+            AchievementScreen()
         }
 
         composable(Screen.Config.route) {

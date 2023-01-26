@@ -41,6 +41,8 @@ class AppStoreImpl(
     var isReadyToCall = false
         private set
 
+    private val fetching = AtomicBoolean(false)
+
     private fun initStrings(): StringText {
         return Localization.get()
     }
@@ -84,10 +86,11 @@ class AppStoreImpl(
                 put("ip", ip)
                 put("port", port)
             }
+            fetchCoin()
         }
     }
 
-    private var fetching = AtomicBoolean(false)
+
     fun fetchCoin() {
         if (fetching.get()) {
             return
