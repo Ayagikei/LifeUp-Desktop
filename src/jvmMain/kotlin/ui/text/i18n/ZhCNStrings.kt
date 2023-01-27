@@ -22,6 +22,10 @@ class ZhCNStrings : StringText {
         get() = "成就"
     override val module_settings: String
         get() = "设置"
+
+    override val module_feelings: String
+        get() = "感想"
+
     override val cancel: String
         get() = "取消"
     override val yes: String
@@ -65,4 +69,13 @@ class ZhCNStrings : StringText {
 
     override val oops_wip: String
         get() = "糟糕，小开发还没做这个功能！\n（欢迎前往 Github 贡献代码）"
+
+    override val btn_purchase: String
+        get() = "购买"
+
+    override val purchase_desc: String
+        get() = "从桌面版购买了 %s"
+
+    override val item_own_number: String
+        get() = "拥有: %d"
 }

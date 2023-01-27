@@ -22,6 +22,7 @@ import ui.Strings
 import ui.page.Screen
 import ui.page.achievement.AchievementScreen
 import ui.page.config.ConfigScreen
+import ui.page.feelings.FeelingsScreen
 import ui.page.item.ShopScreen
 import ui.page.list.TasksScreen
 import ui.page.status.StatusScreen
@@ -50,6 +51,7 @@ fun app() {
                 Strings.module_status,
                 Strings.module_shop,
                 Strings.module_achievements_short,
+                Strings.module_status,
                 Strings.module_settings
             )
             val icons = listOf(
@@ -57,6 +59,7 @@ fun app() {
                 Icons.Filled.Person,
                 Icons.Filled.ShoppingCart,
                 Icons.Filled.Star,
+                Icons.Filled.Book,
                 Icons.Filled.Settings
             )
 
@@ -90,6 +93,10 @@ fun app() {
                                         }
 
                                         4 -> {
+                                            navController.navigate(Screen.Feelings.route)
+                                        }
+
+                                        5 -> {
                                             navController.navigate(Screen.Config.route)
                                         }
 
@@ -133,6 +140,10 @@ fun CustomNavigationHost(
 
         composable(Screen.Achievements.route) {
             AchievementScreen()
+        }
+
+        composable(Screen.Feelings.route) {
+            FeelingsScreen()
         }
 
         composable(Screen.Config.route) {

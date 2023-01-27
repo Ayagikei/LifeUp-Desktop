@@ -1,4 +1,4 @@
-package net.lifeupapp.lifeup.api.content.feelings
+package datasource.data
 
 
 import kotlinx.serialization.Serializable

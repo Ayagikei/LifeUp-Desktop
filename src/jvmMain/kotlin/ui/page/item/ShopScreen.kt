@@ -37,6 +37,7 @@ fun ShopScreen(modifier: Modifier = Modifier) {
 
     ShopContent(
         modifier = modifier,
+        coin = coin,
         categoryExpanded = state.categoryExpanded,
         selectedCategory = state.categories.find { it.id == state.currentCategoryId && it.id != null },
         categories = state.categories,
@@ -46,7 +47,9 @@ fun ShopScreen(modifier: Modifier = Modifier) {
         onCategoryExpended = model::onCategoryExpended,
         onCategoryDismissed = model::onCategoryDismissed,
         onRefreshClick = model::onRefresh,
-        onPurchased = model::onPurchased,
+        onPurchased = {
+            model.onPurchased(it, globalStore.strings.purchase_desc.format(it.name))
+        },
     )
 
     state.editingItem?.also { item ->

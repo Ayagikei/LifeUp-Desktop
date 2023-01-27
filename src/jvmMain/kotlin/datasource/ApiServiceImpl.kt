@@ -11,8 +11,6 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.long
 import net.lifeupapp.lifeup.api.content.achievements.category.AchievementCategory
-import net.lifeupapp.lifeup.api.content.feelings.Feelings
-import net.lifeupapp.lifeup.api.content.info.Info
 import net.lifeupapp.lifeup.api.content.shop.ShopItem
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Request
@@ -120,6 +118,17 @@ object ApiServiceImpl : ApiService {
             val request = Request.Builder().url(OkHttpClientHolder.host + "/info").build()
             val response = okHttpClient.newCall(request).execute()
             json.decodeFromString<HttpResponse<Info>>(response.body?.string() ?: "").dataOrThrow()
+        }
+    }
+
+    override suspend fun purchaseItem(id: Long?, price: Long, desc: String) {
+        return withContext(Dispatchers.IO) {
+            val url = (OkHttpClientHolder.host + "/api").toHttpUrl().newBuilder()
+                .addQueryParameter("url", "lifeup://api/item?id=${id}&own_number=1&own_number_type=relative")
+                .addQueryParameter("url", "lifeup://api/penalty?type=coin&content=${desc}&number=${price}")
+                .build()
+            val request = Request.Builder().url(url).build()
+            okHttpClient.newCall(request).execute()
         }
     }
 

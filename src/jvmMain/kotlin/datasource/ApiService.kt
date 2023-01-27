@@ -3,8 +3,6 @@ package datasource
 import datasource.data.*
 import datasource.net.HttpResponse
 import net.lifeupapp.lifeup.api.content.achievements.category.AchievementCategory
-import net.lifeupapp.lifeup.api.content.feelings.Feelings
-import net.lifeupapp.lifeup.api.content.info.Info
 import net.lifeupapp.lifeup.api.content.shop.ShopItem
 
 interface ApiService {
@@ -41,4 +39,5 @@ interface ApiService {
     suspend fun getFeelings(offset: Int, limit: Int): List<Feelings>
 
     suspend fun getInfo(): Info
+    suspend fun purchaseItem(id: Long?, price: Long, desc: String)
 }

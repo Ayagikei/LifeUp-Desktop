@@ -18,6 +18,8 @@ interface StringText {
 
     val module_settings: String
 
+    val module_feelings: String
+
     val cancel: String
 
     val yes: String
@@ -47,4 +49,10 @@ interface StringText {
     val coin: String
 
     val oops_wip: String
+
+    val btn_purchase: String
+
+    val purchase_desc: String
+
+    val item_own_number: String
 }

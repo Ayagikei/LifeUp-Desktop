@@ -36,7 +36,8 @@ internal class ShopStore(
         val currentCategoryId: Long? = null,
         val categoryExpanded: Boolean = false,
         val editingItem: ShopItem? = null,
-        val coin: Long? = null
+        val coin: Long? = null,
+        val isReadyToBuyNext: Boolean = true
     )
 
     init {
@@ -64,7 +65,7 @@ internal class ShopStore(
         setState {
             copy(categoryExpanded = false, currentCategoryId = id, shopItems = emptyList())
         }
-        fetchAchievement(id)
+        fetchItems(id)
     }
 
     fun onCategoryExpended() {
@@ -120,7 +121,7 @@ internal class ShopStore(
                         )
                     }
                 }
-                fetchAchievement(state.currentCategoryId ?: return@launchSafely)
+                fetchItems(state.currentCategoryId ?: return@launchSafely)
             }.onFailure {
                 logger.log(Level.SEVERE, it.stackTraceToString())
                 delay(2000L)
@@ -130,17 +131,20 @@ internal class ShopStore(
     }
 
     // FIXME: hare may be exist a concurrent problem
-    private fun fetchAchievement(categoryId: Long) {
+    private fun fetchItems(categoryId: Long) {
         coroutineScope.launchSafely(Dispatchers.IO) {
             kotlin.runCatching {
                 apiService.getShopItems(categoryId)
             }.onSuccess { it ->
                 setState {
-                    copy(shopItems = it.map {
-                        it.copy(
-                            icon = apiService.getIconUrl(it.icon)
-                        )
-                    })
+                    copy(
+                        shopItems = it.map {
+                            it.copy(
+                                icon = apiService.getIconUrl(it.icon),
+                            )
+                        },
+                        isReadyToBuyNext = true
+                    )
                 }
             }.onFailure {
                 logger.log(Level.SEVERE, it.stackTraceToString())
@@ -150,7 +154,20 @@ internal class ShopStore(
         }
     }
 
-    fun onPurchased(shopItem: ShopItem) {
+
+    fun onPurchased(shopItem: ShopItem, desc: String) {
         //
+        setState {
+            copy(isReadyToBuyNext = false)
+        }
+        coroutineScope.launchSafely {
+            kotlin.runCatching {
+                apiService.purchaseItem(shopItem.id, shopItem.price, desc)
+            }.onSuccess {
+                onRefresh()
+            }.onFailure {
+                logger.log(Level.SEVERE, it.stackTraceToString())
+            }
+        }
     }
 }

@@ -26,6 +26,9 @@ class EnStrings : StringText {
         get() = "Achievements"
     override val module_settings: String
         get() = "Settings"
+
+    override val module_feelings: String
+        get() = "Feelings"
     override val base_config: String
         get() = "Base"
 
@@ -64,4 +67,13 @@ class EnStrings : StringText {
 
     override val oops_wip: String
         get() = "Oops, this feature is still in development"
+
+    override val btn_purchase: String
+        get() = "Purchase"
+
+    override val purchase_desc: String
+        get() = "Purchase %s from LifeUp desktop"
+
+    override val item_own_number: String
+        get() = "Owned: %d"
 }

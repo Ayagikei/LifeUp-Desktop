@@ -39,6 +39,7 @@ import java.util.logging.Level
 @Composable
 internal fun ShopContent(
     modifier: Modifier = Modifier,
+    coin: Long?,
     categoryExpanded: Boolean,
     items: List<ListItem>,
     categories: List<ShopCategory>,
@@ -90,6 +91,7 @@ internal fun ShopContent(
         Box(Modifier.weight(1F)) {
             ListContent(
                 items = items,
+                coin = coin,
                 onItemClicked = onItemClicked,
                 onPurchased = onPurchased
             )
@@ -106,6 +108,7 @@ sealed class ListItem {
 @Composable
 private fun ListContent(
     items: List<ListItem>,
+    coin: Long?,
     onItemClicked: (id: Long) -> Unit,
     onPurchased: (ShopItem) -> Unit
 ) {
@@ -122,6 +125,7 @@ private fun ListContent(
 
                     is ListItem.Item -> Item(
                         item = item.item,
+                        coin = coin,
                         onClicked = { onItemClicked(item.item.id ?: 0L) },
                         onPurchased = onPurchased
                     )
@@ -170,6 +174,7 @@ private fun CoinRow(
         val color = Color(255, 163, 0)
         Text(number.toString(), fontSize = 16.sp, fontWeight = FontWeight.Bold, color = color)
 
+        Spacer(modifier = Modifier.width(24.dp))
         Spacer(modifier = Modifier.width(MARGIN_SCROLLBAR))
     }
 }
@@ -177,6 +182,7 @@ private fun CoinRow(
 @Composable
 private fun Item(
     item: ShopItem,
+    coin: Long?,
     onClicked: () -> Unit,
     onPurchased: (ShopItem) -> Unit
 ) {
@@ -229,9 +235,17 @@ private fun Item(
                 )
             }
             Spacer4dpH()
-            Text("${item.price} ${Strings.coin}", style = MaterialTheme.typography.caption)
+            Text(
+                "${item.price} ${Strings.coin}",
+                style = MaterialTheme.typography.caption,
+                color = MaterialTheme.colors.unimportantText
+            )
             Spacer4dpH()
-            Text("Owned: ${item.ownNumber}", style = MaterialTheme.typography.caption)
+            Text(
+                Strings.item_own_number.format(item.ownNumber),
+                style = MaterialTheme.typography.caption,
+                color = MaterialTheme.colors.unimportantText
+            )
         }
 
 
@@ -247,31 +261,11 @@ private fun Item(
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.primary,
                     contentColor = MaterialTheme.colors.onPrimary
-                )
+                ),
+                enabled = coin != null && coin >= item.price
             ) {
-                Text("Buy")
+                Text(Strings.btn_purchase)
             }
-//            Text(
-//                "${item.progress}%",
-//                fontSize = 18.sp,
-//                fontWeight = FontWeight.Bold,
-//                color = Color(
-//                    getColorBetween(
-//                        (item.progress / 100.0).toFloat(),
-//                        MaterialTheme.colors.unimportantText.toArgb(),
-//                        MaterialTheme.colors.primary.toArgb()
-//                    )
-//                )
-//            )
-//            if (item.unlockedTime != 0L) {
-//                Spacer4dpH()
-//                Text(
-//                    dateTimeFormatterWithNewLine.format(item.unlockedTime),
-//                    fontSize = 12.sp,
-//                    color = MaterialTheme.colors.unimportantText,
-//                    textAlign = TextAlign.End
-//                )
-//            }
         }
 
 

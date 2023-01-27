@@ -12,6 +12,7 @@ import logger
 import okhttp3.HttpUrl
 import ui.text.Localization
 import ui.text.StringText
+import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.logging.Level
 import java.util.prefs.Preferences
@@ -19,6 +20,18 @@ import java.util.prefs.Preferences
 class AppStoreImpl(
     private val coroutineScope: CoroutineScope
 ) {
+
+    val resourceDir
+        get() = (System.getProperty("compose.application.resources.dir") ?: "").ifBlank {
+            System.getProperty("user.dir")
+        }
+
+    val cacheDir
+        get() = File(resourceDir, "cache").also {
+            if (it.exists().not()) {
+                it.mkdirs()
+            }
+        }
 
     private val apiService = ApiService.instance
 
