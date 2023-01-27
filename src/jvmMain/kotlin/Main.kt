@@ -22,6 +22,7 @@ import ui.Strings
 import ui.page.Screen
 import ui.page.achievement.AchievementScreen
 import ui.page.config.ConfigScreen
+import ui.page.item.ShopScreen
 import ui.page.list.TasksScreen
 import ui.page.status.StatusScreen
 import ui.theme.AppTheme
@@ -56,7 +57,7 @@ fun app() {
                 Icons.Filled.Person,
                 Icons.Filled.ShoppingCart,
                 Icons.Filled.Star,
-                Icons.Filled.Settings,
+                Icons.Filled.Settings
             )
 
             Scaffold(
@@ -78,6 +79,10 @@ fun app() {
 
                                         1 -> {
                                             navController.navigate(Screen.Status.route)
+                                        }
+
+                                        2 -> {
+                                            navController.navigate(Screen.Shop.route)
                                         }
 
                                         3 -> {
@@ -120,6 +125,10 @@ fun CustomNavigationHost(
 
         composable(Screen.Status.route) {
             StatusScreen()
+        }
+
+        composable(Screen.Shop.route) {
+            ShopScreen()
         }
 
         composable(Screen.Achievements.route) {

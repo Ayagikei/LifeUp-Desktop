@@ -2,10 +2,7 @@ package datasource
 
 import base.OkHttpClientHolder
 import base.json
-import datasource.data.Achievement
-import datasource.data.Skill
-import datasource.data.Task
-import datasource.data.TaskCategory
+import datasource.data.*
 import datasource.net.HttpResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -14,6 +11,9 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.long
 import net.lifeupapp.lifeup.api.content.achievements.category.AchievementCategory
+import net.lifeupapp.lifeup.api.content.feelings.Feelings
+import net.lifeupapp.lifeup.api.content.info.Info
+import net.lifeupapp.lifeup.api.content.shop.ShopItem
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Request
 
@@ -83,6 +83,43 @@ object ApiServiceImpl : ApiService {
             val request = Request.Builder().url(OkHttpClientHolder.host + "/achievements/${categoryId}").build()
             val response = okHttpClient.newCall(request).execute()
             json.decodeFromString<HttpResponse<List<Achievement>>>(response.body?.string() ?: "").dataOrThrow()
+        }
+    }
+
+    override suspend fun getShopItemCategories(): List<ShopCategory> {
+        return withContext(Dispatchers.IO) {
+            val request = Request.Builder().url(OkHttpClientHolder.host + "/items_categories").build()
+            val response = okHttpClient.newCall(request).execute()
+            json.decodeFromString<HttpResponse<List<ShopCategory>>>(response.body?.string() ?: "").dataOrThrow()
+        }
+    }
+
+    override suspend fun getShopItems(categoryId: Long): List<ShopItem> {
+        return withContext(Dispatchers.IO) {
+            val request = Request.Builder().url(OkHttpClientHolder.host + "/items/${categoryId}").build()
+            val response = okHttpClient.newCall(request).execute()
+            json.decodeFromString<HttpResponse<List<ShopItem>>>(response.body?.string() ?: "").dataOrThrow()
+        }
+    }
+
+    override suspend fun getFeelings(offset: Int, limit: Int): List<Feelings> {
+        return withContext(Dispatchers.IO) {
+            val url = (OkHttpClientHolder.host + "/feelings").toHttpUrl().newBuilder()
+                .addQueryParameter("offset", offset.toString())
+                .addQueryParameter("limit", limit.toString())
+                .build()
+
+            val request = Request.Builder().url(url).build()
+            val response = okHttpClient.newCall(request).execute()
+            json.decodeFromString<HttpResponse<List<Feelings>>>(response.body?.string() ?: "").dataOrThrow()
+        }
+    }
+
+    override suspend fun getInfo(): Info {
+        return withContext(Dispatchers.IO) {
+            val request = Request.Builder().url(OkHttpClientHolder.host + "/info").build()
+            val response = okHttpClient.newCall(request).execute()
+            json.decodeFromString<HttpResponse<Info>>(response.body?.string() ?: "").dataOrThrow()
         }
     }
 

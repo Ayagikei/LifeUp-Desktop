@@ -7,6 +7,8 @@ sealed class Screen(val route: String) {
 
     object Status : Screen("status")
 
+    object Shop : Screen("shop")
+
     object Achievements : Screen("achievements")
 
     object Empty : Screen("empty")
