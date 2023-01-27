@@ -23,8 +23,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import datasource.data.ShopCategory
+import datasource.data.ShopItem
 import logger
-import net.lifeupapp.lifeup.api.content.shop.ShopItem
 import ui.Strings
 import ui.page.config.Spacer4dpH
 import ui.page.list.MARGIN_SCROLLBAR
@@ -155,7 +155,7 @@ private fun CoinRow(
         Image(
             painter = painterResource("icons/xml/ic_coin.xml"),
             contentDescription = "coin icon",
-            modifier = Modifier.size(40.dp)
+            modifier = Modifier.size(56.dp)
         )
 
 
@@ -204,12 +204,12 @@ private fun Item(
                 remember { BitmapPainter(it) }
             },
             contentDescription = "skill icon",
-            modifier = Modifier.size(40.dp),
+            modifier = Modifier.size(56.dp),
             onError = {
                 Image(
                     painter = painterResource("icons/xml/ic_pic_loading_cir.xml"),
                     contentDescription = "skill icon",
-                    modifier = Modifier.size(40.dp)
+                    modifier = Modifier.size(56.dp)
                 )
             }
         )

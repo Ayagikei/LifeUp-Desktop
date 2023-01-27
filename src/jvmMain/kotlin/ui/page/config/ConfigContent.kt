@@ -11,6 +11,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import base.Val
 import ui.AppStore
 import ui.Strings
 import ui.theme.unimportantText
@@ -22,7 +24,7 @@ fun ConfigScreen(modifier: Modifier = Modifier) {
         modifier.padding(24.dp)
     ) {
         Subtitle(Strings.base_config)
-        Spacer16dpH()
+        Spacer24dpH()
         Text(
             text = Strings.base_config_desc, color = MaterialTheme.colors.unimportantText
         )
@@ -72,6 +74,21 @@ fun ConfigScreen(modifier: Modifier = Modifier) {
                 }
             }
         }
+        Spacer16dpH()
+        Divider()
+        Spacer16dpH()
+        Subtitle(Strings.base_version)
+        Spacer24dpH()
+        Text(
+            text = Strings.version_desc.format(
+                Val.version,
+                Val.targetLifeUpCloudVersion,
+                Val.targetLifeUpAndroidVersion
+            ),
+            color = MaterialTheme.colors.unimportantText,
+            fontSize = 14.sp
+        )
+
     }
 }
 
@@ -83,6 +100,12 @@ fun Subtitle(text: String) {
         fontWeight = FontWeight.Bold
     )
 }
+
+@Composable
+fun Spacer24dpH() {
+    Spacer(Modifier.height(24.dp))
+}
+
 
 @Composable
 fun Spacer16dpH() {

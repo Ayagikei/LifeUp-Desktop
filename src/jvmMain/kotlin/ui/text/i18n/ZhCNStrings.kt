@@ -37,6 +37,12 @@ class ZhCNStrings : StringText {
     override val base_config_desc: String
         get() = "你需要输入云人升运行的 IP 地址以及端口，以便《人升-桌面版》可以读取你的手机上的《人升》数据。IP 地址形如：192.168.1.1，你可以在《云人升》app 上看到手机的 IP 地址和端口。端口一般为 13276。"
 
+    override val base_version: String
+        get() = "版本"
+
+    override val version_desc: String
+        get() = "桌面版本: %s\n\n适配云人升版本: %s\n\n适配人升安卓版本: %s"
+
     override val ip_address: String
         get() = "Ip 地址"
 

@@ -56,7 +56,7 @@ internal class RootStore(
                         val tasks = it?.filterNot {
                             // drop the not started tasks
                             it.startTime >= System.currentTimeMillis()
-                        }?.map { TodoItem(it.id ?: 0L, it.name, it, false) } ?: emptyList()
+                        }?.map { TodoItem(it.id ?: 0L, it.nameExtended, it, false) } ?: emptyList()
                         setState {
                             copy(items = tasks)
                         }
@@ -87,7 +87,7 @@ internal class RootStore(
                 kotlin.runCatching {
                     ApiServiceImpl.completeTask(id)
                 }.onSuccess {
-                    delay(300)
+                    delay(500)
                     fetchTasks()
                 }.onFailure {
                     Logger.getLogger("ApiServiceImpl").log(Level.SEVERE, it.stackTraceToString())

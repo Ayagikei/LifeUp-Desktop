@@ -1,6 +1,7 @@
 package ui
 
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.*
 import base.OkHttpClientHolder
 import datasource.ApiService
@@ -141,6 +142,8 @@ class AppStoreImpl(
 }
 
 val AppStore = compositionLocalOf<AppStoreImpl> { error("AppStore error") }
+
+val ScaffoldState = compositionLocalOf<ScaffoldState> { error("ScaffoldState error") }
 
 val Strings: StringText
     @Composable

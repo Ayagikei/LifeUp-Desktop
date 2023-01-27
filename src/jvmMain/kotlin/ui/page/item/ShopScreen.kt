@@ -11,8 +11,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import base.json
+import datasource.data.ShopItem
 import kotlinx.serialization.encodeToString
-import net.lifeupapp.lifeup.api.content.shop.ShopItem
 import ui.AppStore
 import ui.Strings
 import ui.page.config.Spacer8dpH

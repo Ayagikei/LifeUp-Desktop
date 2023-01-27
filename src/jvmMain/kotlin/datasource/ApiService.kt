@@ -3,7 +3,6 @@ package datasource
 import datasource.data.*
 import datasource.net.HttpResponse
 import net.lifeupapp.lifeup.api.content.achievements.category.AchievementCategory
-import net.lifeupapp.lifeup.api.content.shop.ShopItem
 
 interface ApiService {
 

@@ -35,6 +35,13 @@ class EnStrings : StringText {
     override val base_config_desc: String
         get() = "In order for LifeUp Desktop to connect to your mobile phone data, you need to enter the IP address and port, such as xxx.xxx.xxx.xxx"
 
+    override val base_version: String
+        get() = "Version"
+
+    override val version_desc: String
+        get() = "LifeUp Desktop version: %s\n" +
+                "Designed for LifeUp Cloud version: %s\nDesigned for LifeUp Android version: %s"
+
     override val ip_address: String
         get() = "Ip address"
 

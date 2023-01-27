@@ -1,4 +1,4 @@
-package net.lifeupapp.lifeup.api.content.shop
+package datasource.data
 
 import kotlinx.serialization.Serializable
 

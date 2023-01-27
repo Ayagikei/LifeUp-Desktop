@@ -18,6 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import ui.AppStore
 import ui.AppStoreImpl
+import ui.ScaffoldState
 import ui.Strings
 import ui.page.Screen
 import ui.page.achievement.AchievementScreen
@@ -35,7 +36,6 @@ import java.util.logging.Logger
 @Preview
 fun app() {
     AppTheme {
-
         val coroutineScope: CoroutineScope = rememberCoroutineScope()
         val globalStore = remember { AppStoreImpl(coroutineScope) }
         val scaffoldState: ScaffoldState = rememberScaffoldState()
@@ -44,7 +44,8 @@ fun app() {
         var selectedItem by remember { mutableStateOf(0) }
 
         CompositionLocalProvider(
-            AppStore provides globalStore
+            AppStore provides globalStore,
+            ScaffoldState provides scaffoldState,
         ) {
             val items = listOf(
                 Strings.module_tasks,

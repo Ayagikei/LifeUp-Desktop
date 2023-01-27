@@ -21,7 +21,8 @@ data class Task(
     val itemId: Long,
     val words: String,
     val categoryId: Long,
-    val order: Int
+    val order: Int,
+    val nameExtended: String
 ) {
     class Builder {
         private var id: Long? = null
@@ -42,6 +43,7 @@ data class Task(
         private var words: String = ""
         private var categoryId: Long? = null
         private var order: Int = 0
+        private var nameExtended: String = ""
 
         fun setId(id: Long?) = apply { this.id = id }
 
@@ -77,6 +79,8 @@ data class Task(
 
         fun setOrder(order: Int) = apply { this.order = order }
 
+        fun setNameExtended(nameExtended: String) = apply { this.nameExtended = nameExtended }
+
         fun build(): Task {
             return Task(
                 id = id,
@@ -95,7 +99,8 @@ data class Task(
                 itemId = itemId ?: 0,
                 words = words,
                 categoryId = categoryId ?: 0,
-                order = order
+                order = order,
+                nameExtended = nameExtended
             )
         }
     }

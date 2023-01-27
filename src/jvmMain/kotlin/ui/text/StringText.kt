@@ -28,6 +28,11 @@ interface StringText {
 
     val base_config_desc: String
 
+    val base_version: String
+
+
+    val version_desc: String
+
     val ip_address: String
 
     val server_port: String
@@ -55,4 +60,5 @@ interface StringText {
     val purchase_desc: String
 
     val item_own_number: String
+
 }
