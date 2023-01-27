@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
@@ -167,6 +168,7 @@ fun main() = application {
             position = WindowPosition(alignment = Alignment.Center),
             size = DpSize(1200.dp, 900.dp)
         ),
+        icon = painterResource("icons/svg/icon.svg")
     ) {
         app()
     }

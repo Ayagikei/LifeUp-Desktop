@@ -152,12 +152,13 @@ private fun CoinRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Spacer(modifier = Modifier.width(8.dp))
-        Image(
-            painter = painterResource("icons/xml/ic_coin.xml"),
-            contentDescription = "coin icon",
-            modifier = Modifier.size(56.dp)
-        )
-
+        Box(modifier = Modifier.size(56.dp), contentAlignment = Alignment.Center) {
+            Image(
+                painter = painterResource("icons/xml/ic_coin.xml"),
+                contentDescription = "coin icon",
+                modifier = Modifier.size(40.dp)
+            )
+        }
 
         Spacer(modifier = Modifier.width(8.dp))
 
