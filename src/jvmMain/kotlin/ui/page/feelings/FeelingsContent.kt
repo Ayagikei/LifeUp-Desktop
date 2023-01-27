@@ -1,11 +1,10 @@
 package ui.page.feelings
 
+import androidx.compose.foundation.HorizontalScrollbar
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -151,15 +150,17 @@ private fun Item(
             }
             if (item.attachments.isNotEmpty()) {
                 Spacer4dpH()
-                Row {
-                    item.attachments.forEach {
+
+                val listState = rememberLazyListState()
+                LazyRow(state = listState) {
+                    itemsIndexed(item.attachments) { index, item ->
                         Box(modifier = Modifier.clickable {
-                            onAttachmentClicked(it)
-                        }) {
+                            onAttachmentClicked(item)
+                        }.padding(8.dp)) {
                             AsyncImage(
-                                condition = it.isNotBlank(),
+                                condition = item.isNotBlank(),
                                 load = {
-                                    loadImageBitmap(it)
+                                    loadImageBitmap(item)
                                 },
                                 painterFor = {
                                     remember { BitmapPainter(it) }
@@ -177,10 +178,15 @@ private fun Item(
                         }
                     }
                 }
+
+                HorizontalScrollbar(
+                    modifier = Modifier.align(Alignment.CenterHorizontally).wrapContentSize(),
+                    adapter = rememberScrollbarAdapter(scrollState = listState)
+                )
             }
             Spacer4dpH()
 
-            Column(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxWidth()) {
+            Column(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxWidth().padding(end = 16.dp)) {
                 Text(item.title, style = MaterialTheme.typography.caption, color = MaterialTheme.colors.unimportantText)
                 Spacer4dpH()
                 Text(

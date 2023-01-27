@@ -1,9 +1,6 @@
 package base
 
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -12,7 +9,7 @@ inline fun CoroutineScope.launchSafely(
     start: CoroutineStart = CoroutineStart.DEFAULT,
     crossinline block: suspend CoroutineScope.() -> Unit
 ) {
-    launch(context + handle, start) {
+    launch(SupervisorJob() + context + handle, start) {
         block()
     }
 }

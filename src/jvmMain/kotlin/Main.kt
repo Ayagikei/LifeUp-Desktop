@@ -41,7 +41,14 @@ fun app() {
         val globalStore = remember { AppStoreImpl(coroutineScope) }
         val scaffoldState: ScaffoldState = rememberScaffoldState()
 
-        val navController by rememberNavController(startDestination = Screen.Tasks.route)
+        val navController by rememberNavController(
+            startDestination =
+            if (globalStore.isReadyToCall) {
+                Screen.Tasks.route
+            } else {
+                Screen.Config.route
+            }
+        )
         var selectedItem by remember { mutableStateOf(0) }
 
         CompositionLocalProvider(
@@ -53,7 +60,7 @@ fun app() {
                 Strings.module_status,
                 Strings.module_shop,
                 Strings.module_achievements_short,
-                Strings.module_status,
+                Strings.module_feelings,
                 Strings.module_settings
             )
             val icons = listOf(

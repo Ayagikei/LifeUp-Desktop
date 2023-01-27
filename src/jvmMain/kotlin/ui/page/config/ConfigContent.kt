@@ -122,6 +122,11 @@ fun Spacer8dpH() {
     Spacer(Modifier.height(8.dp))
 }
 
+@Composable
+fun Spacer8dpWH() {
+    Spacer(Modifier.size(8.dp))
+}
+
 
 @Preview
 @Composable

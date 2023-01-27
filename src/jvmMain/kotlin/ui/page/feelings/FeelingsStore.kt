@@ -39,7 +39,16 @@ internal class FeelingsStore(
     }
 
     fun onRefresh() {
-        fetchFeelings()
+        coroutineScope.launchSafely {
+            mutex.withLock {
+                offset = 0
+                end = false
+                setState {
+                    copy(feelings = emptyList())
+                }
+                fetchFeelings()
+            }
+        }
     }
 
     private inline fun setState(update: FeelingsState.() -> FeelingsState) {
