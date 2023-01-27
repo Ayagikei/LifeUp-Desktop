@@ -83,4 +83,14 @@ class EnStrings : StringText {
 
     override val item_own_number: String
         get() = "Owned: %d"
+
+    override val item_price: String
+        get() = "Price: %d"
+
+    override val snackbar_complete_task: String
+        get() = "Task completed!\nDesktop does not support undo at the moment, if need, please go to the mobile phone to operate."
+
+    override val snackbar_purchase_item: String
+        get() = "Purchase success!"
+
 }

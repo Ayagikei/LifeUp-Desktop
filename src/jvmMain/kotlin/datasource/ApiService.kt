@@ -38,5 +38,6 @@ interface ApiService {
     suspend fun getFeelings(offset: Int, limit: Int): List<Feelings>
 
     suspend fun getInfo(): Info
+
     suspend fun purchaseItem(id: Long?, price: Long, desc: String)
 }

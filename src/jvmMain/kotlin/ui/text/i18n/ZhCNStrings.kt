@@ -84,4 +84,13 @@ class ZhCNStrings : StringText {
 
     override val item_own_number: String
         get() = "拥有: %d"
+
+    override val item_price: String
+        get() = "价格: %d"
+
+    override val snackbar_complete_task: String
+        get() = "完成了任务！\n桌面版暂时不支持撤销，如果需要请去手机上操作。"
+
+    override val snackbar_purchase_item: String
+        get() = "购买成功！"
 }

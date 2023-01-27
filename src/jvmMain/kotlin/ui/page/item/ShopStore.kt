@@ -9,7 +9,9 @@ import datasource.data.ShopCategory
 import datasource.data.ShopItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.receiveAsFlow
 import logger
 import ui.AppStoreImpl
 import java.util.logging.Level
@@ -20,6 +22,10 @@ internal class ShopStore(
 ) {
 
     private val apiService = ApiServiceImpl
+
+    private val purchaseSuccessEvent = Channel<Unit>()
+    val purchaseSuccessEventFlow = purchaseSuccessEvent.receiveAsFlow()
+
     var state: ShopState by mutableStateOf(
         ShopState(
             0,
@@ -165,6 +171,7 @@ internal class ShopStore(
                 apiService.purchaseItem(shopItem.id, shopItem.price, desc)
             }.onSuccess {
                 onRefresh()
+                purchaseSuccessEvent.send(Unit)
             }.onFailure {
                 logger.log(Level.SEVERE, it.stackTraceToString())
             }

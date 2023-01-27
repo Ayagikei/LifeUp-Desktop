@@ -7,6 +7,8 @@ import base.launchSafely
 import datasource.ApiServiceImpl
 import datasource.data.TaskCategory
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import logger
 import ui.AppStoreImpl
 import java.util.logging.Level
@@ -20,6 +22,9 @@ internal class RootStore(
     init {
         fetchCategories()
     }
+
+    private val completeSuccessEvent = Channel<Unit>()
+    val completeSuccessEventFlow = completeSuccessEvent.receiveAsFlow()
 
     private fun fetchCategories() {
         coroutineScope.launchSafely(Dispatchers.IO) {
@@ -87,6 +92,7 @@ internal class RootStore(
                 kotlin.runCatching {
                     ApiServiceImpl.completeTask(id)
                 }.onSuccess {
+                    completeSuccessEvent.send(Unit)
                     delay(500)
                     fetchTasks()
                 }.onFailure {

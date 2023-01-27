@@ -30,7 +30,6 @@ interface StringText {
 
     val base_version: String
 
-
     val version_desc: String
 
     val ip_address: String
@@ -61,4 +60,9 @@ interface StringText {
 
     val item_own_number: String
 
+    val item_price: String
+
+    val snackbar_complete_task: String
+
+    val snackbar_purchase_item: String
 }

@@ -4,7 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import base.launchSafely
 import ui.AppStore
+import ui.ScaffoldState
+import ui.Strings
 import ui.page.list.RootStore.RootState
 
 @Composable
@@ -13,6 +16,14 @@ fun TasksScreen(modifier: Modifier = Modifier) {
     val globalStore = AppStore.current
     val model = remember { RootStore(coroutineScope, globalStore) }
     val state = model.state
+    val scaffoldState = ScaffoldState.current
+    val text = Strings.snackbar_complete_task
+
+    coroutineScope.launchSafely {
+        model.completeSuccessEventFlow.collect {
+            scaffoldState.snackbarHostState.showSnackbar(text)
+        }
+    }
 
     MainContent(
         modifier = modifier,

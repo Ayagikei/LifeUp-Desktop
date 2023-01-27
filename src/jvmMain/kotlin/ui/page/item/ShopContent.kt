@@ -236,7 +236,7 @@ private fun Item(
             }
             Spacer4dpH()
             Text(
-                "${item.price} ${Strings.coin}",
+                Strings.item_price.format(item.price),
                 style = MaterialTheme.typography.caption,
                 color = MaterialTheme.colors.unimportantText
             )

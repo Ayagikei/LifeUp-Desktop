@@ -11,9 +11,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import base.json
+import base.launchSafely
 import datasource.data.ShopItem
 import kotlinx.serialization.encodeToString
 import ui.AppStore
+import ui.ScaffoldState
 import ui.Strings
 import ui.page.config.Spacer8dpH
 import ui.page.list.Dialog
@@ -25,6 +27,14 @@ fun ShopScreen(modifier: Modifier = Modifier) {
     val model = remember { ShopStore(coroutineScope, globalStore) }
     val state = model.state
     val coin = state.coin
+    val scaffoldState = ScaffoldState.current
+    val text = Strings.snackbar_purchase_item
+
+    coroutineScope.launchSafely {
+        model.purchaseSuccessEventFlow.collect {
+            scaffoldState.snackbarHostState.showSnackbar(text)
+        }
+    }
 
     val listItem = mutableListOf<ListItem>().apply {
         coin?.let {
