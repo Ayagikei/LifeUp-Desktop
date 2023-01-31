@@ -6,6 +6,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.platform.Font
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
@@ -93,13 +97,13 @@ private val LightColors = Colors(
 )
 
 private val Typography = androidx.compose.material.Typography(
-//    defaultFontFamily = FontFamily(
-//        Font(
-//            resource = "font/SourceHanSans-VF.ttf",
-//            weight = FontWeight.Bold,
-//            style = FontStyle.Normal
-//        )
-//    )
+    defaultFontFamily = FontFamily(
+        Font(
+            resource = "fonts/HONORSansCN-Regular.ttf",
+            weight = FontWeight.Bold,
+            style = FontStyle.Normal
+        )
+    )
 )
 
 @OptIn(ExperimentalUnitApi::class)
@@ -136,6 +140,7 @@ fun AppTheme(
 
     MaterialTheme(
         colors = LightColors,
-        content = content
+        content = content,
+        typography = Typography
     )
 }

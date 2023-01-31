@@ -65,4 +65,8 @@ interface StringText {
     val snackbar_complete_task: String
 
     val snackbar_purchase_item: String
+
+    val license: String
+
+    val license_desc: String
 }

@@ -93,4 +93,12 @@ class EnStrings : StringText {
     override val snackbar_purchase_item: String
         get() = "Purchase success!"
 
+    override val license: String
+        get() = "License"
+
+    override val license_desc: String
+        get() = "developed by Kei (LifeUp Teams)\n\n" +
+                "icon designed by 下车君\n\n" +
+                "using Honor HONOR Sans Font\n\n" +
+                "powered by Kotlin, Jetpack Compose and Compose Desktop\n"
 }
