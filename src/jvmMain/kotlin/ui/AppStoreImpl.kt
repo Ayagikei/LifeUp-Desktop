@@ -23,12 +23,15 @@ class AppStoreImpl(
 ) {
 
     val resourceDir
-        get() = (System.getProperty("compose.application.resources.dir") ?: "").ifBlank {
+        get() = System.getenv("APPDATA").ifBlank {
+            System.getProperty("compose.application.resources.dir")
+        }.ifBlank {
             System.getProperty("user.dir")
         }
 
+
     val cacheDir
-        get() = File(resourceDir, "cache").also {
+        get() = File(resourceDir + File.separator + "LifeUp Desktop" + File.separator + "cache").also {
             if (it.exists().not()) {
                 it.mkdirs()
             }
