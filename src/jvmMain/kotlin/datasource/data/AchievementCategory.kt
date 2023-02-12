@@ -1,4 +1,4 @@
-package net.lifeupapp.lifeup.api.content.achievements.category
+package datasource.data
 
 import kotlinx.serialization.Serializable
 

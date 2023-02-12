@@ -197,7 +197,7 @@ private fun Item(
 
         logger.log(Level.INFO, "item.icon: ${item.icon}")
         AsyncImage(
-            condition = item.icon.isNotBlank(),
+            condition = item.icon.isNotBlank() && item.icon.endsWith("/").not(),
             load = {
                 loadImageBitmap(item.icon)
             },

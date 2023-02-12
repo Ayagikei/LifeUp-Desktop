@@ -10,7 +10,6 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.long
-import net.lifeupapp.lifeup.api.content.achievements.category.AchievementCategory
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Request
 
@@ -132,6 +131,9 @@ object ApiServiceImpl : ApiService {
     }
 
     override fun getIconUrl(icon: String): String {
+        if (icon.isEmpty()) {
+            return ""
+        }
         val host = OkHttpClientHolder.host
         val url = (host).toHttpUrl().newBuilder()
             .addPathSegment("files")

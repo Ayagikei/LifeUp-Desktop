@@ -47,7 +47,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "lifeup-desktop"
-            packageVersion = "1.0.2"
+            packageVersion = "1.0.0"
             macOS {
                 iconFile.set(project.file("icon.icns"))
             }
@@ -57,6 +57,9 @@ compose.desktop {
             linux {
                 iconFile.set(project.file("icon.png"))
             }
+        }
+        buildTypes.release.proguard {
+            configurationFiles.from(project.file("compose-desktop.pro"))
         }
     }
 }

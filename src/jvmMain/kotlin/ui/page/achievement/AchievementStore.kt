@@ -6,11 +6,11 @@ import androidx.compose.runtime.setValue
 import base.launchSafely
 import datasource.ApiServiceImpl
 import datasource.data.Achievement
+import datasource.data.AchievementCategory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import logger
-import net.lifeupapp.lifeup.api.content.achievements.category.AchievementCategory
 import ui.AppStoreImpl
 import java.util.logging.Level
 

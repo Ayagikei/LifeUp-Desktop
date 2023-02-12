@@ -45,7 +45,7 @@ internal fun FeelingsContent(
 
     Column(modifier) {
         TopAppBar(title = {
-            Text(text = Strings.status)
+            Text(text = Strings.module_feelings)
         }, backgroundColor = MaterialTheme.colors.primarySurface, elevation = 0.dp, actions = {
             IconButton(onRefreshClick) {
                 Icon(Icons.Default.Refresh, "Refresh")

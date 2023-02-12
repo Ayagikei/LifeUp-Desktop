@@ -25,8 +25,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import datasource.data.Achievement
+import datasource.data.AchievementCategory
 import logger
-import net.lifeupapp.lifeup.api.content.achievements.category.AchievementCategory
 import ui.Strings
 import ui.page.config.Spacer4dpH
 import ui.page.list.MARGIN_SCROLLBAR
