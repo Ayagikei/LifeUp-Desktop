@@ -8,7 +8,7 @@
 ### Architecture
 
 <p align="center">
- <img src="https://github.com/Ayagikei/LifeUp-Desktop/raw/master/imgs/cloud.png" style="height:600px" />
+ <img src="https://github.com/Ayagikei/LifeUp-Desktop/raw/master/imgs/cloud.png"/>
 </p>
 
 ### Installation
