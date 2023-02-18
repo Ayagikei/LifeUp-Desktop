@@ -1,5 +1,5 @@
 <p align="center">
- <img src="https://github.com/Ayagikei/LifeUp-Desktop/raw/main/imgs/desktop.png" style="height:600px" />
+ <img src="https://github.com/Ayagikei/LifeUp-Desktop/raw/master/imgs/desktop.png" style="height:600px" />
 </p>
 <h2 align="center" padding="100">LifeUp Desktop</h2>
 
@@ -8,7 +8,7 @@
 ### Architecture
 
 <p align="center">
- <img src="https://github.com/Ayagikei/LifeUp-Desktop/raw/main/imgs/cloud.png" style="height:600px" />
+ <img src="https://github.com/Ayagikei/LifeUp-Desktop/raw/master/imgs/cloud.png" style="height:600px" />
 </p>
 
 ### Installation
