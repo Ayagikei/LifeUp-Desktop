@@ -45,6 +45,8 @@ compose.desktop {
     application {
         mainClass = "MainKt"
         nativeDistributions {
+            // https://github.com/JetBrains/compose-jb/tree/master/tutorials/Native_distributions_and_local_execution#configuring-included-jdk-modules
+            modules("java.instrument", "java.prefs", "jdk.unsupported")
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "LifeUp Desktop"
             packageVersion = "1.0.2"
@@ -53,6 +55,9 @@ compose.desktop {
             }
             windows {
                 iconFile.set(project.file("icon.ico"))
+                dirChooser = true // enables customizing the installation path during installation
+                // console = true
+                menuGroup = "LifeUp Desktop"
             }
             linux {
                 iconFile.set(project.file("icon.png"))
