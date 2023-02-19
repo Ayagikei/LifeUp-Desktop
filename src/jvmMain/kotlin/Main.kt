@@ -1,12 +1,19 @@
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
@@ -30,7 +37,9 @@ import ui.page.list.TasksScreen
 import ui.page.status.StatusScreen
 import ui.theme.AppTheme
 import ui.view.fakeDialog
+import java.awt.event.WindowEvent
 import java.util.logging.Logger
+import kotlin.system.exitProcess
 
 @ExperimentalUnitApi
 @Composable
@@ -163,21 +172,54 @@ fun CustomNavigationHost(
 }
 
 
-@OptIn(ExperimentalUnitApi::class)
-fun main() = application {
-    // To fix the window crash issue: https://github.com/JetBrains/compose-jb/issues/610
-    System.setProperty("skiko.renderApi", "OPENGL")
+@OptIn(ExperimentalUnitApi::class, ExperimentalComposeUiApi::class)
+fun main() {
 
-    Window(
-        onCloseRequest = ::exitApplication,
-        title = "LifeUp",
-        state = rememberWindowState(
-            position = WindowPosition(alignment = Alignment.Center),
-            size = DpSize(1200.dp, 900.dp)
-        ),
-        icon = painterResource("icons/svg/icon.svg")
-    ) {
-        app()
+    var lastError: Throwable? by mutableStateOf(null)
+
+    application(exitProcessOnExit = false) {
+        // To fix the window crash issue: https://github.com/JetBrains/compose-jb/issues/610
+        System.setProperty("skiko.renderApi", "OPENGL")
+
+        CompositionLocalProvider(
+            LocalWindowExceptionHandlerFactory provides WindowExceptionHandlerFactory { window ->
+                WindowExceptionHandler {
+                    lastError = it
+                    window.dispatchEvent(WindowEvent(window, WindowEvent.WINDOW_CLOSING))
+                    // throw it
+                }
+            }
+        ) {
+            Window(
+                onCloseRequest = ::exitApplication,
+                title = "LifeUp",
+                state = rememberWindowState(
+                    position = WindowPosition(alignment = Alignment.Center),
+                    size = DpSize(1200.dp, 900.dp)
+                ),
+                icon = painterResource("icons/svg/icon.svg")
+            ) {
+                app()
+            }
+        }
+    }
+
+    // friendly error report
+    // refer to: https://github.com/JetBrains/compose-jb/issues/663 && https://github.com/JetBrains/compose-jb/issues/1764
+    if (lastError != null) {
+        singleWindowApplication(
+            state = WindowState(width = 200.dp, height = Dp.Unspecified),
+            exitProcessOnExit = false
+        ) {
+            Text(
+                lastError?.stackTraceToString() ?: "Unknown error", Modifier.padding(8.dp).verticalScroll(
+                    rememberScrollState()
+                )
+            )
+        }
+        exitProcess(1)
+    } else {
+        exitProcess(0)
     }
 }
 
