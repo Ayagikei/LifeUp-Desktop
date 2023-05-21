@@ -61,7 +61,7 @@ internal fun ShopContent(
                 )
             ) {
                 if (selectedCategory == null) {
-                    Text(text = Strings.module_achievements)
+                    Text(text = Strings.module_shop)
                     Icon(Icons.Default.ArrowDropDown, "")
                 } else {
                     Text(text = selectedCategory.name)
