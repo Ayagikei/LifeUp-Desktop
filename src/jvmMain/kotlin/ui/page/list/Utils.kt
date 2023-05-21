@@ -18,7 +18,7 @@ internal val MARGIN_SCROLLBAR: Dp = 8.dp
 internal typealias ScrollbarAdapter = androidx.compose.foundation.ScrollbarAdapter
 
 @Composable
-internal fun rememberScrollbarAdapter(scrollState: LazyListState): ScrollbarAdapter =
+internal fun rememberScrollbarAdapter(scrollState: LazyListState): androidx.compose.foundation.v2.ScrollbarAdapter =
     androidx.compose.foundation.rememberScrollbarAdapter(scrollState)
 
 @Composable

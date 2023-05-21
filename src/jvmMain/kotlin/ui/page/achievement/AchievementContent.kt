@@ -1,6 +1,7 @@
 package ui.page.achievement
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,7 +31,6 @@ import logger
 import ui.Strings
 import ui.page.config.Spacer4dpH
 import ui.page.list.MARGIN_SCROLLBAR
-import ui.page.list.VerticalScrollbar
 import ui.page.list.rememberScrollbarAdapter
 import ui.text.Localization.dateTimeFormatterWithNewLine
 import ui.theme.subTitle3

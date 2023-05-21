@@ -2,6 +2,7 @@ package ui.page.feelings
 
 import androidx.compose.foundation.HorizontalScrollbar
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -26,7 +27,6 @@ import ui.Strings
 import ui.page.config.Spacer4dpH
 import ui.page.config.Spacer8dpH
 import ui.page.list.MARGIN_SCROLLBAR
-import ui.page.list.VerticalScrollbar
 import ui.page.list.rememberScrollbarAdapter
 import ui.text.Localization
 import ui.theme.important

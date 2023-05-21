@@ -1,6 +1,7 @@
 package ui.page.config
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
@@ -18,7 +19,6 @@ import androidx.compose.ui.unit.sp
 import base.Val
 import ui.AppStore
 import ui.Strings
-import ui.page.list.VerticalScrollbar
 import ui.theme.unimportantText
 
 @Composable
