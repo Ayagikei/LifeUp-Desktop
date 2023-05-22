@@ -1,5 +1,6 @@
 package ui
 
+import AppScope
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.*
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import logger
 import okhttp3.HttpUrl
+import service.MdnsServiceDiscovery
 import ui.text.Localization
 import ui.text.StringText
 import java.io.File
@@ -59,6 +61,8 @@ class AppStoreImpl(
         private set
 
     private val fetching = AtomicBoolean(false)
+    private val mdnsServiceDiscovery = MdnsServiceDiscovery()
+
 
     private fun initStrings(): StringText {
         return Localization.get()
@@ -82,13 +86,31 @@ class AppStoreImpl(
     }.flowOn(kotlinx.coroutines.Dispatchers.IO)
 
     init {
+        mdnsServiceDiscovery.register()
         updateIpOrPort()
+
+        AppScope.launch {
+            mdnsServiceDiscovery.ipAndPortFlow.collect {
+                it ?: return@collect
+                if (ip.isEmpty()) {
+                    updateIpOrPort(it.ip, it.port)
+                }
+            }
+        }
     }
 
 
     fun updateIpOrPort(ip: String = this.ip, port: String = this.port) {
         this.ip = ip
         this.port = port
+
+        if (ip.isEmpty() || port.isEmpty()) {
+            Preferences.userRoot().apply {
+                put("ip", ip)
+                put("port", port)
+            }
+            return
+        }
 
         val validHost = kotlin.runCatching {
             HttpUrl.Builder().scheme("http").host(ip).port(port = port.toIntOrNull() ?: 13276).build()
