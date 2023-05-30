@@ -86,19 +86,15 @@ class AppStoreImpl(
     }.flowOn(kotlinx.coroutines.Dispatchers.IO)
 
     init {
-        mdnsServiceDiscovery.register()
-        updateIpOrPort()
-
         AppScope.launch {
-            mdnsServiceDiscovery.ipAndPortFlow.collect {
-                it ?: return@collect
-                if (ip.isEmpty()) {
-                    updateIpOrPort(it.ip, it.port)
-                }
-            }
+            mdnsServiceDiscovery.register()
         }
+        updateIpOrPort()
     }
 
+    fun listServerInfo(): List<MdnsServiceDiscovery.IpAndPort> {
+        return mdnsServiceDiscovery.ipAndPorts.values.toList().mapNotNull { it }
+    }
 
     fun updateIpOrPort(ip: String = this.ip, port: String = this.port) {
         this.ip = ip

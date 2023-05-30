@@ -1,7 +1,5 @@
 package service
 
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -10,10 +8,11 @@ import java.net.InetAddress
 import java.util.logging.Level
 import javax.jmdns.JmDNS
 import javax.jmdns.ServiceEvent
-import javax.jmdns.ServiceInfo
 import javax.jmdns.ServiceListener
 
-
+/**
+ * Service to discover the lifeup cloud server
+ */
 class MdnsServiceDiscovery {
 
     @Serializable
@@ -21,10 +20,13 @@ class MdnsServiceDiscovery {
         val port: String
     )
 
-    data class IpAndPort(val ip: String, val port: String)
+    data class IpAndPort(val ip: String, val port: String) {
+        override fun toString(): String {
+            return "$ip:$port"
+        }
+    }
 
-    private val _ipAndPortFlow = MutableStateFlow<IpAndPort?>(null)
-    val ipAndPortFlow: StateFlow<IpAndPort?> = _ipAndPortFlow
+    val ipAndPorts = HashMap<String, IpAndPort?>()
 
     private val listener = object : ServiceListener {
         override fun serviceAdded(event: ServiceEvent?) {
@@ -33,12 +35,15 @@ class MdnsServiceDiscovery {
 
         override fun serviceRemoved(event: ServiceEvent?) {
             logger.log(Level.INFO, "Service removed: ${event?.info}")
+            event?.info?.inetAddresses?.firstOrNull()?.hostAddress?.let {
+                ipAndPorts.remove(it)
+            }
         }
 
         override fun serviceResolved(event: ServiceEvent?) {
             logger.log(Level.INFO, "Service resolved: ${event?.info}")
             runCatching {
-                if (event?.name == "lifeup_cloud") {
+                if (event?.name?.contains("lifeup_cloud") == true) {
                     logger.log(Level.INFO, "Service resolved, address: ${event.info.inetAddresses}")
                     val data = event.info.textString
                     if (data.isEmpty()) {
@@ -49,7 +54,7 @@ class MdnsServiceDiscovery {
                     logger.log(Level.INFO, "Service resolved, json: $mdnsInfo")
                     val ip = event.info.inetAddresses.first().hostAddress
                     logger.log(Level.INFO, "Service resolved, ip: $ip")
-                    _ipAndPortFlow.tryEmit(IpAndPort(ip, mdnsInfo.port))
+                    ipAndPorts[ip] = IpAndPort(ip, mdnsInfo.port)
                 }
             }.onFailure {
                 it.printStackTrace()
@@ -57,24 +62,12 @@ class MdnsServiceDiscovery {
         }
     }
 
-    private fun onReceiveServiceInfo(serviceInfo: ServiceInfo) {
-        val data = serviceInfo.textString
-        if (data.isEmpty()) {
-            return
-        }
-        logger.log(Level.INFO, "Service resolved, data: $data")
-        val mdnsInfo = Json.decodeFromString<MdnsInfo>(data)
-        logger.log(Level.INFO, "Service resolved, json: $mdnsInfo")
-        val ip = serviceInfo.inetAddresses.first().hostAddress
-        logger.log(Level.INFO, "Service resolved, ip: $ip")
-        _ipAndPortFlow.tryEmit(IpAndPort(ip, mdnsInfo.port))
-    }
 
     fun register() = runCatching {
         // Create a JmDNS instance
         val jmdns = JmDNS.create(InetAddress.getLocalHost())
 
         // Add a service listener
-        jmdns.addServiceListener("_http._tcp.local.", listener)
+        jmdns.addServiceListener("_lifeup._tcp.local.", listener)
     }
 }

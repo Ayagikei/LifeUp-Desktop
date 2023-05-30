@@ -102,4 +102,17 @@ class ZhCNStrings : StringText {
                 "icon designed by 下车君\n\n" +
                 "using Honor HONOR Sans Font\n\n" +
                 "powered by Kotlin, Jetpack Compose and Compose Desktop\n"
+
+    override val auto_detect: String
+        get() = "自动检测"
+
+    override val auto_detect_dialog_title: String
+        get() = "自动检测"
+
+    override val auto_detect_dialog_empty_desc: String
+        get() = "未检测到《云人升》服务。\n" +
+                "\n" +
+                "请确认你的《云人升》处于同一局域网，并且启动了服务。\n" +
+                "\n" +
+                "你可以尝试重新开启服务，或稍后重试。"
 }
