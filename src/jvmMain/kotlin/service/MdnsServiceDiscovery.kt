@@ -1,8 +1,5 @@
 package service
 
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 import logger
 import java.net.InetAddress
 import java.util.logging.Level
@@ -14,11 +11,6 @@ import javax.jmdns.ServiceListener
  * Service to discover the lifeup cloud server
  */
 class MdnsServiceDiscovery {
-
-    @Serializable
-    data class MdnsInfo(
-        val port: String
-    )
 
     data class IpAndPort(val ip: String, val port: String) {
         override fun toString(): String {
@@ -45,16 +37,16 @@ class MdnsServiceDiscovery {
             runCatching {
                 if (event?.name?.contains("lifeup_cloud") == true) {
                     logger.log(Level.INFO, "Service resolved, address: ${event.info.inetAddresses}")
-                    val data = event.info.textString
-                    if (data.isEmpty()) {
+
+                    val port = event.info.getPropertyString("port")
+                    if (port.isNullOrEmpty()) {
+                        logger.log(Level.INFO, "Service resolved, but data has not port")
                         return@runCatching
                     }
-                    logger.log(Level.INFO, "Service resolved, data: $data")
-                    val mdnsInfo = Json.decodeFromString<MdnsInfo>(data)
-                    logger.log(Level.INFO, "Service resolved, json: $mdnsInfo")
+
                     val ip = event.info.inetAddresses.first().hostAddress
                     logger.log(Level.INFO, "Service resolved, ip: $ip")
-                    ipAndPorts[ip] = IpAndPort(ip, mdnsInfo.port)
+                    ipAndPorts[ip] = IpAndPort(ip, port)
                 }
             }.onFailure {
                 it.printStackTrace()

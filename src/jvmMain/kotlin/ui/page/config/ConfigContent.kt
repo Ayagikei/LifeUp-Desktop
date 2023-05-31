@@ -139,6 +139,9 @@ fun ConfigScreen(modifier: Modifier = Modifier) {
         val config = globalStore.listServerInfo()
         SelectIpDialog(config, onIpSelected = {
             globalStore.updateIpOrPort(it.ip, it.port)
+            model.updateState {
+                this.copy(isDialogShowing = false)
+            }
         }) {
             model.updateState {
                 this.copy(isDialogShowing = false)
@@ -157,7 +160,7 @@ internal fun SelectIpDialog(
     onCloseClicked: () -> Unit
 ) {
     Dialog(
-        title = Strings.module_achievements,
+        title = Strings.auto_detect_dialog_title,
         onCloseRequest = onCloseClicked,
     ) {
         Column {
