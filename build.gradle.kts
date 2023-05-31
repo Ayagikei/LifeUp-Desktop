@@ -50,7 +50,7 @@ compose.desktop {
             modules("java.instrument", "java.prefs", "jdk.unsupported")
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "LifeUp Desktop"
-            packageVersion = "1.0.2"
+            packageVersion = "1.1.0"
             macOS {
                 iconFile.set(project.file("icon.icns"))
             }
@@ -58,6 +58,8 @@ compose.desktop {
                 iconFile.set(project.file("icon.ico"))
                 dirChooser = true // enables customizing the installation path during installation
                 // console = true
+                shortcut = true
+                upgradeUuid = "6400cdde-3cb6-4bad-b238-70b02cc8d210"
                 menuGroup = "LifeUp Desktop"
             }
             linux {
