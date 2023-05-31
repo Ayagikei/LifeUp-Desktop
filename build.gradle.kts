@@ -59,6 +59,7 @@ compose.desktop {
                 dirChooser = true // enables customizing the installation path during installation
                 // console = true
                 shortcut = true
+                perUserInstall = true
                 upgradeUuid = "6400cdde-3cb6-4bad-b238-70b02cc8d210"
                 menuGroup = "LifeUp Desktop"
             }
