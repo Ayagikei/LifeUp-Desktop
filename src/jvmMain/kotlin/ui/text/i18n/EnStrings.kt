@@ -101,4 +101,17 @@ class EnStrings : StringText {
                 "icon designed by 下车君\n\n" +
                 "using Honor HONOR Sans Font\n\n" +
                 "powered by Kotlin, Jetpack Compose and Compose Desktop\n"
+
+    override val auto_detect: String
+        get() = "Auto Detect"
+
+    override val auto_detect_dialog_title: String
+        get() = "Auto Detect"
+
+    override val auto_detect_dialog_empty_desc: String
+        get() = "The LifeUp Cloud service was not detected.\n" +
+                "\n" +
+                "Please make sure that your \"LifeUp Cloud\" is in the same local area network, and the service has been activated.\n" +
+                "\n" +
+                "You can try restarting the service, or try again later."
 }

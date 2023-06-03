@@ -35,6 +35,7 @@ kotlin {
                 implementation("com.squareup.okhttp3:okhttp:4.10.0")
                 implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
+                implementation("org.jmdns:jmdns:3.5.8")
             }
         }
         val jvmTest by getting
@@ -49,7 +50,7 @@ compose.desktop {
             modules("java.instrument", "java.prefs", "jdk.unsupported")
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "LifeUp Desktop"
-            packageVersion = "1.0.2"
+            packageVersion = "1.1.0"
             macOS {
                 iconFile.set(project.file("icon.icns"))
             }
@@ -57,6 +58,9 @@ compose.desktop {
                 iconFile.set(project.file("icon.ico"))
                 dirChooser = true // enables customizing the installation path during installation
                 // console = true
+                shortcut = true
+                perUserInstall = true
+                upgradeUuid = "6400cdde-3cb6-4bad-b238-70b02cc8d210"
                 menuGroup = "LifeUp Desktop"
             }
             linux {

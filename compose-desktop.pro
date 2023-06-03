@@ -26,3 +26,11 @@
 -keepclassmembers class <1>.<2> {
   <1>.<2>$Companion Companion;
 }
+
+-dontwarn kotlinx.datetime.**
+-dontwarn org.slf4j.**
+-keep class org.slf4j.**{ *; }
+-keep class com.sun.jna.* { *; }
+-keep class * implements com.sun.jna.* { *; }
+
+-keep class org.jmdns.** { *; }

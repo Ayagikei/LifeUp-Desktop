@@ -37,6 +37,7 @@ import ui.page.list.TasksScreen
 import ui.page.status.StatusScreen
 import ui.theme.AppTheme
 import ui.view.fakeDialog
+import java.awt.Toolkit
 import java.awt.event.WindowEvent
 import java.util.logging.Logger
 import kotlin.system.exitProcess
@@ -190,12 +191,19 @@ fun main() {
                 }
             }
         ) {
+            // sum better window size
+            val screenSize = Toolkit.getDefaultToolkit().screenSize
+            val width = screenSize.width
+            val height = screenSize.height
+            val windowWidth = if (width > 1920) 1200 else 800
+            val windowHeight = if (height > 1080) 900 else 600
+
             Window(
                 onCloseRequest = ::exitApplication,
                 title = "LifeUp",
                 state = rememberWindowState(
                     position = WindowPosition(alignment = Alignment.Center),
-                    size = DpSize(1200.dp, 900.dp)
+                    size = DpSize(windowWidth.dp, windowHeight.dp)
                 ),
                 icon = painterResource("icons/svg/icon.svg")
             ) {

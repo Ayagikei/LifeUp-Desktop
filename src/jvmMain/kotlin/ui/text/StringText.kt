@@ -69,4 +69,10 @@ interface StringText {
     val license: String
 
     val license_desc: String
+
+    val auto_detect: String
+
+    val auto_detect_dialog_title: String
+
+    val auto_detect_dialog_empty_desc: String
 }
