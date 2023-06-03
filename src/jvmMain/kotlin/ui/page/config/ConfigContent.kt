@@ -80,7 +80,7 @@ fun ConfigScreen(modifier: Modifier = Modifier) {
                         Text(Strings.auto_detect)
                     }
                 } else {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
                         Icon(
                             imageVector = Icons.Default.CheckCircle,
                             contentDescription = null,
