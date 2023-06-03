@@ -114,4 +114,35 @@ class EnStrings : StringText {
                 "Please make sure that your \"LifeUp Cloud\" is in the same local area network, and the service has been activated.\n" +
                 "\n" +
                 "You can try restarting the service, or try again later."
+
+    override val feelings_export_group_by_day: String
+        get() = "Group by day"
+
+    override val feelings_export_group_by_month: String
+        get() = "Group by month"
+
+    override val feelings_export_group_by_year: String
+        get() = "Group by year"
+
+    override val feelings_export_dialog_title: String
+        get() = "Export to Markdown format?"
+    override val feelings_export_dialog_desc: String
+        get() = "Export all feelings and pictures to markdown format.\n" +
+                "\n" +
+                "Through the markdown format, you can easily render your feelings into different document formats. For details, please refer to the online information.\n" +
+                "\n" +
+                "Please select the export destination, try not to select the system-related folder of the system disk, because LifeUp may have insufficient permissions."
+    override val feelings_export_progress_dialog_title: String
+        get() = "Exporting..."
+    override val feelings_export_progress_dialog_desc: String
+        get() = "Progress: %s%"
+
+    override val common_dir_select_title: String
+        get() = "Select a folder"
+
+    override val common_dir_select_button: String
+        get() = "Select"
+
+    override val common_dir_select_button_tooltip: String
+        get() = "Select current directory as save destination"
 }

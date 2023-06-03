@@ -115,4 +115,38 @@ class ZhCNStrings : StringText {
                 "请确认你的《云人升》处于同一局域网，并且启动了服务。\n" +
                 "\n" +
                 "你可以尝试重新开启服务，或稍后重试。"
+
+    override val feelings_export_group_by_day: String
+        get() = "按天分组"
+
+    override val feelings_export_group_by_month: String
+        get() = "按月分组"
+
+    override val feelings_export_group_by_year: String
+        get() = "按年分组"
+
+    override val feelings_export_dialog_title: String
+        get() = "导出为 Markdown 格式？"
+
+    override val feelings_export_dialog_desc: String
+        get() = "将所有感想的内容和图片导出为 markdown 格式。\n" +
+                "\n" +
+                "通过 markdown 格式，你可以轻松地将感想渲染成不同样式的文档格式，详情可以查阅网上资料。\n" +
+                "\n" +
+                "请选择导出的目的地，尽量不要选择系统盘的系统相关文件夹，因为LifeUp可能权限不足。"
+
+    override val feelings_export_progress_dialog_title: String
+        get() = "导出中..."
+
+    override val feelings_export_progress_dialog_desc: String
+        get() = "进度: %d%"
+
+    override val common_dir_select_title: String
+        get() = "选择文件夹"
+
+    override val common_dir_select_button: String
+        get() = "选定"
+
+    override val common_dir_select_button_tooltip: String
+        get() = "选择当前文件夹作为保存处"
 }

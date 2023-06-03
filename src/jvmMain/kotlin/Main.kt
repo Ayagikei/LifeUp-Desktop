@@ -40,6 +40,7 @@ import ui.view.fakeDialog
 import java.awt.Toolkit
 import java.awt.event.WindowEvent
 import java.util.logging.Logger
+import javax.swing.UIManager
 import kotlin.system.exitProcess
 
 @ExperimentalUnitApi
@@ -181,6 +182,8 @@ fun main() {
     application(exitProcessOnExit = false) {
         // To fix the window crash issue: https://github.com/JetBrains/compose-jb/issues/610
         System.setProperty("skiko.renderApi", "OPENGL")
+        // get native dialog UI
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
 
         CompositionLocalProvider(
             LocalWindowExceptionHandlerFactory provides WindowExceptionHandlerFactory { window ->
