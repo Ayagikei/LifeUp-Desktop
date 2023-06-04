@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -39,6 +40,7 @@ internal fun FeelingsContent(
     modifier: Modifier = Modifier,
     items: List<Feelings>,
     onItemClicked: (id: Long) -> Unit,
+    onExportClicked: () -> Unit,
     onRefreshClick: () -> Unit,
     onAttachmentClicked: (attachment: String) -> Unit
 ) {
@@ -47,6 +49,9 @@ internal fun FeelingsContent(
         TopAppBar(title = {
             Text(text = Strings.module_feelings)
         }, backgroundColor = MaterialTheme.colors.primarySurface, elevation = 0.dp, actions = {
+            IconButton(onExportClicked) {
+                Icon(Icons.Default.FileDownload, "Export")
+            }
             IconButton(onRefreshClick) {
                 Icon(Icons.Default.Refresh, "Refresh")
             }

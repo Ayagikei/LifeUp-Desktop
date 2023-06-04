@@ -75,4 +75,24 @@ interface StringText {
     val auto_detect_dialog_title: String
 
     val auto_detect_dialog_empty_desc: String
+
+    val feelings_export_group_by_day: String
+
+    val feelings_export_group_by_month: String
+
+    val feelings_export_group_by_year: String
+
+    val feelings_export_dialog_title: String
+
+    val feelings_export_dialog_desc: String
+
+    val feelings_export_progress_dialog_title: String
+
+    val feelings_export_progress_dialog_desc: String
+
+    val common_dir_select_title: String
+
+    val common_dir_select_button: String
+
+    val common_dir_select_button_tooltip: String
 }

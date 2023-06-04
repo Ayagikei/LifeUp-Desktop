@@ -13,7 +13,14 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import logger
 import ui.AppStoreImpl
+import ui.text.Localization
+import utils.md5
+import java.io.File
+import java.net.URL
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.logging.Level
+
 
 internal class FeelingsStore(
     private val coroutineScope: CoroutineScope,
@@ -31,7 +38,9 @@ internal class FeelingsStore(
 
     data class FeelingsState(
         val state: Int,
-        val feelings: List<Feelings> = emptyList()
+        val feelings: List<Feelings> = emptyList(),
+        val showingDialog: Boolean = false,
+        val exportProgress: Float = -1f
     )
 
     init {
@@ -51,7 +60,74 @@ internal class FeelingsStore(
         }
     }
 
-    private inline fun setState(update: FeelingsState.() -> FeelingsState) {
+
+    // ...
+
+    fun onExportDirSelected(dir: File, dateFormat: String) {
+        coroutineScope.launchSafely(Dispatchers.IO) {
+            setState {
+                copy(showingDialog = false, exportProgress = 0f)
+            }
+
+            // wait for loading all feelings
+            while (end.not()) {
+                delay(1000L)
+            }
+
+            // group feelings by date
+            val feelings = state.feelings
+            val feelingsByDate = feelings.groupBy {
+                SimpleDateFormat(dateFormat, Locale.US).format(it.time)
+            }
+
+            // create attachments directory
+            val attachmentsDir = File(dir, "attachments")
+            attachmentsDir.mkdir()
+
+            // write each group to a markdown file
+            val total = feelings.size
+            var index = 0
+            feelingsByDate.mapValues { (date, feelings) ->
+                val file = File(dir, "$date.md")
+                file.createNewFile()
+                file.writeText("## $date\n\n")
+                var previousDate: String? = null
+                feelings.forEach { feeling ->
+                    val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(feeling.time)
+                    if (currentDate != previousDate) {
+                        file.appendText("### $currentDate\n\n")
+                        previousDate = currentDate
+                    }
+                    file.appendText("${feeling.content}\n\n")
+                    feeling.attachments.forEach { attachment ->
+                        val attachmentFile = File(attachmentsDir, attachment.md5())
+                        saveAttachmentFileTo(attachment, attachmentFile)
+                        file.appendText("![](${attachmentFile.absolutePath})\n\n")
+                    }
+
+                    file.appendText("> ${feeling.title}\n> ${Localization.dateTimeFormatter.format(feeling.time)}\n\n<br />\n\n")
+                    index++
+                    setState {
+                        copy(exportProgress = index / total.toFloat())
+                    }
+                }
+            }
+            setState { copy(exportProgress = -1f) }
+        }
+    }
+
+    private fun saveAttachmentFileTo(attachment: String, destFile: File) {
+        val connection = URL(attachment).openConnection()
+        if (destFile.exists() && destFile.length() == connection.contentLengthLong) {
+            return
+        }
+        destFile.createNewFile()
+        connection.getInputStream().buffered().use {
+            it.copyTo(destFile.outputStream())
+        }
+    }
+
+    inline fun setState(update: FeelingsState.() -> FeelingsState) {
         state = state.update()
     }
 
