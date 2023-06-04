@@ -180,11 +180,12 @@ internal fun SelectIpDialog(
 
 
 @Composable
-fun Subtitle(text: String) {
+fun Subtitle(text: String, modifier: Modifier = Modifier) {
     Text(
         text = text,
         style = MaterialTheme.typography.subtitle1.copy(color = MaterialTheme.colors.primary),
-        fontWeight = FontWeight.Bold
+        fontWeight = FontWeight.Bold,
+        modifier = modifier
     )
 }
 
@@ -197,6 +198,11 @@ fun Spacer24dpH() {
 @Composable
 fun Spacer16dpH() {
     Spacer(Modifier.height(16.dp))
+}
+
+@Composable
+fun Spacer16dpW() {
+    Spacer(Modifier.width(16.dp))
 }
 
 @Composable

@@ -1,8 +1,5 @@
 package ui.page.item
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import base.launchSafely
 import datasource.ApiServiceImpl
 import datasource.data.ShopCategory
@@ -11,6 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import logger
 import ui.AppStoreImpl
@@ -26,14 +24,13 @@ internal class ShopStore(
     private val purchaseSuccessEvent = Channel<Unit>()
     val purchaseSuccessEventFlow = purchaseSuccessEvent.receiveAsFlow()
 
-    var state: ShopState by mutableStateOf(
+    var state = MutableStateFlow(
         ShopState(
             0,
             shopItems = emptyList(),
             categories = emptyList()
         )
     )
-        private set
 
     data class ShopState(
         val state: Int,
@@ -87,7 +84,7 @@ internal class ShopStore(
     }
 
     private inline fun setState(update: ShopState.() -> ShopState) {
-        state = state.update()
+        state.value = state.value.update()
     }
 
     private fun fetchCoin() {
@@ -118,7 +115,7 @@ internal class ShopStore(
                 apiService.getShopItemCategories()
             }.onSuccess { it ->
                 val categories = it
-                if (state.currentCategoryId == null || state.currentCategoryId !in it.map { it.id }) {
+                if (state.value.currentCategoryId == null || state.value.currentCategoryId !in it.map { it.id }) {
                     setState {
                         copy(
                             categories = categories,
@@ -127,7 +124,7 @@ internal class ShopStore(
                         )
                     }
                 }
-                fetchItems(state.currentCategoryId ?: return@launchSafely)
+                fetchItems(state.value.currentCategoryId ?: return@launchSafely)
             }.onFailure {
                 logger.log(Level.SEVERE, it.stackTraceToString())
                 delay(2000L)

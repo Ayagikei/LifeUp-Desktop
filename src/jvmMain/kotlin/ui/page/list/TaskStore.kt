@@ -1,20 +1,18 @@
 package ui.page.list
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import base.launchSafely
 import datasource.ApiServiceImpl
 import datasource.data.TaskCategory
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import logger
 import ui.AppStoreImpl
 import java.util.logging.Level
 import java.util.logging.Logger
 
-internal class RootStore(
+internal class TaskStore(
     private val coroutineScope: CoroutineScope,
     private val globalStore: AppStoreImpl
 ) {
@@ -35,10 +33,12 @@ internal class RootStore(
                 ApiServiceImpl.getTaskCategories()
             }.onSuccess {
                 it.onSuccess {
-                    if (state.currentCategoryId == null || state.currentCategoryId !in (it?.map { it.id }
+                    if (state.value.currentCategoryId == null || state.value.currentCategoryId !in (it?.map { it.id }
                             ?: emptyList())) {
                         setState {
-                            copy(categories = it ?: emptyList(), currentCategoryId = it?.firstOrNull()?.id)
+                            copy(categories = it?.filter {
+                                it.isNormalList() && it.isNotArchived()
+                            }?.sortedBy { it.order } ?: emptyList(), currentCategoryId = it?.firstOrNull()?.id)
                         }
                     }
                     fetchTasks()
@@ -53,7 +53,7 @@ internal class RootStore(
     private fun fetchTasks() {
         coroutineScope.launch {
             withContext(Dispatchers.IO) {
-                val currentCategoryId = state.currentCategoryId ?: return@withContext
+                val currentCategoryId = state.value.currentCategoryId ?: return@withContext
                 kotlin.runCatching {
                     ApiServiceImpl.getTasks(currentCategoryId)
                 }.onSuccess {
@@ -74,8 +74,7 @@ internal class RootStore(
         }
     }
 
-    var state: RootState by mutableStateOf(initialState())
-        private set
+    val state = MutableStateFlow<TaskState>(initialState())
 
     fun onItemClicked(id: Long) {
         setState { copy(editingItemId = id) }
@@ -139,7 +138,7 @@ internal class RootStore(
         }
     }
 
-    private fun RootState.updateItem(id: Long, transformer: (TodoItem) -> TodoItem): RootState =
+    private fun TaskState.updateItem(id: Long, transformer: (TodoItem) -> TodoItem): TaskState =
         copy(items = items.updateItem(id = id, transformer = transformer))
 
     private fun List<TodoItem>.updateItem(
@@ -148,13 +147,13 @@ internal class RootStore(
     ): List<TodoItem> =
         map { item -> if (item.id == id) transformer(item) else item }
 
-    private fun initialState(): RootState =
-        RootState(
+    private fun initialState(): TaskState =
+        TaskState(
             items = emptyList()
         )
 
-    private inline fun setState(update: RootState.() -> RootState) {
-        state = state.update()
+    private inline fun setState(update: TaskState.() -> TaskState) {
+        state.value = state.value.update()
     }
 
     fun onCategoryClicked(id: Long) {
@@ -180,8 +179,20 @@ internal class RootStore(
         fetchCategories()
     }
 
+    fun showAddWindow() {
+        setState {
+            copy(showAddWindow = true)
+        }
+    }
 
-    data class RootState(
+    fun hideAddWindow() {
+        setState {
+            copy(showAddWindow = false)
+        }
+    }
+
+
+    data class TaskState(
         val categories: List<TaskCategory> = emptyList(),
         val currentCategoryId: Long? = null,
         val categoryExpanded: Boolean = false,
@@ -189,5 +200,6 @@ internal class RootStore(
         val inputText: String = "",
         val editingItemId: Long? = null,
         val snackbarText: String? = null,
+        val showAddWindow: Boolean = false,
     )
 }

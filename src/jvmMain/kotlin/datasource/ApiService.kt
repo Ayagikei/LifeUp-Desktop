@@ -2,6 +2,7 @@ package datasource
 
 import datasource.data.*
 import datasource.net.HttpResponse
+import kotlinx.serialization.json.JsonElement
 
 interface ApiService {
 
@@ -38,5 +39,6 @@ interface ApiService {
 
     suspend fun getInfo(): Info
 
+    suspend fun rawCall(api: String): JsonElement?
     suspend fun purchaseItem(id: Long?, price: Long, desc: String)
 }

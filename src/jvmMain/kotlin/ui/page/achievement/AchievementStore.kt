@@ -32,6 +32,7 @@ internal class AchievementStore(
     data class AchievementState(
         val state: Int,
         val categories: List<AchievementCategory>,
+        // TODO: handle subcategory UI
         val achievements: List<Achievement> = emptyList(),
         val currentCategoryId: Long? = null,
         val categoryExpanded: Boolean = false,

@@ -3,10 +3,14 @@ package ui
 import AppScope
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScaffoldState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import base.OkHttpClientHolder
 import datasource.ApiService
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
@@ -162,10 +166,11 @@ class AppStoreImpl(
     }
 }
 
-val AppStore = compositionLocalOf<AppStoreImpl> { error("AppStore error") }
+val AppStore = compositionLocalOf {
+    AppStoreImpl(GlobalScope)
+}
 
 val ScaffoldState = compositionLocalOf<ScaffoldState> { error("ScaffoldState error") }
 
 val Strings: StringText
-    @Composable
-    get() = AppStore.current.strings
+    get() = Localization.get()

@@ -7,6 +7,7 @@ import datasource.net.HttpResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.long
@@ -127,6 +128,17 @@ object ApiServiceImpl : ApiService {
                 .build()
             val request = Request.Builder().url(url).build()
             okHttpClient.newCall(request).execute()
+        }
+    }
+
+    override suspend fun rawCall(api: String): JsonElement? {
+        return withContext(Dispatchers.IO) {
+            val url = (OkHttpClientHolder.host + "/api/contentprovider").toHttpUrl().newBuilder()
+                .addQueryParameter("url", api)
+                .build()
+            val request = Request.Builder().url(url).build()
+            val response = okHttpClient.newCall(request).execute()
+            json.decodeFromString<HttpResponse<JsonElement>>(response.body?.string() ?: "").successOrThrow()
         }
     }
 

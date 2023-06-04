@@ -28,6 +28,11 @@ kotlin {
             dependencies {
                 implementation(compose.desktop.currentOs)
                 implementation(compose.materialIconsExtended)
+                implementation(compose.uiTooling)
+                // debugImplementation(compose.preview)
+
+                // kotlinx-coroutines-swing
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.5.2")
 
                 // TODO: md3 migration
                 // implementation(compose.material3)
