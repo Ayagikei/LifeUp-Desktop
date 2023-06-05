@@ -110,7 +110,7 @@ private fun ListContent(
 
         LazyColumn(state = listState) {
             items(items) { item ->
-                if (item.type == 0) {
+                if (item.isNormalAchievement()) {
                     Item(
                         item = item,
                         onClicked = { onItemClicked(item.id ?: 0L) },
