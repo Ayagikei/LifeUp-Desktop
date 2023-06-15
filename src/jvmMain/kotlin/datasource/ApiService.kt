@@ -40,5 +40,9 @@ interface ApiService {
     suspend fun getInfo(): Info
 
     suspend fun rawCall(api: String): JsonElement?
+
     suspend fun purchaseItem(id: Long?, price: Long, desc: String)
+
+    suspend fun checkUpdate(): ApiServiceImpl.UpdateInfo?
+
 }

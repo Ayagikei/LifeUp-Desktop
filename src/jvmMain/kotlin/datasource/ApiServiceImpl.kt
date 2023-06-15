@@ -6,6 +6,7 @@ import datasource.data.*
 import datasource.net.HttpResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
@@ -152,5 +153,32 @@ object ApiServiceImpl : ApiService {
             .addPathSegment(icon)
             .build()
         return url.toString()
+    }
+
+    @Serializable
+    data class UpdateInfo(
+        val versionCode: Int,
+        val versionName: String?,
+        val downloadUrl: String,
+        val releaseNotes: String?,
+        val downloadWebsite: String?
+    )
+
+    private const val UPDATE_URL = "https://example.com/update"
+
+    override suspend fun checkUpdate(): UpdateInfo? {
+        return withContext(Dispatchers.IO) {
+            val request = Request.Builder().url(UPDATE_URL).build()
+            val response = okHttpClient.newCall(request).execute()
+            if (response.isSuccessful) {
+                val jsonText = response.body?.string()
+                jsonText?.let {
+                    val updateInfo = json.decodeFromString<UpdateInfo>(it)
+                    updateInfo
+                }
+            } else {
+                null
+            }
+        }
     }
 }

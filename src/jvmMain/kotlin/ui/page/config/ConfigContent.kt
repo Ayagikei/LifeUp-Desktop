@@ -117,6 +117,37 @@ fun ConfigScreen(modifier: Modifier = Modifier) {
                 color = MaterialTheme.colors.unimportantText,
                 fontSize = 14.sp
             )
+//            val updateInfo = globalStore.updateInfo
+//            if ((updateInfo?.versionCode ?: 0) > Val.versionCode) {
+//                // Show a button to download the update
+//                Button(
+//                    onClick = {
+//                        val uri = runCatching { URI(updateInfo?.downloadWebsite ?: "") }.getOrNull()
+//                        Desktop.getDesktop().browse(uri)
+//                    },
+//                    modifier = Modifier.padding(start = 8.dp)
+//                ) {
+//                    Text("Download Update")
+//                }
+//            } else {
+//                // Show a secondary button to check for updates
+//                val scaffoldState = ScaffoldState.current
+//
+//                Button(
+//                    onClick = {
+//                        coroutineScope.launch {
+//                            val result = globalStore.checkUpdateAwait()
+//                            if(result?.versionCode <= Val.versionCode) {
+//                                scaffoldState.snackbarHostState.showSnackbar("No update available")
+//                                return@launch
+//                            }
+//                        }
+//                    },
+//                    modifier = Modifier.padding(start = 8.dp)
+//                ) {
+//                    Text("Check for Updates")
+//                }
+//            }
             Spacer16dpH()
             Divider()
             Spacer16dpH()
