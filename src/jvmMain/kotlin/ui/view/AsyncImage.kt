@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -27,7 +28,8 @@ fun <T> AsyncImage(
     contentDescription: String,
     modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.Fit,
-    onError: @Composable () -> Unit
+    onError: @Composable () -> Unit,
+    colorFilter: ColorFilter? = null
 ) {
     if (!condition) {
         onError()
@@ -51,7 +53,8 @@ fun <T> AsyncImage(
             painter = painterFor(image!!),
             contentDescription = contentDescription,
             contentScale = contentScale,
-            modifier = modifier
+            modifier = modifier,
+            colorFilter = colorFilter
         )
     } else {
         onError()

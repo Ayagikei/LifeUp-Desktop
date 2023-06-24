@@ -110,10 +110,14 @@ private fun ListContent(
 
         LazyColumn(state = listState) {
             items(items) { item ->
-                Item(
-                    item = item,
-                    onClicked = { onItemClicked(item.id ?: 0L) },
-                )
+                if (item.isNormalAchievement()) {
+                    Item(
+                        item = item,
+                        onClicked = { onItemClicked(item.id ?: 0L) },
+                    )
+                } else {
+                    Subcategory(item = item)
+                }
 
                 Divider()
             }
@@ -123,43 +127,6 @@ private fun ListContent(
             modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
             adapter = rememberScrollbarAdapter(scrollState = listState)
         )
-    }
-}
-
-@Composable
-private fun CoinRow(
-    number: Long,
-    onClicked: () -> Unit
-) {
-    Row(
-        modifier = Modifier.clickable(onClick = onClicked).requiredSizeIn(minHeight = 56.dp)
-            .padding(vertical = 8.dp, horizontal = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Spacer(modifier = Modifier.width(8.dp))
-        Image(
-            painter = painterResource("icons/xml/ic_coin.xml"),
-            contentDescription = "coin icon",
-            modifier = Modifier.size(40.dp)
-        )
-
-
-        Spacer(modifier = Modifier.width(8.dp))
-
-        Text(
-            text = AnnotatedString(Strings.coin),
-            modifier = Modifier.weight(1F).align(Alignment.CenterVertically),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-
-        Spacer(modifier = Modifier.width(8.dp))
-
-
-        val color = Color(255, 163, 0)
-        Text(number.toString(), fontSize = 16.sp, fontWeight = FontWeight.Bold, color = color)
-
-        Spacer(modifier = Modifier.width(MARGIN_SCROLLBAR))
     }
 }
 
@@ -247,6 +214,52 @@ private fun Item(
         }
 
 
+
+        Spacer(modifier = Modifier.width(MARGIN_SCROLLBAR))
+    }
+}
+
+
+@Composable
+private fun Subcategory(
+    item: Achievement,
+) {
+    Row(
+        modifier = Modifier.requiredSizeIn(minHeight = 56.dp)
+            .padding(vertical = 8.dp, horizontal = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Spacer(modifier = Modifier.width(8.dp))
+
+//        logger.log(Level.INFO, "item.icon: ${item.iconUri}")
+//        AsyncImage(
+//            condition = item.iconUri.isNotBlank(),
+//            load = {
+//                loadImageBitmap(item.iconUri)
+//            },
+//            painterFor = {
+//                remember { BitmapPainter(it) }
+//            },
+//            contentDescription = "skill icon",
+//            modifier = Modifier.size(40.dp),
+//            onError = {
+//                Image(
+//                    painter = painterResource("icons/xml/ic_pic_loading_cir.xml"),
+//                    contentDescription = "skill icon",
+//                    modifier = Modifier.size(40.dp)
+//                )
+//            }
+//        )
+//
+
+        Column(Modifier.weight(1F).align(Alignment.CenterVertically)) {
+            Text(
+                text = AnnotatedString(item.name),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.h6
+            )
+        }
 
         Spacer(modifier = Modifier.width(MARGIN_SCROLLBAR))
     }

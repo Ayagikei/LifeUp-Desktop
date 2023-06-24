@@ -204,12 +204,12 @@ private fun Item(
             painterFor = {
                 remember { BitmapPainter(it) }
             },
-            contentDescription = "skill icon",
+            contentDescription = "item icon",
             modifier = Modifier.size(56.dp),
             onError = {
                 Image(
                     painter = painterResource("icons/xml/ic_pic_loading_cir.xml"),
-                    contentDescription = "skill icon",
+                    contentDescription = "item icon",
                     modifier = Modifier.size(56.dp)
                 )
             }

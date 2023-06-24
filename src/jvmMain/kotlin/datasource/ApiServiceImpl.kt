@@ -6,12 +6,15 @@ import datasource.data.*
 import datasource.net.HttpResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.long
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Request
+import java.util.*
 
 object ApiServiceImpl : ApiService {
 
@@ -130,6 +133,17 @@ object ApiServiceImpl : ApiService {
         }
     }
 
+    override suspend fun rawCall(api: String): JsonElement? {
+        return withContext(Dispatchers.IO) {
+            val url = (OkHttpClientHolder.host + "/api/contentprovider").toHttpUrl().newBuilder()
+                .addQueryParameter("url", api)
+                .build()
+            val request = Request.Builder().url(url).build()
+            val response = okHttpClient.newCall(request).execute()
+            json.decodeFromString<HttpResponse<JsonElement>>(response.body?.string() ?: "").successOrThrow()
+        }
+    }
+
     override fun getIconUrl(icon: String): String {
         if (icon.isEmpty()) {
             return ""
@@ -140,5 +154,58 @@ object ApiServiceImpl : ApiService {
             .addPathSegment(icon)
             .build()
         return url.toString()
+    }
+
+    @Serializable
+    data class UpdateInfoMap(
+        val versionCode: Int,
+        val downloadUrl: String?,
+        val localeInfo: Map<String, UpdateInfo>
+    )
+
+    @Serializable
+    data class UpdateInfo(
+        val versionName: String?,
+        val downloadUrl: String?,
+        val releaseNotes: String?,
+        val downloadWebsite: String?
+    )
+
+    data class LocalizedUpdateInfo(
+        val versionCode: Int,
+        val versionName: String?,
+        val downloadUrl: String?,
+        val releaseNotes: String?,
+        val downloadWebsite: String?
+    )
+
+    private const val UPDATE_URL = "http://cdn.lifeupapp.fun/version/version.json"
+
+
+    override suspend fun checkUpdate(): LocalizedUpdateInfo? {
+        return withContext(Dispatchers.IO) {
+            val request = Request.Builder().url(UPDATE_URL).build()
+            val response = okHttpClient.newCall(request).execute()
+            if (response.isSuccessful) {
+                val jsonText = response.body?.string()
+                jsonText?.let {
+                    val updateInfo = json.decodeFromString<UpdateInfoMap>(it)
+                    val locale = Locale.getDefault()
+                    val bestMatchedUpdateInfo =
+                        updateInfo.localeInfo["${locale.language.lowercase()}_${locale.country.lowercase()}"]
+                            ?: updateInfo.localeInfo[locale.language.lowercase()] ?: updateInfo.localeInfo["en"]
+
+                    return@let LocalizedUpdateInfo(
+                        versionCode = updateInfo.versionCode,
+                        downloadUrl = updateInfo.downloadUrl,
+                        versionName = bestMatchedUpdateInfo?.versionName ?: "",
+                        releaseNotes = bestMatchedUpdateInfo?.releaseNotes ?: "",
+                        downloadWebsite = bestMatchedUpdateInfo?.downloadWebsite ?: ""
+                    )
+                }
+            } else {
+                null
+            }
+        }
     }
 }

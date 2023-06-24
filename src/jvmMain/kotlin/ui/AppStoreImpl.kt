@@ -3,10 +3,16 @@ package ui
 import AppScope
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScaffoldState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import base.OkHttpClientHolder
 import datasource.ApiService
+import datasource.ApiServiceImpl
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
@@ -48,6 +54,7 @@ class AppStoreImpl(
     var dialogStatus: DialogStatus? by mutableStateOf(null)
         private set
 
+    var updateInfo: ApiServiceImpl.LocalizedUpdateInfo? = null
 
     var coinValue: Long? by mutableStateOf(null)
         private set
@@ -90,10 +97,40 @@ class AppStoreImpl(
             mdnsServiceDiscovery.register()
         }
         updateIpOrPort()
+
+        coroutineScope.launch {
+            var retryDelay = 5000L
+            while (true) {
+                if (checkUpdateAwait() != null) {
+                    // Success, check for updates every 3 hours
+                    retryDelay = 1000L * 60 * 60 * 3 // 3 hours
+                } else {
+                    // Failure, retry with increasing delay
+
+                    retryDelay *= 2 // Double the delay time
+                    if (retryDelay > 1000L * 60 * 60 * 3) {
+                        retryDelay = 1000L * 60 * 60 * 3
+                    }
+                }
+                delay(retryDelay)
+            }
+        }
     }
 
     fun listServerInfo(): List<MdnsServiceDiscovery.IpAndPort> {
         return mdnsServiceDiscovery.ipAndPorts.values.toList().mapNotNull { it }
+    }
+
+    private fun checkUpdate() {
+        coroutineScope.launch {
+            checkUpdateAwait()
+        }
+    }
+
+    suspend fun checkUpdateAwait(): ApiServiceImpl.LocalizedUpdateInfo? {
+        return apiService.checkUpdate()?.also {
+            this@AppStoreImpl.updateInfo = it
+        }
     }
 
     fun updateIpOrPort(ip: String = this.ip, port: String = this.port) {
@@ -162,10 +199,11 @@ class AppStoreImpl(
     }
 }
 
-val AppStore = compositionLocalOf<AppStoreImpl> { error("AppStore error") }
+val AppStore = compositionLocalOf {
+    AppStoreImpl(GlobalScope)
+}
 
 val ScaffoldState = compositionLocalOf<ScaffoldState> { error("ScaffoldState error") }
 
 val Strings: StringText
-    @Composable
-    get() = AppStore.current.strings
+    get() = Localization.get()

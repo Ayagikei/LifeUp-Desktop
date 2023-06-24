@@ -191,6 +191,7 @@ fun main() {
                     lastError = it
                     window.dispatchEvent(WindowEvent(window, WindowEvent.WINDOW_CLOSING))
                     // throw it
+                    throw it
                 }
             }
         ) {

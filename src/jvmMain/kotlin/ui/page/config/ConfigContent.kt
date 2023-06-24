@@ -19,11 +19,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import base.Val
+import kotlinx.coroutines.launch
 import service.MdnsServiceDiscovery
 import ui.AppStore
+import ui.ScaffoldState
 import ui.Strings
 import ui.page.list.Dialog
 import ui.theme.unimportantText
+import java.awt.Desktop
+import java.net.URI
 
 @Composable
 fun ConfigScreen(modifier: Modifier = Modifier) {
@@ -117,6 +121,38 @@ fun ConfigScreen(modifier: Modifier = Modifier) {
                 color = MaterialTheme.colors.unimportantText,
                 fontSize = 14.sp
             )
+            Spacer24dpH()
+            val updateInfo = globalStore.updateInfo
+            if ((updateInfo?.versionCode ?: 0) > Val.versionCode) {
+                // Show a button to download the update
+                Button(
+                    onClick = {
+                        val uri = runCatching { URI(updateInfo?.downloadWebsite ?: "") }.getOrNull()
+                        if (Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                            Desktop.getDesktop().browse(uri)
+                        }
+                    }
+                ) {
+                    Text(Strings.about_update_button)
+                }
+            } else {
+                // Show a secondary button to check for updates
+                val scaffoldState = ScaffoldState.current
+
+                OutlinedButton(
+                    onClick = {
+                        coroutineScope.launch {
+                            val result = globalStore.checkUpdateAwait()
+                            if (result != null && result.versionCode <= Val.versionCode) {
+                                scaffoldState.snackbarHostState.showSnackbar(Strings.about_message_no_update)
+                                return@launch
+                            }
+                        }
+                    }
+                ) {
+                    Text(Strings.about_check_updates_button)
+                }
+            }
             Spacer16dpH()
             Divider()
             Spacer16dpH()
@@ -180,11 +216,12 @@ internal fun SelectIpDialog(
 
 
 @Composable
-fun Subtitle(text: String) {
+fun Subtitle(text: String, modifier: Modifier = Modifier) {
     Text(
         text = text,
         style = MaterialTheme.typography.subtitle1.copy(color = MaterialTheme.colors.primary),
-        fontWeight = FontWeight.Bold
+        fontWeight = FontWeight.Bold,
+        modifier = modifier
     )
 }
 
@@ -197,6 +234,11 @@ fun Spacer24dpH() {
 @Composable
 fun Spacer16dpH() {
     Spacer(Modifier.height(16.dp))
+}
+
+@Composable
+fun Spacer16dpW() {
+    Spacer(Modifier.width(16.dp))
 }
 
 @Composable

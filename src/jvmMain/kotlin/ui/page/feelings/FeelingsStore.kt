@@ -94,13 +94,13 @@ internal class FeelingsStore(
                 var previousDate: String? = null
                 feelings.forEach { feeling ->
                     val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(feeling.time)
-                    if (currentDate != previousDate) {
+                    if (currentDate != previousDate && dateFormat != "yyyy-MM-dd") {
                         file.appendText("### $currentDate\n\n")
                         previousDate = currentDate
                     }
                     file.appendText("${feeling.content}\n\n")
                     feeling.attachments.forEach { attachment ->
-                        val attachmentFile = File(attachmentsDir, attachment.md5())
+                        val attachmentFile = File(attachmentsDir, attachment.md5() + ".jpg")
                         saveAttachmentFileTo(attachment, attachmentFile)
                         file.appendText("![](${attachmentFile.absolutePath})\n\n")
                     }
@@ -122,8 +122,20 @@ internal class FeelingsStore(
             return
         }
         destFile.createNewFile()
-        connection.getInputStream().buffered().use {
+        val copied = connection.getInputStream().buffered().use {
             it.copyTo(destFile.outputStream())
+        }
+        // maybe failed
+
+        if (copied == 0L) {
+            try {
+                val cachedFile = File(globalStore.cacheDir, attachment.md5() + ".jpg")
+                if (cachedFile.exists() && cachedFile.length() >= 0) {
+                    cachedFile.copyTo(destFile, overwrite = true)
+                }
+            } catch (ignore: Exception) {
+                // do nothing
+            }
         }
     }
 

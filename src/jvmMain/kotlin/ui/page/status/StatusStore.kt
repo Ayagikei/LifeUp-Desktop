@@ -1,8 +1,5 @@
 package ui.page.status
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import base.launchSafely
 import datasource.ApiServiceImpl
 import datasource.data.Skill
@@ -10,6 +7,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import logger
 import ui.AppStoreImpl
 import java.util.logging.Level
@@ -20,8 +18,10 @@ internal class StatusStore(
 ) {
 
     private val apiService = ApiServiceImpl
-    var state: StatusState by mutableStateOf(StatusState(0, skills = emptyList(), coin = globalStore.coinValue ?: 0))
-        private set
+//    var state: StatusState by mutableStateOf(StatusState(0, skills = emptyList(), coin = globalStore.coinValue ?: 0))
+//        private set
+
+    val state = MutableStateFlow(StatusState(0, skills = emptyList(), coin = globalStore.coinValue ?: 0))
 
     data class StatusState(
         val state: Int,
@@ -38,7 +38,7 @@ internal class StatusStore(
     }
 
     private inline fun setState(update: StatusState.() -> StatusState) {
-        state = state.update()
+        state.value = state.value.update()
     }
 
     data class RequestResult(

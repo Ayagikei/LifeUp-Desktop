@@ -234,7 +234,7 @@ private fun Item(
     }
 }
 
-private fun getLocalIconFilePathBySkillType(type: Int): String {
+fun getLocalIconFilePathBySkillType(type: Int): String {
     return when (type) {
         Skill.SkillType.DEFAULT_CHARM.type -> "ic_attr_charm.xml"
         Skill.SkillType.DEFAULT_CREATIVE.type -> "ic_attr_creative.xml"

@@ -4,6 +4,8 @@ interface StringText {
 
     val language: String
 
+    val perfer_country: Array<String>
+
     val appName: String
 
     val module_tasks: String
@@ -95,4 +97,59 @@ interface StringText {
     val common_dir_select_button: String
 
     val common_dir_select_button_tooltip: String
+
+    val about_update_button: String
+
+    val about_check_updates_button: String
+
+    val about_message_no_update: String
+
+    val add_tasks_title_reward: String
+
+    val add_tasks_reward_coin_min: String
+
+    val add_tasks_reward_coin_max: String
+
+    val add_tasks_reward_shop_items: String
+
+    val common_unselected: String
+
+    val common_search: String
+
+    val common_unknown: String
+
+    val add_tasks_reward_shop_items_quantity: String
+
+    val add_tasks_title_skills: String
+
+    val add_tasks_exp: String
+
+    val add_tasks_title_base: String
+
+    val add_tasks_todo: String
+
+    val add_tasks_notes: String
+
+    val add_tasks_frequency_none: String
+
+    val add_tasks_frequency_daily: String
+
+
+    val add_tasks_frequency_weekly: String
+
+
+    val add_tasks_frequency_monthly: String
+
+
+    val add_tasks_frequency_yearly: String
+
+    val add_tasks_frequency_unlimited: String
+
+    val add_tasks_frequency_desc: String
+
+    val add_tasks_success: String
+
+    val add_tasks_failed: String
+
+    val add_tasks_dialog_title: String
 }

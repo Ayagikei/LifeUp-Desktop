@@ -102,13 +102,17 @@ fun FeelingsScreen(modifier: Modifier = Modifier) {
                         Text(Strings.cancel)
                     }
 
+                    val dialogTitleString = Strings.common_dir_select_title
+                    val approveButtonTextString = Strings.common_dir_select_button
+                    val approveButtonToolTipTextString = Strings.common_dir_select_button_tooltip
+
                     TextButton(modifier = Modifier.padding(start = 16.dp), onClick = {
                         model.setState { copy(showingDialog = false) }
                         val fileChooser = JFileChooser("/").apply {
                             fileSelectionMode = JFileChooser.DIRECTORIES_ONLY
-                            dialogTitle = Strings.common_dir_select_title
-                            approveButtonText = Strings.common_dir_select_button
-                            approveButtonToolTipText = Strings.common_dir_select_button_tooltip
+                            this.dialogTitle = dialogTitleString
+                            this.approveButtonText = approveButtonTextString
+                            approveButtonToolTipText = approveButtonToolTipTextString
                         }
                         fileChooser.showOpenDialog(null /* OR null */)
                         val result = fileChooser.selectedFile
