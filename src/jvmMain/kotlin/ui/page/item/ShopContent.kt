@@ -1,6 +1,7 @@
 package ui.page.item
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,7 +29,6 @@ import logger
 import ui.Strings
 import ui.page.config.Spacer4dpH
 import ui.page.list.MARGIN_SCROLLBAR
-import ui.page.list.VerticalScrollbar
 import ui.page.list.rememberScrollbarAdapter
 import ui.theme.subTitle3
 import ui.theme.unimportantText
@@ -61,7 +61,7 @@ internal fun ShopContent(
                 )
             ) {
                 if (selectedCategory == null) {
-                    Text(text = Strings.module_achievements)
+                    Text(text = Strings.module_shop)
                     Icon(Icons.Default.ArrowDropDown, "")
                 } else {
                     Text(text = selectedCategory.name)
@@ -204,12 +204,12 @@ private fun Item(
             painterFor = {
                 remember { BitmapPainter(it) }
             },
-            contentDescription = "skill icon",
+            contentDescription = "item icon",
             modifier = Modifier.size(56.dp),
             onError = {
                 Image(
                     painter = painterResource("icons/xml/ic_pic_loading_cir.xml"),
-                    contentDescription = "skill icon",
+                    contentDescription = "item icon",
                     modifier = Modifier.size(56.dp)
                 )
             }

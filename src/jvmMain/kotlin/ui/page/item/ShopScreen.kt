@@ -4,9 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -25,7 +23,7 @@ fun ShopScreen(modifier: Modifier = Modifier) {
     val coroutineScope = rememberCoroutineScope()
     val globalStore = AppStore.current
     val model = remember { ShopStore(coroutineScope, globalStore) }
-    val state = model.state
+    val state by model.state.collectAsState()
     val coin = state.coin
     val scaffoldState = ScaffoldState.current
     val text = Strings.snackbar_purchase_item

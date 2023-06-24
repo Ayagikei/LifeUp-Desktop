@@ -1,5 +1,6 @@
 package ui.page.list
 
+import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -39,7 +40,8 @@ internal fun MainContent(
     onCategoryClicked: (Long) -> Unit,
     onCategoryExpended: () -> Unit,
     onCategoryDismissed: () -> Unit,
-    onRefreshClick: () -> Unit
+    onRefreshClick: () -> Unit,
+    onAddClicked: () -> Unit
 ) {
 
     Column(modifier) {
@@ -72,6 +74,9 @@ internal fun MainContent(
                 }
             }
         }, backgroundColor = MaterialTheme.colors.primarySurface, elevation = 0.dp, actions = {
+            IconButton(onAddClicked) {
+                Icon(Icons.Default.Add, "Add")
+            }
             IconButton(onRefreshClick) {
                 Icon(Icons.Default.Refresh, "Refresh")
             }

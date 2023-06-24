@@ -6,6 +6,10 @@ class EnStrings : StringText {
 
     override val language: String
         get() = "en"
+
+    override val perfer_country: Array<String>
+        get() = arrayOf("")
+
     override val appName: String
         get() = "LifeUp desktop"
     override val cancel: String
@@ -101,4 +105,105 @@ class EnStrings : StringText {
                 "icon designed by 下车君\n\n" +
                 "using Honor HONOR Sans Font\n\n" +
                 "powered by Kotlin, Jetpack Compose and Compose Desktop\n"
+
+    override val auto_detect: String
+        get() = "Auto Detect"
+
+    override val auto_detect_dialog_title: String
+        get() = "Auto Detect"
+
+    override val auto_detect_dialog_empty_desc: String
+        get() = "The LifeUp Cloud service was not detected.\n" +
+                "\n" +
+                "Please make sure that your \"LifeUp Cloud\" is in the same local area network, and the service has been activated.\n" +
+                "\n" +
+                "You can try restarting the service, or try again later."
+
+    override val feelings_export_group_by_day: String
+        get() = "Group by day"
+
+    override val feelings_export_group_by_month: String
+        get() = "Group by month"
+
+    override val feelings_export_group_by_year: String
+        get() = "Group by year"
+
+    override val feelings_export_dialog_title: String
+        get() = "Export to Markdown format?"
+    override val feelings_export_dialog_desc: String
+        get() = "Export all feelings and pictures to markdown format.\n" +
+                "\n" +
+                "Through the markdown format, you can easily render your feelings into different document formats. For details, please refer to the online information.\n" +
+                "\n" +
+                "Please select the export destination, try not to select the system-related folder of the system disk, because LifeUp may have insufficient permissions."
+    override val feelings_export_progress_dialog_title: String
+        get() = "Exporting..."
+    override val feelings_export_progress_dialog_desc: String
+        get() = "Progress: %s%"
+
+    override val common_dir_select_title: String
+        get() = "Select a folder"
+
+    override val common_dir_select_button: String
+        get() = "Select"
+
+    override val common_dir_select_button_tooltip: String
+        get() = "Select current directory as save destination"
+
+    override val about_update_button: String
+        get() = "Update"
+    override val about_check_updates_button: String
+        get() = "Check for Updates"
+    override val about_message_no_update: String
+        get() = "No update available"
+
+    override val add_tasks_title_reward: String
+        get() = "Reward"
+    override val add_tasks_reward_coin_min: String
+        get() = "Min"
+    override val add_tasks_reward_coin_max: String
+        get() = "Max"
+    override val add_tasks_reward_shop_items: String
+        get() = "Shop Items"
+    override val common_unselected: String
+        get() = "Unselected"
+    override val common_search: String
+        get() = "Search"
+    override val common_unknown: String
+        get() = "Unknown"
+    override val add_tasks_reward_shop_items_quantity: String
+        get() = "Quantity"
+    override val add_tasks_title_skills: String
+        get() = "Attributes"
+    override val add_tasks_exp: String
+        get() = "Exp"
+    override val add_tasks_title_base: String
+        get() = "Base"
+    override val add_tasks_todo: String
+        get() = "ToDo"
+    override val add_tasks_notes: String
+        get() = "Notes"
+    override val add_tasks_frequency_none: String
+        get() = "None"
+    override val add_tasks_frequency_daily: String
+        get() = "Daily"
+    override val add_tasks_frequency_weekly: String
+        get() = "Weekly"
+    override val add_tasks_frequency_monthly: String
+        get() = "Monthly"
+    override val add_tasks_frequency_yearly: String
+        get() = "Yearly"
+    override val add_tasks_frequency_unlimited: String
+        get() = "Unlimited"
+    override val add_tasks_frequency_desc: String
+        get() = "Frequency: %s"
+
+    override val add_tasks_success: String
+        get() = "Added success"
+
+    override val add_tasks_failed: String
+        get() = "Failed to add task, please try again later and check your LifeUp Cloud state."
+
+    override val add_tasks_dialog_title: String
+        get() = "Add Tasks"
 }

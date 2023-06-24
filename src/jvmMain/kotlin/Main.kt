@@ -37,8 +37,10 @@ import ui.page.list.TasksScreen
 import ui.page.status.StatusScreen
 import ui.theme.AppTheme
 import ui.view.fakeDialog
+import java.awt.Toolkit
 import java.awt.event.WindowEvent
 import java.util.logging.Logger
+import javax.swing.UIManager
 import kotlin.system.exitProcess
 
 @ExperimentalUnitApi
@@ -180,6 +182,8 @@ fun main() {
     application(exitProcessOnExit = false) {
         // To fix the window crash issue: https://github.com/JetBrains/compose-jb/issues/610
         System.setProperty("skiko.renderApi", "OPENGL")
+        // get native dialog UI
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
 
         CompositionLocalProvider(
             LocalWindowExceptionHandlerFactory provides WindowExceptionHandlerFactory { window ->
@@ -187,15 +191,23 @@ fun main() {
                     lastError = it
                     window.dispatchEvent(WindowEvent(window, WindowEvent.WINDOW_CLOSING))
                     // throw it
+                    throw it
                 }
             }
         ) {
+            // sum better window size
+            val screenSize = Toolkit.getDefaultToolkit().screenSize
+            val width = screenSize.width
+            val height = screenSize.height
+            val windowWidth = if (width > 1920) 1200 else 800
+            val windowHeight = if (height > 1080) 900 else 600
+
             Window(
                 onCloseRequest = ::exitApplication,
                 title = "LifeUp",
                 state = rememberWindowState(
                     position = WindowPosition(alignment = Alignment.Center),
-                    size = DpSize(1200.dp, 900.dp)
+                    size = DpSize(windowWidth.dp, windowHeight.dp)
                 ),
                 icon = painterResource("icons/svg/icon.svg")
             ) {

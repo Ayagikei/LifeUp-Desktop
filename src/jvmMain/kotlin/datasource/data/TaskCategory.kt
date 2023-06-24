@@ -49,6 +49,14 @@ data class TaskCategory(
         }
     }
 
+    fun isNormalList(): Boolean {
+        return (id ?: 0 > 0L) && type == 0
+    }
+
+    fun isNotArchived(): Boolean {
+        return status == 0
+    }
+
     companion object {
         fun builder(block: Builder.() -> Unit): TaskCategory {
             return Builder().apply(block).build()
