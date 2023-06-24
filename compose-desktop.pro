@@ -34,3 +34,5 @@
 -keep class * implements com.sun.jna.* { *; }
 
 -keep class org.jmdns.** { *; }
+
+-keep class kotlinx.coroutines.swing.** { *; }
