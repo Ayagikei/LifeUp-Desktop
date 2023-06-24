@@ -1,7 +1,6 @@
 package base
 
 object Val {
-    // FIXME: get version from gradle
     val version: String
         get() = System.getProperty("jpackage.app-version") ?: "UNKNOWN"
 
@@ -18,7 +17,7 @@ object Val {
         (major * 100000 + minor * 1000 + patch)
     }
 
-    const val targetLifeUpCloudVersion = "1.2.0+"
+    const val targetLifeUpCloudVersion = "1.3.0+"
 
     const val targetLifeUpAndroidVersion = "1.91.3+"
 }
