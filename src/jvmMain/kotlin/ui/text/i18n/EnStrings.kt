@@ -6,6 +6,10 @@ class EnStrings : StringText {
 
     override val language: String
         get() = "en"
+
+    override val perfer_country: Array<String>
+        get() = arrayOf("")
+
     override val appName: String
         get() = "LifeUp desktop"
     override val cancel: String

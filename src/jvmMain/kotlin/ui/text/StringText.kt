@@ -4,6 +4,8 @@ interface StringText {
 
     val language: String
 
+    val perfer_country: Array<String>
+
     val appName: String
 
     val module_tasks: String
