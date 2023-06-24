@@ -14,6 +14,7 @@ import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.long
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Request
+import java.util.*
 
 object ApiServiceImpl : ApiService {
 
@@ -156,25 +157,51 @@ object ApiServiceImpl : ApiService {
     }
 
     @Serializable
-    data class UpdateInfo(
+    data class UpdateInfoMap(
         val versionCode: Int,
+        val downloadUrl: String?,
+        val localeInfo: Map<String, UpdateInfo>
+    )
+
+    @Serializable
+    data class UpdateInfo(
         val versionName: String?,
-        val downloadUrl: String,
+        val downloadUrl: String?,
         val releaseNotes: String?,
         val downloadWebsite: String?
     )
 
-    private const val UPDATE_URL = "https://example.com/update"
+    data class LocalizedUpdateInfo(
+        val versionCode: Int,
+        val versionName: String?,
+        val downloadUrl: String?,
+        val releaseNotes: String?,
+        val downloadWebsite: String?
+    )
 
-    override suspend fun checkUpdate(): UpdateInfo? {
+    private const val UPDATE_URL = "http://cdn.lifeupapp.fun/version/version.json"
+
+
+    override suspend fun checkUpdate(): LocalizedUpdateInfo? {
         return withContext(Dispatchers.IO) {
             val request = Request.Builder().url(UPDATE_URL).build()
             val response = okHttpClient.newCall(request).execute()
             if (response.isSuccessful) {
                 val jsonText = response.body?.string()
                 jsonText?.let {
-                    val updateInfo = json.decodeFromString<UpdateInfo>(it)
-                    updateInfo
+                    val updateInfo = json.decodeFromString<UpdateInfoMap>(it)
+                    val locale = Locale.getDefault()
+                    val bestMatchedUpdateInfo =
+                        updateInfo.localeInfo["${locale.language.lowercase()}_${locale.country.lowercase()}"]
+                            ?: updateInfo.localeInfo[locale.language.lowercase()] ?: updateInfo.localeInfo["en"]
+
+                    return@let LocalizedUpdateInfo(
+                        versionCode = updateInfo.versionCode,
+                        downloadUrl = updateInfo.downloadUrl,
+                        versionName = bestMatchedUpdateInfo?.versionName ?: "",
+                        releaseNotes = bestMatchedUpdateInfo?.releaseNotes ?: "",
+                        downloadWebsite = bestMatchedUpdateInfo?.downloadWebsite ?: ""
+                    )
                 }
             } else {
                 null

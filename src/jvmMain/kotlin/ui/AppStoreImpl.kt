@@ -54,7 +54,7 @@ class AppStoreImpl(
     var dialogStatus: DialogStatus? by mutableStateOf(null)
         private set
 
-    var updateInfo: ApiServiceImpl.UpdateInfo? = null
+    var updateInfo: ApiServiceImpl.LocalizedUpdateInfo? = null
 
     var coinValue: Long? by mutableStateOf(null)
         private set
@@ -126,7 +126,7 @@ class AppStoreImpl(
         }
     }
 
-    suspend fun checkUpdateAwait(): ApiServiceImpl.UpdateInfo? {
+    suspend fun checkUpdateAwait(): ApiServiceImpl.LocalizedUpdateInfo? {
         return apiService.checkUpdate()?.also {
             this@AppStoreImpl.updateInfo = it
         }

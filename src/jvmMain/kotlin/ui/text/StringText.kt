@@ -95,4 +95,10 @@ interface StringText {
     val common_dir_select_button: String
 
     val common_dir_select_button_tooltip: String
+
+    val about_update_button: String
+
+    val about_check_updates_button: String
+
+    val about_message_no_update: String
 }

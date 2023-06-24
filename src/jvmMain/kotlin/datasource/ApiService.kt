@@ -43,6 +43,6 @@ interface ApiService {
 
     suspend fun purchaseItem(id: Long?, price: Long, desc: String)
 
-    suspend fun checkUpdate(): ApiServiceImpl.UpdateInfo?
+    suspend fun checkUpdate(): ApiServiceImpl.LocalizedUpdateInfo?
 
 }

@@ -145,4 +145,11 @@ class EnStrings : StringText {
 
     override val common_dir_select_button_tooltip: String
         get() = "Select current directory as save destination"
+
+    override val about_update_button: String
+        get() = "Update"
+    override val about_check_updates_button: String
+        get() = "Check for Updates"
+    override val about_message_no_update: String
+        get() = "No update available"
 }

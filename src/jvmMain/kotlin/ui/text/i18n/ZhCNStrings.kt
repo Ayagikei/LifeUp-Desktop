@@ -149,4 +149,11 @@ class ZhCNStrings : StringText {
 
     override val common_dir_select_button_tooltip: String
         get() = "选择当前文件夹作为保存处"
+
+    override val about_update_button: String
+        get() = "更新"
+    override val about_check_updates_button: String
+        get() = "检测更新"
+    override val about_message_no_update: String
+        get() = "你已经拥有最新版啦~"
 }
