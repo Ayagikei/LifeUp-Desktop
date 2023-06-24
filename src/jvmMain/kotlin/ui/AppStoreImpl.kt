@@ -106,12 +106,13 @@ class AppStoreImpl(
                     retryDelay = 1000L * 60 * 60 * 3 // 3 hours
                 } else {
                     // Failure, retry with increasing delay
-                    delay(retryDelay)
+
                     retryDelay *= 2 // Double the delay time
                     if (retryDelay > 1000L * 60 * 60 * 3) {
                         retryDelay = 1000L * 60 * 60 * 3
                     }
                 }
+                delay(retryDelay)
             }
         }
     }
