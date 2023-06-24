@@ -161,4 +161,54 @@ class ZhHantStrings : StringText {
         get() = "檢測更新"
     override val about_message_no_update: String
         get() = "你已經擁有最新版啦~"
+
+    override val add_tasks_title_reward: String
+        get() = "獎勵"
+    override val add_tasks_reward_coin_min: String
+        get() = "最小值"
+    override val add_tasks_reward_coin_max: String
+        get() = "最大值"
+    override val add_tasks_reward_shop_items: String
+        get() = "物品"
+    override val common_unselected: String
+        get() = "未選擇"
+    override val common_search: String
+        get() = "搜尋"
+    override val common_unknown: String
+        get() = "未知"
+    override val add_tasks_reward_shop_items_quantity: String
+        get() = "數量"
+    override val add_tasks_title_skills: String
+        get() = "屬性"
+    override val add_tasks_exp: String
+        get() = "經驗值"
+    override val add_tasks_title_base: String
+        get() = "基礎"
+    override val add_tasks_todo: String
+        get() = "待辦"
+    override val add_tasks_notes: String
+        get() = "備註"
+    override val add_tasks_frequency_none: String
+        get() = "無"
+    override val add_tasks_frequency_daily: String
+        get() = "每日"
+    override val add_tasks_frequency_weekly: String
+        get() = "每週"
+    override val add_tasks_frequency_monthly: String
+        get() = "每月"
+    override val add_tasks_frequency_yearly: String
+        get() = "每年"
+    override val add_tasks_frequency_unlimited: String
+        get() = "無限"
+    override val add_tasks_frequency_desc: String
+        get() = "重複: %s"
+
+    override val add_tasks_success: String
+        get() = "添加成功"
+
+    override val add_tasks_failed: String
+        get() = "添加任務失敗，請稍後再試並檢查你的《雲人升》狀態。"
+
+    override val add_tasks_dialog_title: String
+        get() = "添加任務"
 }

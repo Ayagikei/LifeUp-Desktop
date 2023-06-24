@@ -26,6 +26,7 @@ import datasource.data.TaskCategory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ui.AppStore
+import ui.Strings
 import ui.page.config.Spacer16dpH
 import ui.page.config.Spacer16dpW
 import ui.page.config.Spacer24dpH
@@ -169,7 +170,7 @@ private fun RewardConfigs(
     onItemAmountChanged: (Int) -> Unit,
     onSkillExpChanged: (Int) -> Unit
 ) {
-    Subtitle("Reward")
+    Subtitle(Strings.add_tasks_title_reward)
     Spacer16dpH()
     // coin input
     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -181,7 +182,7 @@ private fun RewardConfigs(
         Spacer16dpW()
         TextField(modifier = Modifier.width(120.dp), value = state.coinMin.toString(), onValueChange = {
             onInputCoin(it)
-        }, label = { Text("Min") }, singleLine = true)
+        }, label = { Text(Strings.add_tasks_reward_coin_min) }, singleLine = true)
         Text(text = "-", modifier = Modifier.padding(horizontal = 8.dp))
         TextField(
             modifier = Modifier.width(120.dp),
@@ -189,7 +190,7 @@ private fun RewardConfigs(
             onValueChange = {
                 onInputCoinMax(it)
             },
-            label = { Text("Max") },
+            label = { Text(Strings.add_tasks_reward_coin_max) },
             singleLine = true
         )
     }
@@ -201,7 +202,7 @@ private fun RewardConfigs(
     SkillSelector(skills, state, onSkillSelected, onSkillExpChanged)
 
     Spacer24dpH()
-    Subtitle("Shop Items")
+    Subtitle(Strings.add_tasks_reward_shop_items)
 
     Spacer16dpH()
     // shop item selection
@@ -220,20 +221,20 @@ private fun RewardConfigs(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = { setShopExpanded(true) }
             ) {
-                Text(selectedItem?.name ?: "Unselected")
+                Text(selectedItem?.name ?: Strings.common_unselected)
             }
             DropdownMenu(expanded = shopExpanded, onDismissRequest = { setShopExpanded(false) }) {
                 TextField(
                     value = searchText,
                     onValueChange = setSearchText,
-                    label = { Text("Search") },
+                    label = { Text(Strings.common_search) },
                     singleLine = true
                 )
                 TextButton(modifier = Modifier.fillMaxWidth(), onClick = {
                     onItemSelected(null)
                     setShopExpanded(false)
                 }) {
-                    Text("Unselected")
+                    Text(Strings.common_unselected)
                 }
                 shopItems.filter {
                     if (searchText.trim().isNotBlank()) {
@@ -260,7 +261,7 @@ private fun RewardConfigs(
         OutlinedTextField(
             value = state.itemAmount.toString(),
             onValueChange = { onItemAmountChanged(it.toIntOrNull() ?: 0) },
-            label = { Text("Quantity") },
+            label = { Text(Strings.add_tasks_reward_shop_items_quantity) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.width(120.dp)
         )
@@ -297,7 +298,7 @@ private fun SkillSelector(
     onSkillSelected: (id: Long, selected: Boolean) -> Unit,
     onSkillExpChanged: (Int) -> Unit
 ) {
-    Subtitle("Skills")
+    Subtitle(Strings.add_tasks_title_skills)
 
     Spacer16dpH()
     // skill selection
@@ -343,7 +344,7 @@ private fun SkillSelector(
         TextField(
             value = state.exp.toString(),
             onValueChange = { onSkillExpChanged(it.toIntOrNull() ?: 0) },
-            label = { Text("Exp") },
+            label = { Text(Strings.add_tasks_exp) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
         )
@@ -361,7 +362,7 @@ private fun BaseConfigs(
     onSubmitClicked: () -> Unit
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Subtitle("Base", modifier = Modifier.weight(1f))
+        Subtitle(Strings.add_tasks_title_base, modifier = Modifier.weight(1f))
         IconButton(onClick = onSubmitClicked) {
             Icon(
                 imageVector = Icons.Default.Check,
@@ -376,7 +377,7 @@ private fun BaseConfigs(
         OutlinedButton(onClick = {
             setExpanded(true)
         }) {
-            Text(text = taskCategories.find { it.id == state.categoryId }?.name ?: "Unknown")
+            Text(text = taskCategories.find { it.id == state.categoryId }?.name ?: Strings.common_unknown)
             Icon(Icons.Default.ArrowDropDown, "")
         }
         DropdownMenu(expanded = expanded, onDismissRequest = { setExpanded(false) }) {
@@ -399,18 +400,23 @@ private fun BaseConfigs(
     // text input
     TextField(modifier = Modifier.fillMaxWidth(), value = state.todo, onValueChange = {
         onInputToDo(it)
-    }, label = { Text("ToDo") })
+    }, label = { Text(Strings.add_tasks_todo) })
     Spacer16dpH()
     TextField(modifier = Modifier.fillMaxWidth(), value = state.notes, onValueChange = {
         onInputNotes(it)
-    }, label = { Text("Notes") })
+    }, label = { Text(Strings.add_tasks_notes) })
 
     Spacer16dpH()
 
     // frequency dropdown
     val frequencyOptions = remember {
         listOf(
-            "None", "Daily", "Weekly", "Monthly", "Yearly", "Unlimited"
+            Strings.add_tasks_frequency_none,
+            Strings.add_tasks_frequency_daily,
+            Strings.add_tasks_frequency_weekly,
+            Strings.add_tasks_frequency_monthly,
+            Strings.add_tasks_frequency_yearly,
+            Strings.add_tasks_frequency_unlimited
         )
     }
     val (expanded, setExpanded) = remember { mutableStateOf(false) }
@@ -422,7 +428,7 @@ private fun BaseConfigs(
             setExpanded(true)
         }) {
             Text(
-                text = "Frequency: ${frequencyOptions[frequencyToIndex(state.frequency)]}",
+                text = Strings.add_tasks_frequency_desc.format(frequencyOptions[frequencyToIndex(state.frequency)])
             )
         }
         DropdownMenu(expanded = expanded, onDismissRequest = { setExpanded(false) }) {

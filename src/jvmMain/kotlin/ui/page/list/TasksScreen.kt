@@ -60,7 +60,7 @@ fun TasksScreen(modifier: Modifier = Modifier) {
         }, onCloseAndSuccessAdded = {
             model.hideAddWindow()
             coroutineScope.launchSafely {
-                scaffoldState.snackbarHostState.showSnackbar("Added success")
+                scaffoldState.snackbarHostState.showSnackbar(Strings.add_tasks_success)
             }
             model.onRefresh()
         })
@@ -107,7 +107,7 @@ private fun showAddDialog(defaultCategoryId: Long?, onCloseAction: () -> Unit, o
             position = WindowPosition(alignment = Alignment.Center),
             size = DpSize(windowWidth.dp, windowHeight.dp)
         ),
-        title = "Add Tasks"
+        title = Strings.add_tasks_dialog_title
     ) {
         AddTaskScreen(
             defaultCategoryId = defaultCategoryId ?: 0L,

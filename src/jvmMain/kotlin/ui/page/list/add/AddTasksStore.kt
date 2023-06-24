@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import logger
 import ui.AppStoreImpl
+import ui.Strings
 import java.util.logging.Level
 
 internal class AddTasksStore(
@@ -134,7 +135,7 @@ internal class AddTasksStore(
                 addSuccessEvent.send(Unit)
             } catch (e: Exception) {
                 e.printStackTrace()
-                addFailedEvent.send("Failed to add task, please check again and check your LifeUp Cloud state.")
+                addFailedEvent.send(Strings.add_tasks_failed)
             }
         }
     }

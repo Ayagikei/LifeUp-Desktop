@@ -156,4 +156,54 @@ class EnStrings : StringText {
         get() = "Check for Updates"
     override val about_message_no_update: String
         get() = "No update available"
+
+    override val add_tasks_title_reward: String
+        get() = "Reward"
+    override val add_tasks_reward_coin_min: String
+        get() = "Min"
+    override val add_tasks_reward_coin_max: String
+        get() = "Max"
+    override val add_tasks_reward_shop_items: String
+        get() = "Shop Items"
+    override val common_unselected: String
+        get() = "Unselected"
+    override val common_search: String
+        get() = "Search"
+    override val common_unknown: String
+        get() = "Unknown"
+    override val add_tasks_reward_shop_items_quantity: String
+        get() = "Quantity"
+    override val add_tasks_title_skills: String
+        get() = "Attributes"
+    override val add_tasks_exp: String
+        get() = "Exp"
+    override val add_tasks_title_base: String
+        get() = "Base"
+    override val add_tasks_todo: String
+        get() = "ToDo"
+    override val add_tasks_notes: String
+        get() = "Notes"
+    override val add_tasks_frequency_none: String
+        get() = "None"
+    override val add_tasks_frequency_daily: String
+        get() = "Daily"
+    override val add_tasks_frequency_weekly: String
+        get() = "Weekly"
+    override val add_tasks_frequency_monthly: String
+        get() = "Monthly"
+    override val add_tasks_frequency_yearly: String
+        get() = "Yearly"
+    override val add_tasks_frequency_unlimited: String
+        get() = "Unlimited"
+    override val add_tasks_frequency_desc: String
+        get() = "Frequency: %s"
+
+    override val add_tasks_success: String
+        get() = "Added success"
+
+    override val add_tasks_failed: String
+        get() = "Failed to add task, please try again later and check your LifeUp Cloud state."
+
+    override val add_tasks_dialog_title: String
+        get() = "Add Tasks"
 }
