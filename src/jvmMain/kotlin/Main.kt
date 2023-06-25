@@ -180,8 +180,10 @@ fun main() {
     var lastError: Throwable? by mutableStateOf(null)
 
     application(exitProcessOnExit = false) {
-        // To fix the window crash issue: https://github.com/JetBrains/compose-jb/issues/610
-        System.setProperty("skiko.renderApi", "OPENGL")
+        if(System.getProperty("os.name").startsWith("Windows")) {
+            // To fix the window crash issue: https://github.com/JetBrains/compose-jb/issues/610
+            System.setProperty("skiko.renderApi", "OPENGL")
+        }
         // get native dialog UI
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
 
