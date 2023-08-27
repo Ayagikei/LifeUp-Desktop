@@ -128,9 +128,11 @@ class AppStoreImpl(
     }
 
     suspend fun checkUpdateAwait(): ApiServiceImpl.LocalizedUpdateInfo? {
-        return apiService.checkUpdate()?.also {
-            this@AppStoreImpl.updateInfo = it
-        }
+        return runCatching {
+            apiService.checkUpdate()?.also {
+                this@AppStoreImpl.updateInfo = it
+            }
+        }.getOrNull()
     }
 
     fun updateIpOrPort(ip: String = this.ip, port: String = this.port) {

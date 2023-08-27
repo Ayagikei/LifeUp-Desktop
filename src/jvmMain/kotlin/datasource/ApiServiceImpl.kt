@@ -185,7 +185,12 @@ object ApiServiceImpl : ApiService {
     override suspend fun checkUpdate(): LocalizedUpdateInfo? {
         return withContext(Dispatchers.IO) {
             val request = Request.Builder().url(UPDATE_URL).build()
-            val response = okHttpClient.newCall(request).execute()
+            val response = try {
+                okHttpClient.newCall(request).execute()
+            } catch (ignore: Exception) {
+                // failed to check update
+                return@withContext null
+            }
             if (response.isSuccessful) {
                 val jsonText = response.body?.string()
                 jsonText?.let {
