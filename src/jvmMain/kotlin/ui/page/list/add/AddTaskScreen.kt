@@ -186,7 +186,7 @@ private fun RewardConfigs(
         Text(text = "-", modifier = Modifier.padding(horizontal = 8.dp))
         TextField(
             modifier = Modifier.width(120.dp),
-            value = (state.coinMin + state.coinMax).toString(),
+            value = state.coinMax.toString(),
             onValueChange = {
                 onInputCoinMax(it)
             },
