@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -53,7 +52,7 @@ internal fun FeelingsContent(
             Text(text = Strings.module_feelings)
         }, backgroundColor = MaterialTheme.colors.primarySurface, elevation = 0.dp, actions = {
             IconButton(onExportClicked) {
-                Icon(Icons.Default.Build, "Export")
+                Icon(Icons.Default.Build, "Export") // fixme: change to download icon
             }
             IconButton(onRefreshClick) {
                 Icon(Icons.Default.Refresh, "Refresh")

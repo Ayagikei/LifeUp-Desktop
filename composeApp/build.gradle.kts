@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.20"
+    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
@@ -23,10 +23,10 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
 
-            implementation("com.squareup.okhttp3:okhttp:4.10.0")
-            implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
-            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
-            implementation("org.jmdns:jmdns:3.5.8")
+            implementation(libs.okhttp)
+            implementation(libs.okhttp.logging.interceptor)
+            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.jmdns)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

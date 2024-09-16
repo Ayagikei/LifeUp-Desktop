@@ -17,12 +17,15 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
+import kotlinproject.composeapp.generated.resources.Res
+import kotlinproject.composeapp.generated.resources.icon
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
 import net.lifeupapp.app.base.navcontroller.NavController
 import net.lifeupapp.app.base.navcontroller.NavigationHost
 import net.lifeupapp.app.base.navcontroller.composable
 import net.lifeupapp.app.base.navcontroller.rememberNavController
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
+import org.jetbrains.compose.resources.painterResource
 import ui.AppStore
 import ui.AppStoreImpl
 import ui.ScaffoldState
@@ -210,7 +213,7 @@ fun main() {
                     position = WindowPosition(alignment = Alignment.Center),
                     size = DpSize(windowWidth.dp, windowHeight.dp)
                 ),
-               // icon = painterResource("icons/svg/icon.svg")
+                icon = painterResource(Res.drawable.icon)
             ) {
                 app()
             }
