@@ -1,13 +1,18 @@
 package ui.page.feelings.add
 
+import androidx.compose.foundation.HorizontalScrollbar
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DatePickerState
@@ -19,10 +24,18 @@ import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogWindow
 import androidx.compose.ui.window.rememberDialogState
 import kotlinx.coroutines.launch
+import lifeupdesktop.composeapp.generated.resources.Res
+import lifeupdesktop.composeapp.generated.resources.ic_pic_loading_cir
+import ui.page.list.rememberScrollbarAdapter
+import ui.view.AsyncImage
+import ui.view.loadImageBitmap
+import java.io.File
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
@@ -43,6 +56,8 @@ fun FeelingsInputDialog(
     var showDatePicker by remember { mutableStateOf(false) }
     var showTimePicker by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
+    val scrollState = rememberScrollState()
+    val maxImages = 9
 
     val currentDate = remember { Calendar.getInstance() }
     val datePickerState =
@@ -60,16 +75,31 @@ fun FeelingsInputDialog(
         resizable = true
     ) {
         Surface(modifier = Modifier.fillMaxSize()) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                // Title bar
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .verticalScroll(scrollState)
+            ) {
+                // Title bar with submit button
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text("Add New Feeling", style = MaterialTheme.typography.h6)
-                    IconButton(onClick = onCloseRequest) {
-                        Icon(Icons.Default.Close, contentDescription = "Close")
+                    Button(
+                        onClick = {
+                            if (content.isNotBlank()) {
+                                coroutineScope.launch {
+                                    val timestamp =
+                                        combineDateTime(datePickerState, timePickerState)
+                                    onSubmit(content, timestamp, selectedImagePaths)
+                                    onCloseRequest()
+                                }
+                            }
+                        }
+                    ) {
+                        Text("Submit")
                     }
                 }
 
@@ -79,8 +109,7 @@ fun FeelingsInputDialog(
                 TextField(
                     value = content,
                     onValueChange = { content = it },
-                    modifier = Modifier.fillMaxWidth().weight(1f)
-                        .verticalScroll(rememberScrollState()),
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 200.dp),
                     label = { Text("How are you feeling?") },
                     placeholder = { Text("Express your thoughts here...") }
                 )
@@ -92,13 +121,13 @@ fun FeelingsInputDialog(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Button(onClick = { showDatePicker = true }) {
+                    OutlinedButton(onClick = { showDatePicker = true }) {
                         Icon(Icons.Default.DateRange, contentDescription = "Select Date")
                         Spacer(modifier = Modifier.width(8.dp))
                         Text("Date: ${getSelectedDateString(datePickerState)}")
                     }
-                    Button(onClick = { showTimePicker = true }) {
-                        //  Icon(Icons.Default.Add, contentDescription = "Select Time")
+                    OutlinedButton(onClick = { showTimePicker = true }) {
+                        Icon(Icons.Default.DateRange, contentDescription = "Select Time")
                         Spacer(modifier = Modifier.width(8.dp))
                         Text("Time: ${getSelectedTimeString(timePickerState)}")
                     }
@@ -128,43 +157,80 @@ fun FeelingsInputDialog(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Image attachment
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text("Selected Images: ${selectedImagePaths.size}")
-                    Button(
+                // Image attachment button
+                if (selectedImagePaths.size < maxImages) {
+                    OutlinedButton(
                         onClick = {
                             val paths = showImageFileChooser()
                             if (paths.isNotEmpty()) {
-                                selectedImagePaths = selectedImagePaths + paths
+                                val newPaths = (selectedImagePaths + paths).take(maxImages)
+                                selectedImagePaths = newPaths
                             }
                         },
-                        modifier = Modifier.align(Alignment.CenterVertically)
+                        modifier = Modifier.align(Alignment.End)
                     ) {
                         Icon(Icons.Default.Add, contentDescription = "Add Image")
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("Add Image")
+                        Text("Add Image (${selectedImagePaths.size}/$maxImages)")
                     }
+                } else {
+                    Text(
+                        "Maximum number of images reached (9)",
+                        style = MaterialTheme.typography.caption,
+                        modifier = Modifier.align(Alignment.End)
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Submit button
-                Button(
-                    onClick = {
-                        if (content.isNotBlank()) {
-                            coroutineScope.launch {
-                                val timestamp = combineDateTime(datePickerState, timePickerState)
-                                onSubmit(content, timestamp, selectedImagePaths)
+                // Image preview
+                if (selectedImagePaths.isNotEmpty()) {
+                    Text("Selected Images:", style = MaterialTheme.typography.subtitle1)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    val listState = rememberLazyListState()
+                    LazyRow(state = listState) {
+                        itemsIndexed(selectedImagePaths, key = { index, path ->
+                            path
+                        }) { index, path ->
+                            Box(modifier = Modifier.padding(end = 8.dp)) {
+                                AsyncImage(
+                                    condition = File(path).exists(),
+                                    load = { loadImageBitmap(File(path)) },
+                                    painterFor = {
+                                        remember(path) { BitmapPainter(it) }
+                                    },
+                                    contentDescription = "Attachment $index",
+                                    modifier = Modifier.size(156.dp),
+                                    contentScale = ContentScale.Crop,
+                                    onError = {
+                                        Image(
+                                            painter = org.jetbrains.compose.resources.painterResource(
+                                                Res.drawable.ic_pic_loading_cir
+                                            ),
+                                            contentDescription = "skill icon",
+                                            modifier = Modifier.size(40.dp)
+                                        )
+                                    }
+                                )
+                                IconButton(
+                                    onClick = {
+                                        selectedImagePaths = selectedImagePaths - path
+                                    },
+                                    modifier = Modifier.align(Alignment.TopEnd)
+                                ) {
+                                    Icon(
+                                        Icons.Default.Delete,
+                                        contentDescription = "Delete Image",
+                                        tint = androidx.compose.ui.graphics.Color.Red
+                                    )
+                                }
                             }
                         }
-                    },
-                    modifier = Modifier.align(Alignment.End)
-                ) {
-                    Text("Submit")
+                    }
+                    HorizontalScrollbar(
+                        modifier = Modifier.align(Alignment.CenterHorizontally).fillMaxWidth(),
+                        adapter = rememberScrollbarAdapter(scrollState = listState)
+                    )
                 }
             }
         }

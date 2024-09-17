@@ -10,6 +10,7 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.long
+import logger
 import net.lifeupapp.app.datasource.data.Feelings
 import net.lifeupapp.app.datasource.net.HttpResponse
 import okhttp3.HttpUrl
@@ -20,6 +21,7 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.util.*
+import java.util.logging.Level
 
 object ApiServiceImpl : ApiService {
 
@@ -241,7 +243,7 @@ object ApiServiceImpl : ApiService {
         }
     }
 
-    fun buildLifeUpUrl(api: String, params: Map<String, String>): String {
+    fun buildLifeUpUrl(api: String, params: List<Pair<String, String>>): String {
         val lifeUpUrlBuilder = HttpUrl.Builder()
             .scheme("http")
             .host("api")
@@ -256,11 +258,12 @@ object ApiServiceImpl : ApiService {
 
     suspend fun callApi(
         api: String,
-        params: Map<String, String> = emptyMap()
+        params: List<Pair<String, String>> = emptyList()
     ): Result<JsonElement?> {
         return withContext(Dispatchers.IO) {
             try {
                 val lifeUpUrl = buildLifeUpUrl(api, params)
+                this@ApiServiceImpl.logger.log(Level.INFO, "Calling API: $lifeUpUrl")
                 val url =
                     (OkHttpClientHolder.host + "/api/contentprovider").toHttpUrl().newBuilder()
                         .addQueryParameter("url", lifeUpUrl)
@@ -291,15 +294,19 @@ object ApiServiceImpl : ApiService {
         relateId: Long?,
         imageUris: List<String>?
     ): Result<JsonElement?> {
-        val params = mutableMapOf<String, String>()
+        val params = arrayListOf<Pair<String, String>>()
 
-        id?.let { params["id"] = it.toString() }
-        content?.let { params["content"] = it }
-        time?.let { params["time"] = it.toString() }
-        isFavorite?.let { params["is_favorite"] = it.toString() }
-        relateType?.let { params["relate_type"] = it.toString() }
-        relateId?.let { params["relate_id"] = it.toString() }
-        imageUris?.let { params["image_uris"] = it.joinToString(",") }
+        id?.let { params.add("id" to it.toString()) }
+        content?.let { params.add("content" to it) }
+        time?.let { params.add("time" to it.toString()) }
+        isFavorite?.let { params.add("is_favorite" to it.toString()) }
+        relateType?.let { params.add("relate_type" to it.toString()) }
+        relateId?.let { params.add("relate_id" to it.toString()) }
+        imageUris?.let { uris ->
+            uris.forEachIndexed { index, uri ->
+                params.add("image_uris" to uri)
+            }
+        }
 
         return callApi("feeling", params)
     }
