@@ -1,4 +1,4 @@
-package datasource.data
+package net.lifeupapp.app.datasource.data
 
 
 import kotlinx.serialization.Serializable

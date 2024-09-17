@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import datasource.ApiServiceImpl
-import datasource.data.Feelings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -12,6 +11,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import logger
 import net.lifeupapp.app.base.launchSafely
+import net.lifeupapp.app.datasource.data.Feelings
 import net.lifeupapp.app.ui.text.Localization
 import ui.AppStoreImpl
 import utils.md5
@@ -40,7 +40,8 @@ internal class FeelingsStore(
         val state: Int,
         val feelings: List<Feelings> = emptyList(),
         val showingDialog: Boolean = false,
-        val exportProgress: Float = -1f
+        val exportProgress: Float = -1f,
+        val showAddedDialog: Boolean = false
     )
 
     init {
@@ -60,6 +61,17 @@ internal class FeelingsStore(
         }
     }
 
+    fun onAdd() {
+        setState {
+            copy(showAddedDialog = true)
+        }
+    }
+
+    fun onCloseAddDialog() {
+        setState {
+            copy(showAddedDialog = false)
+        }
+    }
 
     // ...
 
@@ -105,7 +117,13 @@ internal class FeelingsStore(
                         file.appendText("![](${attachmentFile.absolutePath})\n\n")
                     }
 
-                    file.appendText("> ${feeling.title}\n> ${Localization.dateTimeFormatter.format(feeling.time)}\n\n<br />\n\n")
+                    file.appendText(
+                        "> ${feeling.title}\n> ${
+                            Localization.dateTimeFormatter.format(
+                                feeling.time
+                            )
+                        }\n\n<br />\n\n"
+                    )
                     index++
                     setState {
                         copy(exportProgress = index / total.toFloat())
@@ -143,7 +161,6 @@ internal class FeelingsStore(
         state = state.update()
     }
 
-
     private fun fetchFeelings() {
         coroutineScope.launchSafely(Dispatchers.IO) {
             while (globalStore.isReadyToCall.not()) {
@@ -174,5 +191,28 @@ internal class FeelingsStore(
                 }
             }
         }
+    }
+
+    fun addFeeling(content: String, time: Long, attachments: List<String>) {
+        coroutineScope.launchSafely {
+            val finalFiles = attachments.map { File(it) }.filter { it.exists() }
+            logger.info("addFeeling finalFiles: $finalFiles")
+            val transformUris = if (finalFiles.isEmpty()) emptyList<String>() else {
+                apiService.uploadFilesToUris(finalFiles)
+            }
+            logger.info("addFeeling transformUris: $transformUris")
+            apiService.createOrUpdateFeeling(
+                content = content,
+                time = time,
+                imageUris = transformUris
+            ).onSuccess {
+                onCloseAddDialog()
+                onRefresh()
+            }.onFailure {
+                // handle error toast
+
+            }
+        }
+
     }
 }

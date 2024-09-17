@@ -1,8 +1,10 @@
 package datasource
 
 import datasource.data.*
-import net.lifeupapp.app.datasource.net.HttpResponse
 import kotlinx.serialization.json.JsonElement
+import net.lifeupapp.app.datasource.data.Feelings
+import net.lifeupapp.app.datasource.net.HttpResponse
+import java.io.File
 
 interface ApiService {
 
@@ -45,4 +47,15 @@ interface ApiService {
 
     suspend fun checkUpdate(): ApiServiceImpl.LocalizedUpdateInfo?
 
+    suspend fun createOrUpdateFeeling(
+        id: Long? = null,
+        content: String? = null,
+        time: Long? = null,
+        isFavorite: Boolean? = null,
+        relateType: Int? = null,
+        relateId: Long? = null,
+        imageUris: List<String>? = null
+    ): Result<JsonElement?>
+
+    suspend fun uploadFilesToUris(files: List<File>): List<String>
 }

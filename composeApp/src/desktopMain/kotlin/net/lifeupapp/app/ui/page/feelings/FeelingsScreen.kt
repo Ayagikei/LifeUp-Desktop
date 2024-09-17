@@ -13,6 +13,7 @@ import kotlinx.coroutines.withContext
 import net.lifeupapp.app.base.launchSafely
 import net.lifeupapp.app.ui.text.StringText
 import ui.AppStore
+import ui.page.feelings.add.FeelingsInputDialog
 import ui.page.list.Dialog
 import utils.md5
 import java.awt.Desktop
@@ -36,7 +37,9 @@ fun FeelingsScreen(modifier: Modifier = Modifier) {
     }, onRefreshClick = model::onRefresh, onAttachmentClicked = { attachment ->
         coroutineScope.launchSafely {
             withContext(Dispatchers.IO) {
-                if (!Desktop.isDesktopSupported() || Desktop.getDesktop().isSupported(Desktop.Action.OPEN).not()) {
+                if (!Desktop.isDesktopSupported() || Desktop.getDesktop()
+                        .isSupported(Desktop.Action.OPEN).not()
+                ) {
                     return@withContext
                 }
                 val destFile = File(globalStore.cacheDir, attachment.md5() + ".jpg")
@@ -51,7 +54,18 @@ fun FeelingsScreen(modifier: Modifier = Modifier) {
                 Desktop.getDesktop().open(destFile)
             }
         }
-    })
+    }, onAddClicked = model::onAdd)
+
+    if (state.showAddedDialog) {
+        FeelingsInputDialog(
+            onCloseRequest = (
+                    model::onCloseAddDialog
+                    ),
+            onSubmit = { content, time, attachments ->
+                model.addFeeling(content, time, attachments)
+            }
+        )
+    }
 
     if (state.showingDialog) {
         // AlertDialog()

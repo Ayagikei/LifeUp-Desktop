@@ -3,17 +3,22 @@ package datasource
 import base.OkHttpClientHolder
 import base.json
 import datasource.data.*
-import net.lifeupapp.app.datasource.net.HttpResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.long
+import net.lifeupapp.app.datasource.data.Feelings
+import net.lifeupapp.app.datasource.net.HttpResponse
+import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
 import okhttp3.Request
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 import java.util.*
 
 object ApiServiceImpl : ApiService {
@@ -27,7 +32,8 @@ object ApiServiceImpl : ApiService {
 
     override suspend fun getTasks(categoryId: Long): HttpResponse<List<Task>> {
         return withContext(Dispatchers.IO) {
-            val request = Request.Builder().url(OkHttpClientHolder.host + "/tasks/${categoryId}").build()
+            val request =
+                Request.Builder().url(OkHttpClientHolder.host + "/tasks/${categoryId}").build()
             val response = okHttpClient.newCall(request).execute()
             json.decodeFromString(response.body?.string() ?: "")
         }
@@ -35,7 +41,8 @@ object ApiServiceImpl : ApiService {
 
     override suspend fun getTaskCategories(): HttpResponse<List<TaskCategory>> {
         return withContext(Dispatchers.IO) {
-            val request = Request.Builder().url(OkHttpClientHolder.host + "/tasks_categories").build()
+            val request =
+                Request.Builder().url(OkHttpClientHolder.host + "/tasks_categories").build()
             val response = okHttpClient.newCall(request).execute()
             json.decodeFromString(response.body?.string() ?: "")
         }
@@ -65,39 +72,50 @@ object ApiServiceImpl : ApiService {
         return withContext(Dispatchers.IO) {
             val request = Request.Builder().url(OkHttpClientHolder.host + "/skills").build()
             val response = okHttpClient.newCall(request).execute()
-            json.decodeFromString<HttpResponse<List<Skill>>>(response.body?.string() ?: "").dataOrThrow()
+            json.decodeFromString<HttpResponse<List<Skill>>>(response.body?.string() ?: "")
+                .dataOrThrow()
         }
     }
 
     override suspend fun getAchievementCategories(): List<AchievementCategory> {
         return withContext(Dispatchers.IO) {
-            val request = Request.Builder().url(OkHttpClientHolder.host + "/achievement_categories").build()
+            val request =
+                Request.Builder().url(OkHttpClientHolder.host + "/achievement_categories").build()
             val response = okHttpClient.newCall(request).execute()
-            json.decodeFromString<HttpResponse<List<AchievementCategory>>>(response.body?.string() ?: "").dataOrThrow()
+            json.decodeFromString<HttpResponse<List<AchievementCategory>>>(
+                response.body?.string() ?: ""
+            ).dataOrThrow()
         }
     }
 
     override suspend fun getAchievement(categoryId: Long): List<Achievement> {
         return withContext(Dispatchers.IO) {
-            val request = Request.Builder().url(OkHttpClientHolder.host + "/achievements/${categoryId}").build()
+            val request =
+                Request.Builder().url(OkHttpClientHolder.host + "/achievements/${categoryId}")
+                    .build()
             val response = okHttpClient.newCall(request).execute()
-            json.decodeFromString<HttpResponse<List<Achievement>>>(response.body?.string() ?: "").dataOrThrow()
+            json.decodeFromString<HttpResponse<List<Achievement>>>(response.body?.string() ?: "")
+                .dataOrThrow()
         }
     }
 
     override suspend fun getShopItemCategories(): List<ShopCategory> {
         return withContext(Dispatchers.IO) {
-            val request = Request.Builder().url(OkHttpClientHolder.host + "/items_categories").build()
+            val request =
+                Request.Builder().url(OkHttpClientHolder.host + "/items_categories").build()
             val response = okHttpClient.newCall(request).execute()
-            json.decodeFromString<HttpResponse<List<ShopCategory>>>(response.body?.string() ?: "").dataOrThrow()
+            json.decodeFromString<HttpResponse<List<ShopCategory>>>(response.body?.string() ?: "")
+                .dataOrThrow()
         }
     }
 
     override suspend fun getShopItems(categoryId: Long): List<ShopItem> {
         return withContext(Dispatchers.IO) {
-            val request = Request.Builder().url(OkHttpClientHolder.host + "/items/${categoryId}").build()
+            val request =
+                Request.Builder().url(OkHttpClientHolder.host + "/items/${categoryId}").build()
             val response = okHttpClient.newCall(request).execute()
-            json.decodeFromString<HttpResponse<List<ShopItem>>>(response.body?.string() ?: "").dataOrThrow()
+            json.decodeFromString<HttpResponse<List<ShopItem>>>(response.body?.string() ?: "")
+                .dataOrThrow()
         }
     }
 
@@ -110,7 +128,8 @@ object ApiServiceImpl : ApiService {
 
             val request = Request.Builder().url(url).build()
             val response = okHttpClient.newCall(request).execute()
-            json.decodeFromString<HttpResponse<List<Feelings>>>(response.body?.string() ?: "").dataOrThrow()
+            json.decodeFromString<HttpResponse<List<Feelings>>>(response.body?.string() ?: "")
+                .dataOrThrow()
         }
     }
 
@@ -125,8 +144,14 @@ object ApiServiceImpl : ApiService {
     override suspend fun purchaseItem(id: Long?, price: Long, desc: String) {
         return withContext(Dispatchers.IO) {
             val url = (OkHttpClientHolder.host + "/api/contentprovider").toHttpUrl().newBuilder()
-                .addQueryParameter("url", "lifeup://api/item?id=${id}&own_number=1&own_number_type=relative")
-                .addQueryParameter("url", "lifeup://api/penalty?type=coin&content=${desc}&number=${price}&silent=true")
+                .addQueryParameter(
+                    "url",
+                    "lifeup://api/item?id=${id}&own_number=1&own_number_type=relative"
+                )
+                .addQueryParameter(
+                    "url",
+                    "lifeup://api/penalty?type=coin&content=${desc}&number=${price}&silent=true"
+                )
                 .build()
             val request = Request.Builder().url(url).build()
             okHttpClient.newCall(request).execute()
@@ -140,7 +165,8 @@ object ApiServiceImpl : ApiService {
                 .build()
             val request = Request.Builder().url(url).build()
             val response = okHttpClient.newCall(request).execute()
-            json.decodeFromString<HttpResponse<JsonElement>>(response.body?.string() ?: "").successOrThrow()
+            json.decodeFromString<HttpResponse<JsonElement>>(response.body?.string() ?: "")
+                .successOrThrow()
         }
     }
 
@@ -198,7 +224,8 @@ object ApiServiceImpl : ApiService {
                     val locale = Locale.getDefault()
                     val bestMatchedUpdateInfo =
                         updateInfo.localeInfo["${locale.language.lowercase()}_${locale.country.lowercase()}"]
-                            ?: updateInfo.localeInfo[locale.language.lowercase()] ?: updateInfo.localeInfo["en"]
+                            ?: updateInfo.localeInfo[locale.language.lowercase()]
+                            ?: updateInfo.localeInfo["en"]
 
                     return@let LocalizedUpdateInfo(
                         versionCode = updateInfo.versionCode,
@@ -211,6 +238,87 @@ object ApiServiceImpl : ApiService {
             } else {
                 null
             }
+        }
+    }
+
+    fun buildLifeUpUrl(api: String, params: Map<String, String>): String {
+        val lifeUpUrlBuilder = HttpUrl.Builder()
+            .scheme("http")
+            .host("api")
+            .addPathSegment(api)
+
+        params.forEach { (key, value) ->
+            lifeUpUrlBuilder.addQueryParameter(key, value)
+        }
+
+        return lifeUpUrlBuilder.build().toString().replaceFirst("http", "lifeup")
+    }
+
+    suspend fun callApi(
+        api: String,
+        params: Map<String, String> = emptyMap()
+    ): Result<JsonElement?> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val lifeUpUrl = buildLifeUpUrl(api, params)
+                val url =
+                    (OkHttpClientHolder.host + "/api/contentprovider").toHttpUrl().newBuilder()
+                        .addQueryParameter("url", lifeUpUrl)
+                        .build()
+
+                val request = Request.Builder().url(url).build()
+                val response = okHttpClient.newCall(request).execute()
+                val responseBody =
+                    response.body?.string() ?: throw IllegalStateException("Empty response body")
+
+                return@withContext Result.success(
+                    json.decodeFromString<HttpResponse<JsonElement>>(
+                        responseBody
+                    ).successOrThrow()
+                )
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+
+    override suspend fun createOrUpdateFeeling(
+        id: Long?,
+        content: String?,
+        time: Long?,
+        isFavorite: Boolean?,
+        relateType: Int?,
+        relateId: Long?,
+        imageUris: List<String>?
+    ): Result<JsonElement?> {
+        val params = mutableMapOf<String, String>()
+
+        id?.let { params["id"] = it.toString() }
+        content?.let { params["content"] = it }
+        time?.let { params["time"] = it.toString() }
+        isFavorite?.let { params["is_favorite"] = it.toString() }
+        relateType?.let { params["relate_type"] = it.toString() }
+        relateId?.let { params["relate_id"] = it.toString() }
+        imageUris?.let { params["image_uris"] = it.joinToString(",") }
+
+        return callApi("feeling", params)
+    }
+
+    override suspend fun uploadFilesToUris(files: List<File>): List<String> {
+        return withContext(Dispatchers.IO) {
+            val url = (OkHttpClientHolder.host + "/files/upload").toHttpUrl()
+            val builder = MultipartBody.Builder().setType(MultipartBody.FORM)
+            files.forEach {
+                builder.addFormDataPart(
+                    "file",
+                    it.name,
+                    it.asRequestBody("application/octet-stream".toMediaType())
+                )
+            }
+            val request = Request.Builder().url(url).post(builder.build()).build()
+            val response = okHttpClient.newCall(request).execute()
+            json.decodeFromString<HttpResponse<List<String>>>(response.body?.string() ?: "")
+                .dataOrThrow()
         }
     }
 }

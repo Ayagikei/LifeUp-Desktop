@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
@@ -22,10 +23,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import datasource.data.Feelings
 import lifeupdesktop.composeapp.generated.resources.Res
 import lifeupdesktop.composeapp.generated.resources.ic_coin
 import lifeupdesktop.composeapp.generated.resources.ic_pic_loading_cir
+import net.lifeupapp.app.datasource.data.Feelings
 import net.lifeupapp.app.ui.text.Localization
 import net.lifeupapp.app.ui.text.StringText
 import ui.page.config.Spacer4dpH
@@ -44,13 +45,17 @@ internal fun FeelingsContent(
     onItemClicked: (id: Long) -> Unit,
     onExportClicked: () -> Unit,
     onRefreshClick: () -> Unit,
-    onAttachmentClicked: (attachment: String) -> Unit
+    onAttachmentClicked: (attachment: String) -> Unit,
+    onAddClicked: () -> Unit
 ) {
 
     Column(modifier) {
         TopAppBar(title = {
             Text(text = StringText.module_feelings)
         }, backgroundColor = MaterialTheme.colors.primarySurface, elevation = 0.dp, actions = {
+            IconButton(onAddClicked) {
+                Icon(Icons.Default.Add, "Add")
+            }
             IconButton(onExportClicked) {
                 Icon(Icons.Default.Build, "Export") // fixme: change to download icon
             }
@@ -152,7 +157,11 @@ private fun Item(
             Spacer8dpH()
             Row(modifier = Modifier.fillMaxWidth()) {
                 SelectionContainer(modifier = Modifier.weight(1F)) {
-                    Text(item.content, style = MaterialTheme.typography.body1, color = MaterialTheme.colors.important)
+                    Text(
+                        item.content,
+                        style = MaterialTheme.typography.body1,
+                        color = MaterialTheme.colors.important
+                    )
                 }
             }
             if (item.attachments.isNotEmpty()) {
@@ -176,7 +185,9 @@ private fun Item(
                                 modifier = Modifier.size(156.dp),
                                 onError = {
                                     Image(
-                                        painter = org.jetbrains.compose.resources.painterResource(Res.drawable.ic_pic_loading_cir),
+                                        painter = org.jetbrains.compose.resources.painterResource(
+                                            Res.drawable.ic_pic_loading_cir
+                                        ),
                                         contentDescription = "skill icon",
                                         modifier = Modifier.size(156.dp)
                                     )
@@ -193,8 +204,15 @@ private fun Item(
             }
             Spacer4dpH()
 
-            Column(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxWidth().padding(end = 16.dp)) {
-                Text(item.title, style = MaterialTheme.typography.caption, color = MaterialTheme.colors.unimportantText)
+            Column(
+                horizontalAlignment = Alignment.End,
+                modifier = Modifier.fillMaxWidth().padding(end = 16.dp)
+            ) {
+                Text(
+                    item.title,
+                    style = MaterialTheme.typography.caption,
+                    color = MaterialTheme.colors.unimportantText
+                )
                 Spacer4dpH()
                 Text(
                     Localization.dateTimeFormatter.format(item.time),
