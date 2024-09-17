@@ -1,8 +1,12 @@
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
@@ -12,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.ExperimentalUnitApi
@@ -21,12 +26,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import lifeupdesktop.composeapp.generated.resources.Res
 import lifeupdesktop.composeapp.generated.resources.icon
+import lifeupdesktop.composeapp.generated.resources.module_save
 import net.lifeupapp.app.base.navcontroller.NavController
 import net.lifeupapp.app.base.navcontroller.NavigationHost
 import net.lifeupapp.app.base.navcontroller.composable
 import net.lifeupapp.app.base.navcontroller.rememberNavController
+import net.lifeupapp.app.ui.page.save.SaveScreen
 import net.lifeupapp.app.ui.text.StringText
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import ui.AppStore
 import ui.AppStoreImpl
 import ui.ScaffoldState
@@ -36,6 +44,8 @@ import ui.page.config.ConfigScreen
 import ui.page.feelings.FeelingsScreen
 import ui.page.item.ShopScreen
 import ui.page.list.TasksScreen
+import ui.page.list.VerticalScrollbar
+import ui.page.list.rememberScrollbarAdapter
 import ui.page.status.StatusScreen
 import ui.theme.AppTheme
 import ui.view.fakeDialog
@@ -74,6 +84,7 @@ fun app() {
                 StringText.module_shop,
                 StringText.module_achievements_short,
                 StringText.module_feelings,
+                stringResource(Res.string.module_save),
                 StringText.module_settings
             )
             val icons = listOf(
@@ -82,6 +93,7 @@ fun app() {
                 Icons.Filled.ShoppingCart,
                 Icons.Filled.Star,
                 Icons.Filled.Build, //FIXME: BOOK
+                Icons.Filled.Info,
                 Icons.Filled.Settings
             )
 
@@ -89,46 +101,13 @@ fun app() {
                 scaffoldState = scaffoldState
             ) {
                 Row {
-                    NavigationRail {
-                        items.forEachIndexed { index, item ->
-                            NavigationRailItem(
-                                icon = { Icon(icons[index], contentDescription = item) },
-                                label = { Text(item) },
-                                selected = selectedItem == index,
-                                onClick = {
-                                    selectedItem = index
-                                    when (selectedItem) {
-                                        0 -> {
-                                            navController.navigate(Screen.Tasks.route)
-                                        }
-
-                                        1 -> {
-                                            navController.navigate(Screen.Status.route)
-                                        }
-
-                                        2 -> {
-                                            navController.navigate(Screen.Shop.route)
-                                        }
-
-                                        3 -> {
-                                            navController.navigate(Screen.Achievements.route)
-                                        }
-
-                                        4 -> {
-                                            navController.navigate(Screen.Feelings.route)
-                                        }
-
-                                        5 -> {
-                                            navController.navigate(Screen.Config.route)
-                                        }
-
-                                        else -> {
-                                            navController.navigate(Screen.Empty.route)
-                                        }
-                                    }
-                                })
-                        }
-                    }
+                    ScrollableNavigationRail(
+                        items = items,
+                        icons = icons,
+                        selectedItem = selectedItem,
+                        navController = navController,
+                        onItemSelected = { selectedItem = it }
+                    )
                     Box(Modifier.fillMaxSize()) {
                         CustomNavigationHost(navController)
                     }
@@ -140,6 +119,54 @@ fun app() {
                 fakeDialog(dialogStatus)
             }
         }
+    }
+}
+
+@Composable
+fun ScrollableNavigationRail(
+    items: List<String>,
+    icons: List<ImageVector>,
+    selectedItem: Int,
+    navController: NavController,
+    onItemSelected: (Int) -> Unit
+) {
+    val listState = rememberLazyListState()
+
+    Box(modifier = Modifier.fillMaxHeight()) {
+        NavigationRail(
+            modifier = Modifier.fillMaxHeight()
+        ) {
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.fillMaxHeight()
+            ) {
+                itemsIndexed(items) { index, item ->
+                    NavigationRailItem(
+                        icon = { Icon(icons[index], contentDescription = item) },
+                        label = { Text(item) },
+                        selected = selectedItem == index,
+                        onClick = {
+                            onItemSelected(index)
+                            when (index) {
+                                0 -> navController.navigate(Screen.Tasks.route)
+                                1 -> navController.navigate(Screen.Status.route)
+                                2 -> navController.navigate(Screen.Shop.route)
+                                3 -> navController.navigate(Screen.Achievements.route)
+                                4 -> navController.navigate(Screen.Feelings.route)
+                                5 -> navController.navigate(Screen.Save.route)
+                                6 -> navController.navigate(Screen.Config.route)
+                                else -> navController.navigate(Screen.Empty.route)
+                            }
+                        }
+                    )
+                }
+            }
+        }
+
+        VerticalScrollbar(
+            modifier = Modifier.align(Alignment.CenterStart).fillMaxHeight(),
+            adapter = rememberScrollbarAdapter(scrollState = listState)
+        )
     }
 }
 
@@ -168,6 +195,10 @@ fun CustomNavigationHost(
             FeelingsScreen()
         }
 
+        composable(Screen.Save.route) {
+            SaveScreen()
+        }
+
         composable(Screen.Config.route) {
             ConfigScreen()
         }
@@ -182,7 +213,7 @@ fun main() {
     var lastError: Throwable? by mutableStateOf(null)
 
     application(exitProcessOnExit = false) {
-        if(System.getProperty("os.name").startsWith("Windows")) {
+        if (System.getProperty("os.name").startsWith("Windows")) {
             // To fix the window crash issue: https://github.com/JetBrains/compose-jb/issues/610
             System.setProperty("skiko.renderApi", "OPENGL")
         }
@@ -228,7 +259,8 @@ fun main() {
             exitProcessOnExit = false
         ) {
             Text(
-                lastError?.stackTraceToString() ?: "Unknown error", Modifier.padding(8.dp).verticalScroll(
+                lastError?.stackTraceToString() ?: "Unknown error",
+                Modifier.padding(8.dp).verticalScroll(
                     rememberScrollState()
                 )
             )

@@ -14,4 +14,6 @@ sealed class Screen(val route: String) {
     object Achievements : Screen("achievements")
 
     object Empty : Screen("empty")
+
+    object Save : Screen("save")
 }

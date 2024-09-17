@@ -8,6 +8,7 @@
     <string name="module_achievements">成就</string>
     <string name="module_settings">設定</string>
     <string name="module_feelings">感想</string>
+    <string name="module_save">存檔</string>
     <string name="cancel">取消</string>
     <string name="yes">確定</string>
     <string name="base_config">基礎</string>

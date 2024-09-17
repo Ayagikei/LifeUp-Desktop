@@ -328,4 +328,44 @@ object ApiServiceImpl : ApiService {
                 .dataOrThrow()
         }
     }
+
+    override suspend fun exportDataToDir(withMedia: Boolean): String {
+        return withContext(Dispatchers.IO) {
+            val url = (OkHttpClientHolder.host + "/data/export").toHttpUrl().newBuilder()
+                .addQueryParameter(
+                    "withMedia",
+                    withMedia.toString()
+                ).build()
+            val request = Request.Builder().url(url).get().build()
+            val response = okHttpClient.newCall(request).execute()
+            val data =
+                json.decodeFromString<HttpResponse<JsonObject>>(response.body?.string() ?: "")
+                    .dataOrThrow()
+            // 从 JsonElement 获取 “backup_file_uri” string 类型
+            val backupFileUri = data.getValue("backup_file_uri").jsonPrimitive.content
+            if (backupFileUri.isBlank()) {
+                throw IllegalStateException("backup_file_uri is null or blank")
+            } else {
+                return@withContext getIconUrl(backupFileUri)
+            }
+        }
+    }
+
+    override suspend fun importData(file: File) {
+        withContext(Dispatchers.IO) {
+            val url = (OkHttpClientHolder.host + "/data/import").toHttpUrl()
+            val builder = MultipartBody.Builder().setType(MultipartBody.FORM)
+            file.let {
+                builder.addFormDataPart(
+                    "file",
+                    it.name,
+                    it.asRequestBody("application/octet-stream".toMediaType())
+                )
+            }
+            val request = Request.Builder().url(url).post(builder.build()).build()
+            val response = okHttpClient.newCall(request).execute()
+            json.decodeFromString<HttpResponse<JsonElement?>>(response.body?.string() ?: "")
+                .successOrThrow()
+        }
+    }
 }

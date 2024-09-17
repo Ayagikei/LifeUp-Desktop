@@ -58,4 +58,8 @@ interface ApiService {
     ): Result<JsonElement?>
 
     suspend fun uploadFilesToUris(files: List<File>): List<String>
+
+    suspend fun exportDataToDir(withMedia: Boolean): String
+
+    suspend fun importData(file: File)
 }
