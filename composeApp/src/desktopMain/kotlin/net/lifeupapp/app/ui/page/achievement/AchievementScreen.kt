@@ -13,8 +13,8 @@ import androidx.compose.ui.unit.dp
 import base.json
 import datasource.data.Achievement
 import kotlinx.serialization.encodeToString
+import net.lifeupapp.app.ui.text.StringText
 import ui.AppStore
-import ui.Strings
 import ui.page.config.Spacer8dpH
 import ui.page.list.Dialog
 
@@ -52,11 +52,11 @@ internal fun DetailDialog(
     onCloseClicked: () -> Unit
 ) {
     Dialog(
-        title = Strings.module_achievements,
+        title = StringText.module_achievements,
         onCloseRequest = onCloseClicked,
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(Strings.oops_wip)
+            Text(StringText.oops_wip)
             Spacer8dpH()
             Text(json.encodeToString(item))
             Spacer(modifier = Modifier.height(8.dp))

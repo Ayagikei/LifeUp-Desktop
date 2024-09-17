@@ -10,12 +10,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import base.json
 import datasource.data.ShopItem
+import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import net.lifeupapp.app.base.launchSafely
 import net.lifeupapp.app.ui.page.item.ShopStore
+import net.lifeupapp.app.ui.text.StringText
 import ui.AppStore
 import ui.ScaffoldState
-import ui.Strings
 import ui.page.config.Spacer8dpH
 import ui.page.list.Dialog
 
@@ -27,7 +28,7 @@ fun ShopScreen(modifier: Modifier = Modifier) {
     val state by model.state.collectAsState()
     val coin = state.coin
     val scaffoldState = ScaffoldState.current
-    val text = Strings.snackbar_purchase_item
+    val text = StringText.snackbar_purchase_item
 
     coroutineScope.launchSafely {
         model.purchaseSuccessEventFlow.collect {
@@ -57,7 +58,9 @@ fun ShopScreen(modifier: Modifier = Modifier) {
         onCategoryDismissed = model::onCategoryDismissed,
         onRefreshClick = model::onRefresh,
         onPurchased = {
-            model.onPurchased(it, globalStore.strings.purchase_desc.format(it.name))
+            coroutineScope.launch {
+                model.onPurchased(it, StringText.getPurchaseDesc(it.name))
+            }
         },
     )
 
@@ -75,11 +78,11 @@ internal fun DetailDialog(
     onCloseClicked: () -> Unit
 ) {
     Dialog(
-        title = Strings.module_achievements,
+        title = StringText.module_achievements,
         onCloseRequest = onCloseClicked,
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(Strings.oops_wip)
+            Text(StringText.oops_wip)
             Spacer8dpH()
             Text(json.encodeToString(item))
             Spacer(modifier = Modifier.height(8.dp))

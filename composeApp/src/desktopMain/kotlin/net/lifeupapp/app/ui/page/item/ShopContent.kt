@@ -28,7 +28,7 @@ import lifeupdesktop.composeapp.generated.resources.Res
 import lifeupdesktop.composeapp.generated.resources.ic_coin
 import lifeupdesktop.composeapp.generated.resources.ic_pic_loading_cir
 import logger
-import ui.Strings
+import net.lifeupapp.app.ui.text.StringText
 import ui.page.config.Spacer4dpH
 import ui.page.list.MARGIN_SCROLLBAR
 import ui.page.list.rememberScrollbarAdapter
@@ -63,7 +63,7 @@ internal fun ShopContent(
                 )
             ) {
                 if (selectedCategory == null) {
-                    Text(text = Strings.module_shop)
+                    Text(text = StringText.module_shop)
                     Icon(Icons.Default.ArrowDropDown, "")
                 } else {
                     Text(text = selectedCategory.name)
@@ -165,7 +165,7 @@ private fun CoinRow(
         Spacer(modifier = Modifier.width(8.dp))
 
         Text(
-            text = AnnotatedString(Strings.coin),
+            text = AnnotatedString(StringText.coin),
             modifier = Modifier.weight(1F).align(Alignment.CenterVertically),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
@@ -239,13 +239,13 @@ private fun Item(
             }
             Spacer4dpH()
             Text(
-                Strings.item_price.format(item.price),
+                StringText.item_price.format(item.price),
                 style = MaterialTheme.typography.caption,
                 color = MaterialTheme.colors.unimportantText
             )
             Spacer4dpH()
             Text(
-                Strings.item_own_number.format(item.ownNumber),
+                StringText.item_own_number.format(item.ownNumber),
                 style = MaterialTheme.typography.caption,
                 color = MaterialTheme.colors.unimportantText
             )
@@ -267,7 +267,7 @@ private fun Item(
                 ),
                 enabled = coin != null && coin >= item.price
             ) {
-                Text(Strings.btn_purchase)
+                Text(StringText.btn_purchase)
             }
         }
 

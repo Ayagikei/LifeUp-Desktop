@@ -8,11 +8,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import net.lifeupapp.app.base.launchSafely
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import net.lifeupapp.app.base.launchSafely
+import net.lifeupapp.app.ui.text.StringText
 import ui.AppStore
-import ui.Strings
 import ui.page.list.Dialog
 import utils.md5
 import java.awt.Desktop
@@ -58,15 +58,15 @@ fun FeelingsScreen(modifier: Modifier = Modifier) {
         AlertDialog(onDismissRequest = {
             model.setState { copy(showingDialog = false) }
         }, title = {
-            Text(Strings.feelings_export_dialog_title)
+            Text(StringText.feelings_export_dialog_title)
         }, text = {
-            Text(Strings.feelings_export_dialog_desc)
+            Text(StringText.feelings_export_dialog_desc)
         }, buttons = {
             Column {
                 val groupByMethods = listOf(
-                    GroupMethod(Strings.feelings_export_group_by_day, "yyyy-MM-dd"),
-                    GroupMethod(Strings.feelings_export_group_by_month, "yyyy-MM"),
-                    GroupMethod(Strings.feelings_export_group_by_year, "yyyy"),
+                    GroupMethod(StringText.feelings_export_group_by_day, "yyyy-MM-dd"),
+                    GroupMethod(StringText.feelings_export_group_by_month, "yyyy-MM"),
+                    GroupMethod(StringText.feelings_export_group_by_year, "yyyy"),
                 )
                 val expended = remember { mutableStateOf(false) }
                 val index = remember {
@@ -99,12 +99,12 @@ fun FeelingsScreen(modifier: Modifier = Modifier) {
                     TextButton(onClick = {
                         model.setState { copy(showingDialog = false) }
                     }) {
-                        Text(Strings.cancel)
+                        Text(StringText.cancel)
                     }
 
-                    val dialogTitleString = Strings.common_dir_select_title
-                    val approveButtonTextString = Strings.common_dir_select_button
-                    val approveButtonToolTipTextString = Strings.common_dir_select_button_tooltip
+                    val dialogTitleString = StringText.common_dir_select_title
+                    val approveButtonTextString = StringText.common_dir_select_button
+                    val approveButtonToolTipTextString = StringText.common_dir_select_button_tooltip
 
                     TextButton(modifier = Modifier.padding(start = 16.dp), onClick = {
                         model.setState { copy(showingDialog = false) }
@@ -118,7 +118,7 @@ fun FeelingsScreen(modifier: Modifier = Modifier) {
                         val result = fileChooser.selectedFile
                         model.onExportDirSelected(result, groupByMethods[index.value].dateFormat)
                     }) {
-                        Text(Strings.yes)
+                        Text(StringText.yes)
                     }
                 }
             }
@@ -127,7 +127,7 @@ fun FeelingsScreen(modifier: Modifier = Modifier) {
 
     if (state.exportProgress >= 0.0f) {
         // dialog
-        Dialog(title = Strings.feelings_export_progress_dialog_title, onCloseRequest = {
+        Dialog(title = StringText.feelings_export_progress_dialog_title, onCloseRequest = {
             model.setState { copy(exportProgress = -1f) }
         }, content = {
             Column {

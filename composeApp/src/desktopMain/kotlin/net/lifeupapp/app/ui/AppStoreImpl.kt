@@ -1,7 +1,6 @@
 package ui
 
 import AppScope
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
@@ -18,10 +17,10 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import logger
 import net.lifeupapp.app.ui.text.Localization
+import net.lifeupapp.app.ui.text.StringText
 import net.lifeupapp.app.utils.ifNullOrBlank
 import okhttp3.HttpUrl
 import service.MdnsServiceDiscovery
-import ui.text.StringText
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.logging.Level
@@ -185,21 +184,21 @@ class AppStoreImpl(
     }
 
 
-    fun showDialog(
-        title: String,
-        message: String = "",
-        positiveButton: String = strings.yes,
-        negativeButton: String = strings.cancel,
-        negativeAction: () -> Unit = {
-            dialogStatus = null
-        },
-        positiveAction: () -> Unit
-    ) {
-        dialogStatus = DialogStatus(
-            title, message, positiveButton, negativeButton, positiveAction, negativeAction
-        )
-        MaterialTheme
-    }
+//    fun showDialog(
+//        title: String,
+//        message: String = "",
+//        positiveButton: String = strings.yes,
+//        negativeButton: String = strings.cancel,
+//        negativeAction: () -> Unit = {
+//            dialogStatus = null
+//        },
+//        positiveAction: () -> Unit
+//    ) {
+//        dialogStatus = DialogStatus(
+//            title, message, positiveButton, negativeButton, positiveAction, negativeAction
+//        )
+//        MaterialTheme
+//    }
 }
 
 val AppStore = compositionLocalOf {

@@ -27,7 +27,7 @@ import lifeupdesktop.composeapp.generated.resources.Res
 import lifeupdesktop.composeapp.generated.resources.ic_coin
 import lifeupdesktop.composeapp.generated.resources.ic_pic_loading_cir
 import net.lifeupapp.app.ui.text.Localization
-import ui.Strings
+import net.lifeupapp.app.ui.text.StringText
 import ui.page.config.Spacer4dpH
 import ui.page.config.Spacer8dpH
 import ui.page.list.MARGIN_SCROLLBAR
@@ -49,7 +49,7 @@ internal fun FeelingsContent(
 
     Column(modifier) {
         TopAppBar(title = {
-            Text(text = Strings.module_feelings)
+            Text(text = StringText.module_feelings)
         }, backgroundColor = MaterialTheme.colors.primarySurface, elevation = 0.dp, actions = {
             IconButton(onExportClicked) {
                 Icon(Icons.Default.Build, "Export") // fixme: change to download icon
@@ -119,7 +119,7 @@ private fun CoinRow(
         Spacer(modifier = Modifier.width(8.dp))
 
         Text(
-            text = AnnotatedString(Strings.coin),
+            text = AnnotatedString(StringText.coin),
             modifier = Modifier.weight(1F).align(Alignment.CenterVertically),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis

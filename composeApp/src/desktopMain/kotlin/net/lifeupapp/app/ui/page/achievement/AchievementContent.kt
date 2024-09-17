@@ -30,7 +30,7 @@ import lifeupdesktop.composeapp.generated.resources.Res
 import lifeupdesktop.composeapp.generated.resources.ic_pic_loading_cir
 import logger
 import net.lifeupapp.app.ui.text.Localization.dateTimeFormatterWithNewLine
-import ui.Strings
+import net.lifeupapp.app.ui.text.StringText
 import ui.page.config.Spacer4dpH
 import ui.page.list.MARGIN_SCROLLBAR
 import ui.page.list.rememberScrollbarAdapter
@@ -64,7 +64,7 @@ internal fun AchievementContent(
                 )
             ) {
                 if (selectedCategory == null) {
-                    Text(text = Strings.module_achievements)
+                    Text(text = StringText.module_achievements)
                     Icon(Icons.Default.ArrowDropDown, "")
                 } else {
                     Text(text = selectedCategory.name)

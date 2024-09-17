@@ -135,7 +135,7 @@ internal class AddTasksStore(
                 addSuccessEvent.send(Unit)
             } catch (e: Exception) {
                 e.printStackTrace()
-                addFailedEvent.send(Strings.add_tasks_failed)
+                addFailedEvent.send(Strings.getAddTasksFailed())
             }
         }
     }

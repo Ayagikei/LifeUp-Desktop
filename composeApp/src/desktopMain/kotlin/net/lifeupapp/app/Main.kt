@@ -25,11 +25,11 @@ import net.lifeupapp.app.base.navcontroller.NavController
 import net.lifeupapp.app.base.navcontroller.NavigationHost
 import net.lifeupapp.app.base.navcontroller.composable
 import net.lifeupapp.app.base.navcontroller.rememberNavController
+import net.lifeupapp.app.ui.text.StringText
 import org.jetbrains.compose.resources.painterResource
 import ui.AppStore
 import ui.AppStoreImpl
 import ui.ScaffoldState
-import ui.Strings
 import ui.page.Screen
 import ui.page.achievement.AchievementScreen
 import ui.page.config.ConfigScreen
@@ -69,12 +69,12 @@ fun app() {
             ScaffoldState provides scaffoldState,
         ) {
             val items = listOf(
-                Strings.module_tasks,
-                Strings.module_status,
-                Strings.module_shop,
-                Strings.module_achievements_short,
-                Strings.module_feelings,
-                Strings.module_settings
+                StringText.module_tasks,
+                StringText.module_status,
+                StringText.module_shop,
+                StringText.module_achievements_short,
+                StringText.module_feelings,
+                StringText.module_settings
             )
             val icons = listOf(
                 Icons.Filled.List,

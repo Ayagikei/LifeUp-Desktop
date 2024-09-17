@@ -24,12 +24,14 @@ import datasource.data.TaskCategory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import lifeupdesktop.composeapp.generated.resources.Res
+import lifeupdesktop.composeapp.generated.resources.add_tasks_frequency_desc
 import lifeupdesktop.composeapp.generated.resources.ic_coin
 import lifeupdesktop.composeapp.generated.resources.ic_pic_loading_cir
 import net.lifeupapp.app.base.launchSafely
 import net.lifeupapp.app.ui.page.item.ShopStore
 import net.lifeupapp.app.ui.page.list.TaskStore
 import net.lifeupapp.app.ui.page.status.StatusStore
+import org.jetbrains.compose.resources.stringResource
 import ui.AppStore
 import ui.Strings
 import ui.page.config.Spacer16dpH
@@ -412,7 +414,7 @@ private fun BaseConfigs(
     Spacer16dpH()
 
     // frequency dropdown
-    val frequencyOptions = remember {
+    val frequencyOptions =
         listOf(
             Strings.add_tasks_frequency_none,
             Strings.add_tasks_frequency_daily,
@@ -421,7 +423,7 @@ private fun BaseConfigs(
             Strings.add_tasks_frequency_yearly,
             Strings.add_tasks_frequency_unlimited
         )
-    }
+
     val (expanded, setExpanded) = remember { mutableStateOf(false) }
 
 
@@ -431,7 +433,10 @@ private fun BaseConfigs(
             setExpanded(true)
         }) {
             Text(
-                text = Strings.add_tasks_frequency_desc.format(frequencyOptions[frequencyToIndex(state.frequency)])
+                text = stringResource(
+                    Res.string.add_tasks_frequency_desc,
+                    frequencyOptions[frequencyToIndex(state.frequency)]
+                )
             )
         }
         DropdownMenu(expanded = expanded, onDismissRequest = { setExpanded(false) }) {

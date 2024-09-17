@@ -64,7 +64,7 @@ fun TasksScreen(modifier: Modifier = Modifier) {
         }, onCloseAndSuccessAdded = {
             model.hideAddWindow()
             coroutineScope.launchSafely {
-                scaffoldState.snackbarHostState.showSnackbar(Strings.add_tasks_success)
+                scaffoldState.snackbarHostState.showSnackbar(Strings.getAddTasksSuccess())
             }
             model.onRefresh()
         })

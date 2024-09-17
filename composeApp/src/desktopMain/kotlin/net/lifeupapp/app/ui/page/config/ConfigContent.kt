@@ -144,7 +144,7 @@ fun ConfigScreen(modifier: Modifier = Modifier) {
                         coroutineScope.launch {
                             val result = globalStore.checkUpdateAwait()
                             if (result != null && result.versionCode <= Val.versionCode) {
-                                scaffoldState.snackbarHostState.showSnackbar(Strings.about_message_no_update)
+                                scaffoldState.snackbarHostState.showSnackbar(Strings.getAboutMessageNoUpdate())
                                 return@launch
                             }
                         }

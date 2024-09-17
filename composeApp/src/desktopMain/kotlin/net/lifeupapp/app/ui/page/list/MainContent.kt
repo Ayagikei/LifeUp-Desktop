@@ -22,7 +22,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import datasource.data.TaskCategory
-import ui.Strings
+import net.lifeupapp.app.ui.text.StringText
 
 @Composable
 internal fun MainContent(
@@ -53,7 +53,7 @@ internal fun MainContent(
                 )
             ) {
                 if (selectedCategory == null) {
-                    Text(text = Strings.module_tasks)
+                    Text(text = StringText.module_tasks)
                     Icon(Icons.Default.ArrowDropDown, "")
                 } else {
                     Text(text = selectedCategory.name)
