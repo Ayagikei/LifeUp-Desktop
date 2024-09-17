@@ -1,6 +1,7 @@
-package ui.text
+package net.lifeupapp.app.ui.text
 
 import logger
+import ui.text.StringText
 import ui.text.i18n.EnStrings
 import ui.text.i18n.ZhCNStrings
 import ui.text.i18n.ZhHantStrings

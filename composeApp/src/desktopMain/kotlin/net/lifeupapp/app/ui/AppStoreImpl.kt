@@ -17,9 +17,10 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import logger
+import net.lifeupapp.app.ui.text.Localization
+import net.lifeupapp.app.utils.ifNullOrBlank
 import okhttp3.HttpUrl
 import service.MdnsServiceDiscovery
-import ui.text.Localization
 import ui.text.StringText
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
@@ -30,11 +31,10 @@ class AppStoreImpl(
     private val coroutineScope: CoroutineScope
 ) {
 
-    // fixme: java.lang.NullPointerException: Parameter specified as non-null is null: method kotlin.text.StringsKt__StringsKt.isBlank, parameter <this>
     val resourceDir
-        get() = System.getenv("APPDATA").ifBlank {
+        get() = System.getenv("APPDATA").ifNullOrBlank {
             System.getProperty("compose.application.resources.dir")
-        }.ifBlank {
+        }.ifNullOrBlank {
             System.getProperty("user.dir")
         }
 

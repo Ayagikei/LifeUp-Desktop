@@ -1,12 +1,34 @@
 package net.lifeupapp.app.base
 
 object Val {
-    // fixme
-    val version: String
-        get() = System.getProperty("jpackage.app-version") ?: "UNKNOWN"
+    object AppVersion {
+        private const val UNKNOWN = "UNKNOWN"
+        private val versionSources = listOf(
+            { System.getProperty("jpackage.app-version") },
+            { System.getenv("APP_VERSION") },
+            { getVersionFromManifest() },
+            { getVersionFromResourceFile() }
+        )
+
+        val version: String by lazy {
+            versionSources.firstNotNullOfOrNull { it() } ?: UNKNOWN
+        }
+
+        private fun getVersionFromManifest(): String? {
+            return javaClass.getPackage()?.implementationVersion
+        }
+
+        private fun getVersionFromResourceFile(): String? {
+            return javaClass.getResourceAsStream("/version.txt")?.bufferedReader()
+                ?.use { it.readLine() }
+        }
+
+        fun isUnknown() = version == UNKNOWN
+    }
+
 
     val versionCode: Int by lazy {
-        val version = version.split(".")
+        val version = AppVersion.version.split(".")
         assert(version.size == 3) { "Invalid version format" }
         if (version.size != 3) {
             return@lazy 0

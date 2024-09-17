@@ -3,7 +3,6 @@ package ui.page.feelings
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import net.lifeupapp.app.base.launchSafely
 import datasource.ApiServiceImpl
 import datasource.data.Feelings
 import kotlinx.coroutines.CoroutineScope
@@ -12,8 +11,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import logger
+import net.lifeupapp.app.base.launchSafely
+import net.lifeupapp.app.ui.text.Localization
 import ui.AppStoreImpl
-import ui.text.Localization
 import utils.md5
 import java.io.File
 import java.net.URL

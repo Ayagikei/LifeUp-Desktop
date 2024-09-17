@@ -18,8 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import net.lifeupapp.app.base.Val
 import kotlinx.coroutines.launch
+import net.lifeupapp.app.base.Val
 import service.MdnsServiceDiscovery
 import ui.AppStore
 import ui.ScaffoldState
@@ -114,7 +114,7 @@ fun ConfigScreen(modifier: Modifier = Modifier) {
             Spacer24dpH()
             Text(
                 text = Strings.version_desc.format(
-                    Val.version,
+                    Val.AppVersion.version,
                     Val.targetLifeUpCloudVersion,
                     Val.targetLifeUpAndroidVersion
                 ),

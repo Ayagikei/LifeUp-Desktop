@@ -26,12 +26,12 @@ import datasource.data.Feelings
 import lifeupdesktop.composeapp.generated.resources.Res
 import lifeupdesktop.composeapp.generated.resources.ic_coin
 import lifeupdesktop.composeapp.generated.resources.ic_pic_loading_cir
+import net.lifeupapp.app.ui.text.Localization
 import ui.Strings
 import ui.page.config.Spacer4dpH
 import ui.page.config.Spacer8dpH
 import ui.page.list.MARGIN_SCROLLBAR
 import ui.page.list.rememberScrollbarAdapter
-import ui.text.Localization
 import ui.theme.important
 import ui.theme.unimportantText
 import ui.view.AsyncImage
