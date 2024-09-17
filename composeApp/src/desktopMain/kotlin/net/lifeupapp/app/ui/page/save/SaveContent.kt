@@ -5,6 +5,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.draganddrop.dragAndDropTarget
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -20,6 +22,8 @@ import androidx.compose.ui.draganddrop.awtTransferable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import ui.page.list.VerticalScrollbar
+import ui.page.list.rememberScrollbarAdapter
 import java.awt.datatransfer.DataFlavor
 import java.io.File
 import javax.swing.JFileChooser
@@ -32,119 +36,161 @@ fun SaveScreen(modifier: Modifier = Modifier) {
     val saveStore = remember { SaveStore(coroutineScope) }
     var importedFileName by remember { mutableStateOf<String?>(null) }
     var exportPath by remember { mutableStateOf<String?>(null) }
+    var includeMedia by remember { mutableStateOf(true) }
 
-    Column(
-        modifier = modifier.padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        Text(
-            "Backup and Restore",
-            style = MaterialTheme.typography.h4
-        )
+    val scrollState = rememberLazyListState()
 
-        // Export Section
-        Text(
-            "Export Backup",
-            style = MaterialTheme.typography.h5
-        )
-
-        // Export Backup Button
-        Button(
-            onClick = {
-                val selectedDir = showDirectoryChooser(
-                    "Select Export Directory",
-                    "Export",
-                    "Choose directory for backup export"
-                )
-                selectedDir?.let { dir ->
-                    exportPath = dir.absolutePath
-                    saveStore.onExportToDir(dir, withMedia = true)
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
+    Box(modifier = modifier.fillMaxSize()) {
+        LazyColumn(
+            state = scrollState,
+            modifier = Modifier.fillMaxSize().padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Export")
-            Spacer(Modifier.width(8.dp))
-            Text("Choose Export Directory")
-        }
+            item {
+                Text(
+                    "Backup and Restore",
+                    style = MaterialTheme.typography.h5
+                )
+            }
 
-        exportPath?.let {
-            Text("Export Path: $it", style = MaterialTheme.typography.body2)
-        }
+            item {
+                // Export Section
+                Text(
+                    "Export Backup",
+                    style = MaterialTheme.typography.h6
+                )
+            }
 
-        Divider(modifier = Modifier.padding(vertical = 16.dp))
-
-        // Import Section
-        Text(
-            "Import Backup",
-            style = MaterialTheme.typography.h5
-        )
-
-        // Drag and Drop Area
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .border(2.dp, Color.Gray, RoundedCornerShape(8.dp))
-                .padding(16.dp)
-                .dragAndDropTarget(
-                    shouldStartDragAndDrop = { true },
-                    target = object : DragAndDropTarget {
-                        override fun onDrop(event: DragAndDropEvent): Boolean {
-                            val file =
-                                event.awtTransferable.getTransferData(DataFlavor.javaFileListFlavor) as? List<File>
-                            file?.firstOrNull()?.let {
-                                importedFileName = it.name
-                                saveStore.onImportBackup(it)
-                            }
-                            return true
+            item {
+                // Export Backup Button
+                Button(
+                    onClick = {
+                        val selectedDir = showDirectoryChooser(
+                            "Select Export Directory",
+                            "Export",
+                            "Choose directory for backup export"
+                        )
+                        selectedDir?.let { dir ->
+                            exportPath = dir.absolutePath
+                            saveStore.onExportToDir(dir, withMedia = includeMedia)
                         }
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Export")
+                    Spacer(Modifier.width(8.dp))
+                    Text("Choose Export Directory")
+                }
+            }
+
+            item {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Checkbox(
+                        checked = includeMedia,
+                        onCheckedChange = { includeMedia = it }
+                    )
+                    Text("Include media files in backup", style = MaterialTheme.typography.body2)
+                }
+            }
+
+            item {
+                exportPath?.let {
+                    Text("Export Path: $it", style = MaterialTheme.typography.body2)
+                }
+            }
+
+            item {
+                Divider(modifier = Modifier.padding(vertical = 16.dp))
+            }
+
+            item {
+                // Import Section
+                Text(
+                    "Import Backup",
+                    style = MaterialTheme.typography.h6
+                )
+            }
+
+            item {
+                // Drag and Drop Area
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .border(2.dp, Color.Gray, RoundedCornerShape(8.dp))
+                        .padding(16.dp)
+                        .dragAndDropTarget(
+                            shouldStartDragAndDrop = { true },
+                            target = object : DragAndDropTarget {
+                                override fun onDrop(event: DragAndDropEvent): Boolean {
+                                    val file =
+                                        event.awtTransferable.getTransferData(DataFlavor.javaFileListFlavor) as? List<File>
+                                    file?.firstOrNull()?.let {
+                                        importedFileName = it.name
+                                        saveStore.onImportBackup(it)
+                                    }
+                                    return true
+                                }
+                            }
+                        )
+                ) {
+                    if (importedFileName != null) {
+                        Text(
+                            "Imported: $importedFileName",
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                    } else {
+                        Text(
+                            "Drag and drop your backup file here",
+                            modifier = Modifier.align(Alignment.Center),
+                            textAlign = TextAlign.Center
+                        )
                     }
-                )
-        ) {
-            if (importedFileName != null) {
-                Text(
-                    "Imported: $importedFileName",
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            } else {
-                Text(
-                    "Drag and drop your backup file here",
-                    modifier = Modifier.align(Alignment.Center),
-                    textAlign = TextAlign.Center
-                )
+                }
+            }
+
+            item {
+                // Or divider
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Divider(Modifier.weight(1f))
+                    Text(
+                        "OR",
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        style = MaterialTheme.typography.body2
+                    )
+                    Divider(Modifier.weight(1f))
+                }
+            }
+
+            item {
+                // Import Button
+                Button(
+                    onClick = {
+                        val files = showBackupFileChooser()
+                        if (files.isNotEmpty()) {
+                            importedFileName = File(files.first()).name
+                            saveStore.onImportBackup(File(files.first()))
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Import")
+                    Spacer(Modifier.width(8.dp))
+                    Text("Choose Backup File")
+                }
             }
         }
 
-        // Or divider
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Divider(Modifier.weight(1f))
-            Text(
-                "OR",
-                modifier = Modifier.padding(horizontal = 16.dp),
-                style = MaterialTheme.typography.body2
-            )
-            Divider(Modifier.weight(1f))
-        }
-
-        // Import Button
-        Button(
-            onClick = {
-                val files = showBackupFileChooser()
-                if (files.isNotEmpty()) {
-                    importedFileName = File(files.first()).name
-                    saveStore.onImportBackup(File(files.first()))
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Import")
-            Spacer(Modifier.width(8.dp))
-            Text("Choose Backup File")
-        }
+        VerticalScrollbar(
+            modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
+            adapter = rememberScrollbarAdapter(scrollState)
+        )
     }
 }
 
