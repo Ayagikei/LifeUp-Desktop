@@ -17,10 +17,10 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
-import kotlinproject.composeapp.generated.resources.Res
-import kotlinproject.composeapp.generated.resources.icon
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
+import lifeupdesktop.composeapp.generated.resources.Res
+import lifeupdesktop.composeapp.generated.resources.icon
 import net.lifeupapp.app.base.navcontroller.NavController
 import net.lifeupapp.app.base.navcontroller.NavigationHost
 import net.lifeupapp.app.base.navcontroller.composable

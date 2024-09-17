@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -27,8 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import datasource.data.Achievement
 import datasource.data.AchievementCategory
-import kotlinproject.composeapp.generated.resources.Res
-import kotlinproject.composeapp.generated.resources.ic_pic_loading_cir
+import lifeupdesktop.composeapp.generated.resources.Res
+import lifeupdesktop.composeapp.generated.resources.ic_pic_loading_cir
 import logger
 import ui.Strings
 import ui.page.config.Spacer4dpH

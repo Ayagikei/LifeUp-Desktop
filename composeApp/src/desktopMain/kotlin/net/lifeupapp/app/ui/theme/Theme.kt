@@ -9,12 +9,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.platform.Font
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
-import kotlinproject.composeapp.generated.resources.HONORSansCN_Regular
-import kotlinproject.composeapp.generated.resources.Res
+import lifeupdesktop.composeapp.generated.resources.HONORSansCN_Regular
+import lifeupdesktop.composeapp.generated.resources.Res
 
 
 //private val LightColors = lightColorScheme(

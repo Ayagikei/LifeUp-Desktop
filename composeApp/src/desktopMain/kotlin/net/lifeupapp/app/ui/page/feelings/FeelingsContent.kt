@@ -23,9 +23,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import datasource.data.Feelings
-import kotlinproject.composeapp.generated.resources.Res
-import kotlinproject.composeapp.generated.resources.ic_coin
-import kotlinproject.composeapp.generated.resources.ic_pic_loading_cir
+import lifeupdesktop.composeapp.generated.resources.Res
+import lifeupdesktop.composeapp.generated.resources.ic_coin
+import lifeupdesktop.composeapp.generated.resources.ic_pic_loading_cir
 import ui.Strings
 import ui.page.config.Spacer4dpH
 import ui.page.config.Spacer8dpH

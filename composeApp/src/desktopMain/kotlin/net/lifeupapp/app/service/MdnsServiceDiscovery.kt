@@ -1,15 +1,18 @@
 package service
 
+
+/**
+ * Service to discover the lifeup cloud server
+ */
 import logger
+import java.net.Inet4Address
 import java.net.InetAddress
+import java.net.NetworkInterface
 import java.util.logging.Level
 import javax.jmdns.JmDNS
 import javax.jmdns.ServiceEvent
 import javax.jmdns.ServiceListener
 
-/**
- * Service to discover the lifeup cloud server
- */
 class MdnsServiceDiscovery {
 
     data class IpAndPort(val ip: String, val port: String) {
@@ -19,6 +22,7 @@ class MdnsServiceDiscovery {
     }
 
     val ipAndPorts = HashMap<String, IpAndPort?>()
+    private var jmdns: JmDNS? = null
 
     private val listener = object : ServiceListener {
         override fun serviceAdded(event: ServiceEvent?) {
@@ -40,7 +44,7 @@ class MdnsServiceDiscovery {
 
                     val port = event.info.getPropertyString("port")
                     if (port.isNullOrEmpty()) {
-                        logger.log(Level.INFO, "Service resolved, but data has not port")
+                        logger.log(Level.INFO, "Service resolved, but data has no port")
                         return@runCatching
                     }
 
@@ -55,11 +59,62 @@ class MdnsServiceDiscovery {
     }
 
 
+    private fun logNetworkInterfaces() {
+        NetworkInterface.getNetworkInterfaces().asSequence().forEach { networkInterface ->
+            logger.log(
+                Level.INFO,
+                "Interface: ${networkInterface.displayName}, Name: ${networkInterface.name}"
+            )
+            logger.log(
+                Level.INFO,
+                "  Is up: ${networkInterface.isUp}, Is loopback: ${networkInterface.isLoopback}, Is point to point: ${networkInterface.isPointToPoint}"
+            )
+            networkInterface.inetAddresses.asSequence().forEach { address ->
+                logger.log(
+                    Level.INFO,
+                    "  Address: ${address.hostAddress}, Is IPv4: ${address is Inet4Address}"
+                )
+            }
+        }
+    }
+
+    private fun findSuitableNetworkInterface(): Pair<NetworkInterface, InetAddress>? {
+        return NetworkInterface.getNetworkInterfaces().asSequence()
+            .filter { it.isUp && !it.isLoopback && !it.isPointToPoint }
+            .flatMap { networkInterface ->
+                networkInterface.inetAddresses.asSequence()
+                    .filter { it is Inet4Address }
+                    .map { Pair(networkInterface, it) }
+            }
+            .firstOrNull()
+    }
+
     fun register() = runCatching {
+        logNetworkInterfaces()
+
+        val (networkInterface, address) = findSuitableNetworkInterface() ?: run {
+            logger.log(Level.SEVERE, "No suitable network interface and IPv4 address found")
+            return@runCatching
+        }
+
+        logger.log(
+            Level.INFO,
+            "Selected interface: ${networkInterface.displayName}, address: ${address.hostAddress}"
+        )
+
         // Create a JmDNS instance
-        val jmdns = JmDNS.create(InetAddress.getLocalHost())
+        jmdns = JmDNS.create(address)
 
         // Add a service listener
-        jmdns.addServiceListener("_lifeup._tcp.local.", listener)
+        jmdns?.addServiceListener("_lifeup._tcp.local.", listener)
+
+        logger.log(
+            Level.INFO,
+            "JmDNS started on interface: ${networkInterface.displayName}, address: ${address.hostAddress}"
+        )
+    }
+
+    fun unregister() {
+        jmdns?.close()
     }
 }
