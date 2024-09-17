@@ -6,6 +6,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.Dispatchers
+import net.lifeupapp.app.ui.page.status.StatusStore
 import ui.AppStore
 
 @Composable

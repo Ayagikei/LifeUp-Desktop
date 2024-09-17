@@ -8,13 +8,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
-import net.lifeupapp.app.base.launchSafely
 import kotlinx.coroutines.Dispatchers
+import net.lifeupapp.app.base.launchSafely
+import net.lifeupapp.app.ui.page.item.ShopStore
+import net.lifeupapp.app.ui.page.list.TaskDetailsViewDialog
+import net.lifeupapp.app.ui.page.list.TaskStore
+import net.lifeupapp.app.ui.page.list.TaskStore.TaskState
+import net.lifeupapp.app.ui.page.list.add.AddTaskScreen
+import net.lifeupapp.app.ui.page.status.StatusStore
 import ui.AppStore
 import ui.ScaffoldState
 import ui.Strings
-import ui.page.list.TaskStore.TaskState
-import net.lifeupapp.app.ui.page.list.add.AddTaskScreen
 import java.awt.Toolkit
 
 @Composable
@@ -82,11 +86,21 @@ fun TasksScreen(modifier: Modifier = Modifier) {
 //    }
 
     state.editingItem?.also { item ->
-        EditDialog(
+        // we need skill lists
+        val statusStore = remember { StatusStore(coroutineScope, globalStore) }
+        // we need item list
+        val shopStore = remember { ShopStore(coroutineScope, globalStore) }
+        val taskStore = remember { TaskStore(coroutineScope, globalStore) }
+        val statusState by statusStore.state.collectAsState(Dispatchers.Main)
+        val shopState by shopStore.state.collectAsState(Dispatchers.Main)
+        val taskStatus by taskStore.state.collectAsState(Dispatchers.Main)
+
+        TaskDetailsViewDialog(
             item = item,
+            skills = statusState.skills,
+            shopItems = shopState.shopItems,
+            taskCategories = taskStatus.categories,
             onCloseClicked = model::onEditorCloseClicked,
-            onTextChanged = model::onEditorTextChanged,
-            onDoneChanged = model::onEditorDoneChanged,
         )
     }
 }

@@ -1,6 +1,5 @@
-package ui.page.status
+package net.lifeupapp.app.ui.page.status
 
-import net.lifeupapp.app.base.launchSafely
 import datasource.ApiServiceImpl
 import datasource.data.Skill
 import kotlinx.coroutines.CoroutineScope
@@ -9,6 +8,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import logger
+import net.lifeupapp.app.base.launchSafely
 import ui.AppStoreImpl
 import java.util.logging.Level
 
@@ -18,8 +18,6 @@ internal class StatusStore(
 ) {
 
     private val apiService = ApiServiceImpl
-//    var state: StatusState by mutableStateOf(StatusState(0, skills = emptyList(), coin = globalStore.coinValue ?: 0))
-//        private set
 
     val state = MutableStateFlow(StatusState(0, skills = emptyList(), coin = globalStore.coinValue ?: 0))
 

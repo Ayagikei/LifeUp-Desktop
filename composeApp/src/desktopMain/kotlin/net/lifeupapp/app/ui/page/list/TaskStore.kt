@@ -1,6 +1,5 @@
-package ui.page.list
+package net.lifeupapp.app.ui.page.list
 
-import net.lifeupapp.app.base.launchSafely
 import datasource.ApiServiceImpl
 import datasource.data.TaskCategory
 import kotlinx.coroutines.*
@@ -8,7 +7,9 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import logger
+import net.lifeupapp.app.base.launchSafely
 import ui.AppStoreImpl
+import ui.page.list.TodoItem
 import java.util.logging.Level
 import java.util.logging.Logger
 
@@ -55,14 +56,15 @@ internal class TaskStore(
         coroutineScope.launch {
             withContext(Dispatchers.IO) {
                 val currentCategoryId = state.value.currentCategoryId ?: return@withContext
-                kotlin.runCatching {
+                runCatching {
                     ApiServiceImpl.getTasks(currentCategoryId)
                 }.onSuccess {
                     it.onSuccess {
                         val tasks = it?.filterNot {
                             // drop the not started tasks
                             it.startTime >= System.currentTimeMillis()
-                        }?.map { TodoItem(it.id ?: 0L, it.nameExtended, it, false) } ?: emptyList()
+                        }?.map { TodoItem(it.id ?: 0L, it.nameExtended, it, false, it) }
+                            ?: emptyList()
                         setState {
                             copy(items = tasks)
                         }
@@ -89,7 +91,7 @@ internal class TaskStore(
         }
         if (isDone) {
             coroutineScope.launch {
-                kotlin.runCatching {
+                runCatching {
                     ApiServiceImpl.completeTask(id)
                 }.onSuccess {
                     completeSuccessEvent.send(Unit)

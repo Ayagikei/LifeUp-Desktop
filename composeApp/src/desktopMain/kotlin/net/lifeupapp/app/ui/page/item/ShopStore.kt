@@ -1,6 +1,5 @@
-package ui.page.item
+package net.lifeupapp.app.ui.page.item
 
-import net.lifeupapp.app.base.launchSafely
 import datasource.ApiServiceImpl
 import datasource.data.ShopCategory
 import datasource.data.ShopItem
@@ -11,6 +10,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import logger
+import net.lifeupapp.app.base.launchSafely
 import ui.AppStoreImpl
 import java.util.logging.Level
 
