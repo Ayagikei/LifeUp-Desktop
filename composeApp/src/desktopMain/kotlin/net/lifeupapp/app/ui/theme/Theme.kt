@@ -1,4 +1,4 @@
-package ui.theme
+package net.lifeupapp.app.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.Colors
@@ -97,8 +97,8 @@ private val LightColors = Colors(
     secondaryVariant = md_theme_light_tertiary
 )
 
-@get:Composable
-private val Typography : androidx.compose.material.Typography
+private val Typography: androidx.compose.material.Typography
+    @Composable
     get() = androidx.compose.material.Typography(
         defaultFontFamily = FontFamily(
             org.jetbrains.compose.resources.Font(
@@ -128,7 +128,10 @@ val Colors.important: Color
 @OptIn(ExperimentalUnitApi::class)
 val androidx.compose.material.Typography.subTitle3: TextStyle
     @Composable
-    get() = TextStyle(fontSize = TextUnit(16f, TextUnitType.Sp), color = MaterialTheme.colors.important)
+    get() = TextStyle(
+        fontSize = TextUnit(16f, TextUnitType.Sp),
+        color = MaterialTheme.colors.important
+    )
 
 @Composable
 fun AppTheme(

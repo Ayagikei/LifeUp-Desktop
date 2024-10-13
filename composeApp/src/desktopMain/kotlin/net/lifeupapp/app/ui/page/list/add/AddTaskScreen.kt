@@ -1,15 +1,44 @@
 package net.lifeupapp.app.ui.page.list.add
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.VerticalScrollbar
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.OutlinedButton
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
+import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.runtime.*
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -28,18 +57,17 @@ import lifeupdesktop.composeapp.generated.resources.add_tasks_frequency_desc
 import lifeupdesktop.composeapp.generated.resources.ic_coin
 import lifeupdesktop.composeapp.generated.resources.ic_pic_loading_cir
 import net.lifeupapp.app.base.launchSafely
+import net.lifeupapp.app.ui.AppStore
+import net.lifeupapp.app.ui.Strings
 import net.lifeupapp.app.ui.page.item.ShopStore
 import net.lifeupapp.app.ui.page.list.TaskStore
 import net.lifeupapp.app.ui.page.status.StatusStore
+import net.lifeupapp.app.ui.page.status.getLocalIconFilePathBySkillType
 import org.jetbrains.compose.resources.stringResource
-import ui.AppStore
-import ui.Strings
 import ui.page.config.Spacer16dpH
 import ui.page.config.Spacer16dpW
 import ui.page.config.Spacer24dpH
 import ui.page.config.Subtitle
-import ui.page.list.add.AddTasksStore
-import ui.page.status.getLocalIconFilePathBySkillType
 import ui.view.AsyncImage
 import ui.view.loadImageBitmap
 
@@ -185,9 +213,15 @@ private fun RewardConfigs(
             modifier = Modifier.size(40.dp)
         )
         Spacer16dpW()
-        TextField(modifier = Modifier.width(120.dp), value = state.coinMin.toString(), onValueChange = {
-            onInputCoin(it)
-        }, label = { Text(Strings.add_tasks_reward_coin_min) }, singleLine = true)
+        TextField(
+            modifier = Modifier.width(120.dp),
+            value = state.coinMin.toString(),
+            onValueChange = {
+                onInputCoin(it)
+            },
+            label = { Text(Strings.add_tasks_reward_coin_min) },
+            singleLine = true
+        )
         Text(text = "-", modifier = Modifier.padding(horizontal = 8.dp))
         TextField(
             modifier = Modifier.width(120.dp),
@@ -313,7 +347,10 @@ private fun SkillSelector(
             val selected = state.skills.contains(skill.id)
 
             if (skill.type > Skill.SkillType.USER.type && skill.icon.isBlank()) {
-                Image(painter = org.jetbrains.compose.resources.painterResource(getLocalIconFilePathBySkillType(skill.type)),
+                Image(
+                    painter = org.jetbrains.compose.resources.painterResource(
+                        getLocalIconFilePathBySkillType(skill.type)
+                    ),
                     contentDescription = "skill icon",
                     colorFilter = if (selected) null else ColorFilter.colorMatrix(ColorMatrix().apply {
                         setToSaturation(0f)
@@ -322,24 +359,32 @@ private fun SkillSelector(
                         onSkillSelected(skill.id!!, !selected)
                     })
             } else {
-                AsyncImage(condition = skill.icon.isNotBlank(), load = {
-                    loadImageBitmap(skill.icon)
-                }, painterFor = {
-                    remember { BitmapPainter(it) }
-                }, contentDescription = skill.name, modifier = Modifier.size(60.dp).padding(8.dp).clickable {
-                    onSkillSelected(skill.id!!, !selected)
-                }, colorFilter = if (selected) null else ColorFilter.colorMatrix(ColorMatrix().apply {
-                    setToSaturation(0f)
-                }), onError = {
-                    Image(
-                        painter =  org.jetbrains.compose.resources.painterResource(Res.drawable.ic_pic_loading_cir),
-                        contentDescription = "skill icon",
-                        modifier = Modifier.size(60.dp),
-                        colorFilter = if (selected) null else ColorFilter.colorMatrix(ColorMatrix().apply {
-                            setToSaturation(0f)
-                        }),
-                    )
-                })
+                AsyncImage(
+                    condition = skill.icon.isNotBlank(),
+                    load = {
+                        loadImageBitmap(skill.icon)
+                    },
+                    painterFor = {
+                        remember { BitmapPainter(it) }
+                    },
+                    contentDescription = skill.name,
+                    modifier = Modifier.size(60.dp).padding(8.dp).clickable {
+                        onSkillSelected(skill.id!!, !selected)
+                    },
+                    colorFilter = if (selected) null else ColorFilter.colorMatrix(ColorMatrix().apply {
+                        setToSaturation(0f)
+                    }),
+                    onError = {
+                        Image(
+                            painter = org.jetbrains.compose.resources.painterResource(Res.drawable.ic_pic_loading_cir),
+                            contentDescription = "skill icon",
+                            modifier = Modifier.size(60.dp),
+                            colorFilter = if (selected) null else ColorFilter.colorMatrix(
+                                ColorMatrix().apply {
+                                    setToSaturation(0f)
+                                }),
+                        )
+                    })
             }
         }
     }
@@ -382,7 +427,10 @@ private fun BaseConfigs(
         OutlinedButton(onClick = {
             setExpanded(true)
         }) {
-            Text(text = taskCategories.find { it.id == state.categoryId }?.name ?: Strings.common_unknown)
+            Text(
+                text = taskCategories.find { it.id == state.categoryId }?.name
+                    ?: Strings.common_unknown
+            )
             Icon(Icons.Default.ArrowDropDown, "")
         }
         DropdownMenu(expanded = expanded, onDismissRequest = { setExpanded(false) }) {

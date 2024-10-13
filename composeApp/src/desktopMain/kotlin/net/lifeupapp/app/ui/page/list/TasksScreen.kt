@@ -1,6 +1,11 @@
 package ui.page.list
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpSize
@@ -10,15 +15,16 @@ import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
 import kotlinx.coroutines.Dispatchers
 import net.lifeupapp.app.base.launchSafely
+import net.lifeupapp.app.ui.AppStore
+import net.lifeupapp.app.ui.ScaffoldState
+import net.lifeupapp.app.ui.Strings
 import net.lifeupapp.app.ui.page.item.ShopStore
 import net.lifeupapp.app.ui.page.list.TaskDetailsViewDialog
 import net.lifeupapp.app.ui.page.list.TaskStore
 import net.lifeupapp.app.ui.page.list.TaskStore.TaskState
+import net.lifeupapp.app.ui.page.list.TodoItem
 import net.lifeupapp.app.ui.page.list.add.AddTaskScreen
 import net.lifeupapp.app.ui.page.status.StatusStore
-import ui.AppStore
-import ui.ScaffoldState
-import ui.Strings
 import java.awt.Toolkit
 
 @Composable
@@ -106,7 +112,11 @@ fun TasksScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun showAddDialog(defaultCategoryId: Long?, onCloseAction: () -> Unit, onCloseAndSuccessAdded: () -> Unit) {
+private fun showAddDialog(
+    defaultCategoryId: Long?,
+    onCloseAction: () -> Unit,
+    onCloseAndSuccessAdded: () -> Unit
+) {
     val screenSize = Toolkit.getDefaultToolkit().screenSize
     val width = screenSize.width
     val height = screenSize.height

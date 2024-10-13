@@ -13,8 +13,8 @@ import androidx.compose.ui.unit.dp
 import base.json
 import datasource.data.Achievement
 import kotlinx.serialization.encodeToString
+import net.lifeupapp.app.ui.AppStore
 import net.lifeupapp.app.ui.text.StringText
-import ui.AppStore
 import ui.page.config.Spacer8dpH
 import ui.page.list.Dialog
 

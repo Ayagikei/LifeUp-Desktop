@@ -3,7 +3,6 @@ package ui.page.achievement
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import net.lifeupapp.app.base.launchSafely
 import datasource.ApiServiceImpl
 import datasource.data.Achievement
 import datasource.data.AchievementCategory
@@ -11,7 +10,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import logger
-import ui.AppStoreImpl
+import net.lifeupapp.app.base.launchSafely
+import net.lifeupapp.app.ui.AppStoreImpl
 import java.util.logging.Level
 
 internal class AchievementStore(
@@ -90,7 +90,8 @@ internal class AchievementStore(
             runCatching {
                 apiService.getAchievementCategories()
             }.onSuccess { it ->
-                val categories = it.filter { it.type != AchievementCategory.AchievementType.SYSTEM.type }
+                val categories =
+                    it.filter { it.type != AchievementCategory.AchievementType.SYSTEM.type }
                 if (state.currentCategoryId == null || state.currentCategoryId !in it.map { it.id }) {
                     setState {
                         copy(

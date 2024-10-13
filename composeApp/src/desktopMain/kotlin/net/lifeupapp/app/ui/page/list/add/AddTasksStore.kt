@@ -1,4 +1,4 @@
-package ui.page.list.add
+package net.lifeupapp.app.ui.page.list.add
 
 import datasource.ApiService
 import kotlinx.coroutines.CoroutineScope
@@ -8,12 +8,14 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import logger
-import ui.AppStoreImpl
-import ui.Strings
+import net.lifeupapp.app.ui.AppStoreImpl
+import net.lifeupapp.app.ui.Strings
 import java.util.logging.Level
 
 internal class AddTasksStore(
-    private val coroutineScope: CoroutineScope, private val globalStore: AppStoreImpl, defaultCategoryId: Long
+    private val coroutineScope: CoroutineScope,
+    private val globalStore: AppStoreImpl,
+    defaultCategoryId: Long
 ) {
 
     init {

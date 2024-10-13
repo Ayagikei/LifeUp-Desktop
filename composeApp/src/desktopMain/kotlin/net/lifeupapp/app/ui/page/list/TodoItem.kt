@@ -1,4 +1,4 @@
-package ui.page.list
+package net.lifeupapp.app.ui.page.list
 
 import datasource.data.Task
 import kotlinx.serialization.Serializable

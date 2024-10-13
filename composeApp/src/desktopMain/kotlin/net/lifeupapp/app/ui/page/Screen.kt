@@ -1,19 +1,19 @@
-package ui.page
+package net.lifeupapp.app.ui.page
 
 sealed class Screen(val route: String) {
-    object Tasks : Screen("tasks")
+    data object Tasks : Screen("tasks")
 
-    object Config : Screen("config")
+    data object Config : Screen("config")
 
-    object Status : Screen("status")
+    data object Status : Screen("status")
 
-    object Shop : Screen("shop")
+    data object Shop : Screen("shop")
 
-    object Feelings : Screen("feelings")
+    data object Feelings : Screen("feelings")
 
-    object Achievements : Screen("achievements")
+    data object Achievements : Screen("achievements")
 
-    object Empty : Screen("empty")
+    data object Empty : Screen("empty")
 
-    object Save : Screen("save")
+    data object Save : Screen("save")
 }

@@ -2,14 +2,17 @@ package net.lifeupapp.app.ui.page.list
 
 import datasource.ApiServiceImpl
 import datasource.data.TaskCategory
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import logger
 import net.lifeupapp.app.base.launchSafely
-import ui.AppStoreImpl
-import ui.page.list.TodoItem
+import net.lifeupapp.app.ui.AppStoreImpl
 import java.util.logging.Level
 import java.util.logging.Logger
 

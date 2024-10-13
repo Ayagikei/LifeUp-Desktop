@@ -73,4 +73,43 @@
     <string name="add_tasks_success">Added successfully</string>
     <string name="add_tasks_failed">Failed to add task, please try again later and check your LifeUp Cloud state.</string>
     <string name="add_tasks_dialog_title">Add Tasks</string>
+
+    <string name="save_and_restore">Backup and Restore</string>
+    <string name="save_export">Export Backup</string>
+    <string name="save_choose_export_directory">Choose Export Directory</string>
+    <string name="save_include_media_files">Include media files in backup</string>
+    <string name="save_export_path">Export Path: %s</string>
+    <string name="save_import">Import Backup</string>
+    <string name="save_drag_drop_instruction">Drag and drop your backup file here</string>
+    <string name="save_imported_file">Imported: %s</string>
+    <string name="save_or">OR</string>
+    <string name="save_choose_backup_file">Choose Backup File</string>
+    <string name="save_select_export_directory">Select Export Directory</string>
+    <string name="save_export_button">Export</string>
+    <string name="save_choose_directory_for_backup">Choose directory for backup export</string>
+    <string name="save_select_backup_file">Select Backup File</string>
+
+    <string name="task_details_title">Task Details</string>
+    <string name="task_details_name">Task Name</string>
+    <string name="task_details_notes">Notes</string>
+    <string name="task_details_category">Category</string>
+    <string name="task_details_unknown">Unknown</string>
+    <string name="task_details_frequency">Frequency</string>
+    <string name="task_details_status">Status</string>
+    <string name="task_details_completed">Completed</string>
+    <string name="task_details_pending">Pending</string>
+    <string name="task_details_rewards">Rewards</string>
+    <string name="task_details_coins">Coins</string>
+    <string name="task_details_exp">EXP</string>
+    <string name="task_details_skills">Skills</string>
+    <string name="task_details_item_reward">Item Reward</string>
+    <string name="task_details_item_icon">Item icon</string>
+    <string name="task_details_no_item_reward">No item reward</string>
+    <string name="task_details_frequency_none">None</string>
+    <string name="task_details_frequency_daily">Daily</string>
+    <string name="task_details_frequency_weekly">Weekly</string>
+    <string name="task_details_frequency_monthly">Monthly</string>
+    <string name="task_details_frequency_yearly">Yearly</string>
+    <string name="task_details_frequency_unlimited">Unlimited</string>
+    <string name="task_details_frequency_custom">Custom: %d days</string>
 </resources>

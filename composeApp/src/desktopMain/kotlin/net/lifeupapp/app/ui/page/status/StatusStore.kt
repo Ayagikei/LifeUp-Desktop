@@ -9,7 +9,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import logger
 import net.lifeupapp.app.base.launchSafely
-import ui.AppStoreImpl
+import net.lifeupapp.app.ui.AppStoreImpl
 import java.util.logging.Level
 
 internal class StatusStore(
@@ -19,7 +19,8 @@ internal class StatusStore(
 
     private val apiService = ApiServiceImpl
 
-    val state = MutableStateFlow(StatusState(0, skills = emptyList(), coin = globalStore.coinValue ?: 0))
+    val state =
+        MutableStateFlow(StatusState(0, skills = emptyList(), coin = globalStore.coinValue ?: 0))
 
     data class StatusState(
         val state: Int,

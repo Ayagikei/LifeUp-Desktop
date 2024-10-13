@@ -4,7 +4,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -13,10 +17,10 @@ import datasource.data.ShopItem
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import net.lifeupapp.app.base.launchSafely
+import net.lifeupapp.app.ui.AppStore
+import net.lifeupapp.app.ui.ScaffoldState
 import net.lifeupapp.app.ui.page.item.ShopStore
 import net.lifeupapp.app.ui.text.StringText
-import ui.AppStore
-import ui.ScaffoldState
 import ui.page.config.Spacer8dpH
 import ui.page.list.Dialog
 

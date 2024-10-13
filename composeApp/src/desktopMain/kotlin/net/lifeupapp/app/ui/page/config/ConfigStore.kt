@@ -4,7 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import kotlinx.coroutines.CoroutineScope
-import ui.AppStoreImpl
+import net.lifeupapp.app.ui.AppStoreImpl
 
 internal class ConfigStore(
     private val coroutineScope: CoroutineScope,

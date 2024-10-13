@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import logger
 import net.lifeupapp.app.base.launchSafely
-import ui.AppStoreImpl
+import net.lifeupapp.app.ui.AppStoreImpl
 import java.util.logging.Level
 
 internal class ShopStore(

@@ -1,4 +1,4 @@
-package ui
+package net.lifeupapp.app.ui
 
 import AppScope
 import androidx.compose.material.ScaffoldState
@@ -148,7 +148,8 @@ class AppStoreImpl(
         }
 
         val validHost = kotlin.runCatching {
-            HttpUrl.Builder().scheme("http").host(ip).port(port = port.toIntOrNull() ?: 13276).build()
+            HttpUrl.Builder().scheme("http").host(ip).port(port = port.toIntOrNull() ?: 13276)
+                .build()
         }.onFailure {
             logger.log(Level.SEVERE, "update ip or port error", it)
         }.isSuccess

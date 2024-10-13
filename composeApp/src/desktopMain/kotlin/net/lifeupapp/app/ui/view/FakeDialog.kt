@@ -4,7 +4,16 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -17,8 +26,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
-import ui.DialogStatus
-import ui.theme.dialogTitle
+import net.lifeupapp.app.ui.DialogStatus
+import net.lifeupapp.app.ui.theme.dialogTitle
 
 @OptIn(ExperimentalUnitApi::class)
 @Preview
@@ -44,7 +53,10 @@ fun fakeDialog(dialogStatus: DialogStatus) {
             Column(
                 Modifier.wrapContentSize().padding(16.dp),
             ) {
-                Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
                     Text(
                         dialogStatus.title,
                         modifier = Modifier.fillMaxWidth(),
@@ -53,7 +65,10 @@ fun fakeDialog(dialogStatus: DialogStatus) {
                     )
                 }
                 Spacer(Modifier.height(24.dp))
-                Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
                     Text(
                         dialogStatus.message,
                         modifier = Modifier.fillMaxWidth(),
@@ -67,10 +82,16 @@ fun fakeDialog(dialogStatus: DialogStatus) {
                     verticalAlignment = Alignment.Bottom,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    TextButton(onClick = dialogStatus.negativeAction, modifier = Modifier.wrapContentSize()) {
+                    TextButton(
+                        onClick = dialogStatus.negativeAction,
+                        modifier = Modifier.wrapContentSize()
+                    ) {
                         Text(dialogStatus.negativeButton)
                     }
-                    TextButton(onClick = dialogStatus.positiveAction, modifier = Modifier.wrapContentSize()) {
+                    TextButton(
+                        onClick = dialogStatus.positiveAction,
+                        modifier = Modifier.wrapContentSize()
+                    ) {
                         Text(dialogStatus.positiveButton)
                     }
                 }

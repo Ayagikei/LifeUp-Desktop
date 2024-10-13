@@ -73,4 +73,43 @@
     <string name="add_tasks_success">添加成功</string>
     <string name="add_tasks_failed">添加任務失敗，請稍後再試並檢查你的《雲人升》狀態。</string>
     <string name="add_tasks_dialog_title">添加任務</string>
+
+    <string name="save_and_restore">備份和恢復</string>
+    <string name="save_export">匯出備份</string>
+    <string name="save_choose_export_directory">選擇匯出目錄</string>
+    <string name="save_include_media_files">在備份中包含媒體文件</string>
+    <string name="save_export_path">匯出路徑：%s</string>
+    <string name="save_import">匯入備份</string>
+    <string name="save_drag_drop_instruction">將備份文件拖放到這裡</string>
+    <string name="save_imported_file">已匯入：%s</string>
+    <string name="save_or">或者</string>
+    <string name="save_choose_backup_file">選擇備份文件</string>
+    <string name="save_select_export_directory">選擇匯出目錄</string>
+    <string name="save_export_button">匯出</string>
+    <string name="save_choose_directory_for_backup">選擇備份匯出目錄</string>
+    <string name="save_select_backup_file">選擇備份文件</string>
+    
+    <string name="task_details_title">任務詳情</string>
+    <string name="task_details_name">任務名稱</string>
+    <string name="task_details_notes">備註</string>
+    <string name="task_details_category">分類</string>
+    <string name="task_details_unknown">未知</string>
+    <string name="task_details_frequency">頻率</string>
+    <string name="task_details_status">狀態</string>
+    <string name="task_details_completed">已完成</string>
+    <string name="task_details_pending">待完成</string>
+    <string name="task_details_rewards">獎勵</string>
+    <string name="task_details_coins">金幣</string>
+    <string name="task_details_exp">經驗值</string>
+    <string name="task_details_skills">技能</string>
+    <string name="task_details_item_reward">物品獎勵</string>
+    <string name="task_details_item_icon">物品圖示</string>
+    <string name="task_details_no_item_reward">無物品獎勵</string>
+    <string name="task_details_frequency_none">無</string>
+    <string name="task_details_frequency_daily">每日</string>
+    <string name="task_details_frequency_weekly">每週</string>
+    <string name="task_details_frequency_monthly">每月</string>
+    <string name="task_details_frequency_yearly">每年</string>
+    <string name="task_details_frequency_unlimited">無限制</string>
+    <string name="task_details_frequency_custom">自定義：%d 天</string>
 </resources>

@@ -1,11 +1,19 @@
 package net.lifeupapp.app.ui.page.list
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,13 +25,38 @@ import datasource.data.Skill
 import datasource.data.TaskCategory
 import lifeupdesktop.composeapp.generated.resources.Res
 import lifeupdesktop.composeapp.generated.resources.ic_pic_loading_cir
+import lifeupdesktop.composeapp.generated.resources.task_details_category
+import lifeupdesktop.composeapp.generated.resources.task_details_coins
+import lifeupdesktop.composeapp.generated.resources.task_details_completed
+import lifeupdesktop.composeapp.generated.resources.task_details_exp
+import lifeupdesktop.composeapp.generated.resources.task_details_frequency
+import lifeupdesktop.composeapp.generated.resources.task_details_frequency_custom
+import lifeupdesktop.composeapp.generated.resources.task_details_frequency_daily
+import lifeupdesktop.composeapp.generated.resources.task_details_frequency_monthly
+import lifeupdesktop.composeapp.generated.resources.task_details_frequency_none
+import lifeupdesktop.composeapp.generated.resources.task_details_frequency_unlimited
+import lifeupdesktop.composeapp.generated.resources.task_details_frequency_weekly
+import lifeupdesktop.composeapp.generated.resources.task_details_frequency_yearly
+import lifeupdesktop.composeapp.generated.resources.task_details_item_icon
+import lifeupdesktop.composeapp.generated.resources.task_details_item_reward
+import lifeupdesktop.composeapp.generated.resources.task_details_name
+import lifeupdesktop.composeapp.generated.resources.task_details_no_item_reward
+import lifeupdesktop.composeapp.generated.resources.task_details_notes
+import lifeupdesktop.composeapp.generated.resources.task_details_pending
+import lifeupdesktop.composeapp.generated.resources.task_details_rewards
+import lifeupdesktop.composeapp.generated.resources.task_details_skills
+import lifeupdesktop.composeapp.generated.resources.task_details_status
+import lifeupdesktop.composeapp.generated.resources.task_details_title
+import lifeupdesktop.composeapp.generated.resources.task_details_unknown
+import net.lifeupapp.app.ui.page.status.getLocalIconFilePathBySkillType
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import ui.page.list.EnhancedLargeDialog
-import ui.page.list.TodoItem
-import ui.page.status.getLocalIconFilePathBySkillType
 import ui.view.AsyncImage
 import ui.view.loadImageBitmap
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun TaskDetailsViewDialog(
     item: TodoItem,
@@ -34,31 +67,46 @@ internal fun TaskDetailsViewDialog(
 ) {
     EnhancedLargeDialog(
         onCloseRequest = onCloseClicked,
-        title = "Task Details"
+        title = stringResource(Res.string.task_details_title)
     ) {
         Column {
-            DetailItem("Task Name", item.task.name)
-            DetailItem("Notes", item.task.notes)
+            DetailItem(stringResource(Res.string.task_details_name), item.task.name)
+            DetailItem(stringResource(Res.string.task_details_notes), item.task.notes)
             DetailItem(
-                "Category",
-                taskCategories.find { it.id == item.task.categoryId }?.name ?: "Unknown"
+                stringResource(Res.string.task_details_category),
+                taskCategories.find { it.id == item.task.categoryId }?.name
+                    ?: stringResource(Res.string.task_details_unknown)
             )
-            DetailItem("Frequency", getFrequencyText(item.task.frequency))
-            DetailItem("Status", if (item.isDone) "Completed" else "Pending")
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text("Rewards", style = MaterialTheme.typography.h6)
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            DetailItem("Coins", "${item.task.coin} - ${item.task.coin + item.task.coinVariable}")
-            DetailItem("EXP", item.task.exp.toString())
+            DetailItem(
+                stringResource(Res.string.task_details_frequency),
+                getFrequencyText(item.task.frequency)
+            )
+            DetailItem(
+                stringResource(Res.string.task_details_status),
+                if (item.isDone) stringResource(Res.string.task_details_completed) else stringResource(
+                    Res.string.task_details_pending
+                )
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                "Skills",
+                stringResource(Res.string.task_details_rewards),
+                style = MaterialTheme.typography.h6
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            DetailItem(
+                stringResource(Res.string.task_details_coins),
+                "${item.task.coin} - ${item.task.coin + item.task.coinVariable}"
+            )
+            DetailItem(stringResource(Res.string.task_details_exp), item.task.exp.toString())
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                stringResource(Res.string.task_details_skills),
                 style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.Bold)
             )
             SkillDisplay(skills.filter { item.task.skillIds.contains(it.id) })
@@ -66,7 +114,7 @@ internal fun TaskDetailsViewDialog(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                "Item Reward",
+                stringResource(Res.string.task_details_item_reward),
                 style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.Bold)
             )
             ItemDisplay(shopItems.find { it.id == item.task.itemId })
@@ -74,7 +122,7 @@ internal fun TaskDetailsViewDialog(
     }
 }
 
-
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun DetailItem(label: String, value: String) {
     Column(modifier = Modifier.padding(vertical = 4.dp)) {
@@ -84,6 +132,7 @@ private fun DetailItem(label: String, value: String) {
     Spacer(modifier = Modifier.height(8.dp))
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun SkillDisplay(skills: List<Skill>) {
     LazyRow {
@@ -103,6 +152,7 @@ private fun SkillDisplay(skills: List<Skill>) {
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun ItemDisplay(item: ShopItem?) {
     if (item != null) {
@@ -111,12 +161,12 @@ private fun ItemDisplay(item: ShopItem?) {
                 condition = item.icon.isNotBlank() && item.icon.endsWith("/").not(),
                 load = { loadImageBitmap(item.icon) },
                 painterFor = { remember { BitmapPainter(it) } },
-                contentDescription = "item icon",
+                contentDescription = stringResource(Res.string.task_details_item_icon),
                 modifier = Modifier.size(40.dp),
                 onError = {
                     Image(
                         painter = painterResource(Res.drawable.ic_pic_loading_cir),
-                        contentDescription = "item icon",
+                        contentDescription = stringResource(Res.string.task_details_item_icon),
                         modifier = Modifier.size(40.dp)
                     )
                 }
@@ -125,18 +175,22 @@ private fun ItemDisplay(item: ShopItem?) {
             Text(item.name, style = MaterialTheme.typography.body1)
         }
     } else {
-        Text("No item reward", style = MaterialTheme.typography.body1)
+        Text(
+            stringResource(Res.string.task_details_no_item_reward),
+            style = MaterialTheme.typography.body1
+        )
     }
 }
 
+@Composable
 private fun getFrequencyText(frequency: Int): String {
     return when (frequency) {
-        0 -> "None"
-        1 -> "Daily"
-        7 -> "Weekly"
-        -4 -> "Monthly"
-        -5 -> "Yearly"
-        -1 -> "Unlimited"
-        else -> "Custom: $frequency days"
+        0 -> stringResource(Res.string.task_details_frequency_none)
+        1 -> stringResource(Res.string.task_details_frequency_daily)
+        7 -> stringResource(Res.string.task_details_frequency_weekly)
+        -4 -> stringResource(Res.string.task_details_frequency_monthly)
+        -5 -> stringResource(Res.string.task_details_frequency_yearly)
+        -1 -> stringResource(Res.string.task_details_frequency_unlimited)
+        else -> stringResource(Res.string.task_details_frequency_custom, frequency)
     }
 }
