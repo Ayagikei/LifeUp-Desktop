@@ -40,7 +40,7 @@ object Val {
         (major * 100000 + minor * 1000 + patch)
     }
 
-    const val targetLifeUpCloudVersion = "1.3.0+"
+    const val targetLifeUpCloudVersion = "2.0.0+"
 
-    const val targetLifeUpAndroidVersion = "1.91.3+"
+    const val targetLifeUpAndroidVersion = "1.98.0+"
 }
