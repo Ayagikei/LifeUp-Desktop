@@ -1,17 +1,7 @@
 package ui.page.feelings
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,8 +12,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import net.lifeupapp.app.base.launchSafely
 import net.lifeupapp.app.ui.AppStore
+import net.lifeupapp.app.ui.page.feelings.add.FeelingsInputDialog
 import net.lifeupapp.app.ui.text.StringText
-import ui.page.feelings.add.FeelingsInputDialog
 import ui.page.list.Dialog
 import utils.md5
 import java.awt.Desktop

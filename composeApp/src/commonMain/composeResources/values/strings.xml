@@ -111,5 +111,22 @@
     <string name="task_details_frequency_monthly">Monthly</string>
     <string name="task_details_frequency_yearly">Yearly</string>
     <string name="task_details_frequency_unlimited">Unlimited</string>
-    <string name="task_details_frequency_custom">Custom: %d days</string>
+    <string name="task_details_frequency_custom">Custom: %1$d days</string>
+
+    <string name="feelings_input_dialog_title">Add New Feeling</string>
+    <string name="feelings_input_dialog_submit">Submit</string>
+    <string name="feelings_input_content_label">How are you feeling?</string>
+    <string name="feelings_input_content_placeholder">Express your thoughts here...</string>
+    <string name="feelings_input_select_date">Select Date</string>
+    <string name="feelings_input_select_time">Select Time</string>
+    <string name="feelings_input_date_format">Date: %1$s</string>
+    <string name="feelings_input_time_format">Time: %1$s</string>
+    <string name="feelings_input_ok">OK</string>
+    <string name="feelings_input_cancel">Cancel</string>
+    <string name="feelings_input_add_image">Add Image (%1$d/%2$d)</string>
+    <string name="feelings_input_max_images">Maximum number of images reached (%1$d)</string>
+    <string name="feelings_input_selected_images">Selected Images:</string>
+    <string name="feelings_input_attachment_desc">Attachment %1$d</string>
+    <string name="feelings_input_delete_image">Delete Image</string>
+    <string name="feelings_input_select_images">Select Images</string>
 </resources>

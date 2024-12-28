@@ -111,5 +111,22 @@
     <string name="task_details_frequency_monthly">每月</string>
     <string name="task_details_frequency_yearly">每年</string>
     <string name="task_details_frequency_unlimited">無限制</string>
-    <string name="task_details_frequency_custom">自定義：%d 天</string>
+    <string name="task_details_frequency_custom">自定義：%1$d 天</string>
+
+    <string name="feelings_input_dialog_title">添加新感想</string>
+    <string name="feelings_input_dialog_submit">提交</string>
+    <string name="feelings_input_content_label">你現在感覺如何？</string>
+    <string name="feelings_input_content_placeholder">在這裡表達你的想法...</string>
+    <string name="feelings_input_select_date">選擇日期</string>
+    <string name="feelings_input_select_time">選擇時間</string>
+    <string name="feelings_input_date_format">日期: %1$s</string>
+    <string name="feelings_input_time_format">時間: %1$s</string>
+    <string name="feelings_input_ok">確定</string>
+    <string name="feelings_input_cancel">取消</string>
+    <string name="feelings_input_add_image">添加圖片 (%1$d/%2$d)</string>
+    <string name="feelings_input_max_images">已達到最大圖片數量 (%1$d)</string>
+    <string name="feelings_input_selected_images">已選擇的圖片:</string>
+    <string name="feelings_input_attachment_desc">附件 %1$d</string>
+    <string name="feelings_input_delete_image">刪除圖片</string>
+    <string name="feelings_input_select_images">選擇圖片</string>
 </resources>

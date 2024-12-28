@@ -1,4 +1,4 @@
-package ui.page.feelings.add
+package net.lifeupapp.app.ui.page.feelings.add
 
 import androidx.compose.foundation.HorizontalScrollbar
 import androidx.compose.foundation.Image
@@ -30,8 +30,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogWindow
 import androidx.compose.ui.window.rememberDialogState
 import kotlinx.coroutines.launch
-import lifeupdesktop.composeapp.generated.resources.Res
-import lifeupdesktop.composeapp.generated.resources.ic_pic_loading_cir
+import lifeupdesktop.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 import ui.page.list.rememberScrollbarAdapter
 import ui.view.AsyncImage
 import ui.view.loadImageBitmap
@@ -71,7 +71,7 @@ fun FeelingsInputDialog(
     DialogWindow(
         onCloseRequest = onCloseRequest,
         state = dialogState,
-        title = "Add New Feeling",
+        title = stringResource(Res.string.feelings_input_dialog_title),
         resizable = true
     ) {
         Surface(modifier = Modifier.fillMaxSize()) {
@@ -86,7 +86,7 @@ fun FeelingsInputDialog(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("Add New Feeling", style = MaterialTheme.typography.h6)
+                    Text(stringResource(Res.string.feelings_input_dialog_title), style = MaterialTheme.typography.h6)
                     Button(
                         onClick = {
                             if (content.isNotBlank()) {
@@ -99,7 +99,7 @@ fun FeelingsInputDialog(
                             }
                         }
                     ) {
-                        Text("Submit")
+                        Text(stringResource(Res.string.feelings_input_dialog_submit))
                     }
                 }
 
@@ -110,8 +110,8 @@ fun FeelingsInputDialog(
                     value = content,
                     onValueChange = { content = it },
                     modifier = Modifier.fillMaxWidth().heightIn(min = 200.dp),
-                    label = { Text("How are you feeling?") },
-                    placeholder = { Text("Express your thoughts here...") }
+                    label = { Text(stringResource(Res.string.feelings_input_content_label)) },
+                    placeholder = { Text(stringResource(Res.string.feelings_input_content_placeholder)) }
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -122,14 +122,30 @@ fun FeelingsInputDialog(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     OutlinedButton(onClick = { showDatePicker = true }) {
-                        Icon(Icons.Default.DateRange, contentDescription = "Select Date")
+                        Icon(
+                            Icons.Default.DateRange,
+                            contentDescription = stringResource(Res.string.feelings_input_select_date)
+                        )
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("Date: ${getSelectedDateString(datePickerState)}")
+                        Text(
+                            stringResource(
+                                Res.string.feelings_input_date_format,
+                                getSelectedDateString(datePickerState)
+                            )
+                        )
                     }
                     OutlinedButton(onClick = { showTimePicker = true }) {
-                        Icon(Icons.Default.DateRange, contentDescription = "Select Time")
+                        Icon(
+                            Icons.Default.DateRange,
+                            contentDescription = stringResource(Res.string.feelings_input_select_time)
+                        )
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("Time: ${getSelectedTimeString(timePickerState)}")
+                        Text(
+                            stringResource(
+                                Res.string.feelings_input_time_format,
+                                getSelectedTimeString(timePickerState)
+                            )
+                        )
                     }
                 }
 
@@ -138,7 +154,7 @@ fun FeelingsInputDialog(
                         onDismissRequest = { showDatePicker = false },
                         confirmButton = {
                             TextButton(onClick = { showDatePicker = false }) {
-                                Text("OK")
+                                Text(stringResource(Res.string.feelings_input_ok))
                             }
                         }
                     ) {
@@ -161,21 +177,27 @@ fun FeelingsInputDialog(
                 if (selectedImagePaths.size < maxImages) {
                     OutlinedButton(
                         onClick = {
-                            val paths = showImageFileChooser()
-                            if (paths.isNotEmpty()) {
-                                val newPaths = (selectedImagePaths + paths).take(maxImages)
-                                selectedImagePaths = newPaths
+                            coroutineScope.launch {
+                                val paths =
+                                    showImageFileChooser(org.jetbrains.compose.resources.getString(Res.string.feelings_input_select_images))
+                                if (paths.isNotEmpty()) {
+                                    val newPaths = (selectedImagePaths + paths).take(maxImages)
+                                    selectedImagePaths = newPaths
+                                }
                             }
                         },
                         modifier = Modifier.align(Alignment.End)
                     ) {
-                        Icon(Icons.Default.Add, contentDescription = "Add Image")
+                        Icon(
+                            Icons.Default.Add,
+                            contentDescription = stringResource(Res.string.feelings_input_add_image)
+                        )
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("Add Image (${selectedImagePaths.size}/$maxImages)")
+                        Text(stringResource(Res.string.feelings_input_add_image, selectedImagePaths.size, maxImages))
                     }
                 } else {
                     Text(
-                        "Maximum number of images reached (9)",
+                        stringResource(Res.string.feelings_input_max_images, maxImages),
                         style = MaterialTheme.typography.caption,
                         modifier = Modifier.align(Alignment.End)
                     )
@@ -185,7 +207,10 @@ fun FeelingsInputDialog(
 
                 // Image preview
                 if (selectedImagePaths.isNotEmpty()) {
-                    Text("Selected Images:", style = MaterialTheme.typography.subtitle1)
+                    Text(
+                        stringResource(Res.string.feelings_input_selected_images),
+                        style = MaterialTheme.typography.subtitle1
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
                     val listState = rememberLazyListState()
                     LazyRow(state = listState) {
@@ -199,7 +224,10 @@ fun FeelingsInputDialog(
                                     painterFor = {
                                         remember(path) { BitmapPainter(it) }
                                     },
-                                    contentDescription = "Attachment $index",
+                                    contentDescription = stringResource(
+                                        Res.string.feelings_input_attachment_desc,
+                                        index
+                                    ),
                                     modifier = Modifier.size(156.dp),
                                     contentScale = ContentScale.Crop,
                                     onError = {
@@ -220,7 +248,7 @@ fun FeelingsInputDialog(
                                 ) {
                                     Icon(
                                         Icons.Default.Delete,
-                                        contentDescription = "Delete Image",
+                                        contentDescription = stringResource(Res.string.feelings_input_delete_image),
                                         tint = androidx.compose.ui.graphics.Color.Red
                                     )
                                 }
@@ -237,11 +265,11 @@ fun FeelingsInputDialog(
     }
 }
 
-fun showImageFileChooser(): List<String> {
+fun showImageFileChooser(title: String): List<String> {
     val fileChooser = JFileChooser().apply {
         fileSelectionMode = JFileChooser.FILES_ONLY
         isMultiSelectionEnabled = true
-        dialogTitle = "Select Images"
+        dialogTitle = title
         fileFilter = FileNameExtensionFilter("Image files", "jpg", "jpeg", "png", "gif", "webp")
     }
 
@@ -261,16 +289,16 @@ fun TimePickerDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Select Time") },
+        title = { Text(stringResource(Res.string.feelings_input_select_time)) },
         text = { content() },
         confirmButton = {
             TextButton(onClick = onConfirm) {
-                Text("OK")
+                Text(stringResource(Res.string.feelings_input_ok))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text(stringResource(Res.string.feelings_input_cancel))
             }
         }
     )
