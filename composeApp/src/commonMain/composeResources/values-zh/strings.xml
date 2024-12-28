@@ -12,7 +12,9 @@
     <string name="cancel">取消</string>
     <string name="yes">確定</string>
     <string name="base_config">基礎</string>
-    <string name="base_config_desc">你需要輸入雲人升運行的 IP 地址以及端口，以便《人升-桌面版》可以讀取你的手機上的《人升》數據。IP 地址形如：192.168.1.1，你可以在《雲人升》app 上看到手機的 IP 地址和端口。端口一般為 13276。</string>
+    <string name="base_config_desc">你需要輸入雲人升運行的 IP 地址以及端口，以便《人升-桌面版》可以讀取你的手機上的《人升》數據。IP
+        地址形如：192.168.1.1，你可以在《雲人升》app 上看到手機的 IP 地址和端口。端口一般為 13276。
+    </string>
     <string name="base_version">版本</string>
     <string name="version_desc">桌面版本: %1$s\n\n適配雲人升版本: %2$s\n\n適配人升安卓版本: %3$s</string>
     <string name="ip_address">IP 地址</string>
@@ -33,15 +35,21 @@
     <string name="snackbar_complete_task">完成了任務！\n桌面版暫時不支持撤銷，如果需要請去手機上操作。</string>
     <string name="snackbar_purchase_item">購買成功！</string>
     <string name="license">許可</string>
-    <string name="license_desc">developed by Kei (LifeUp Teams)\n\nicon designed by 下車君\n\nusing Honor HONOR Sans Font\n\npowered by Kotlin, Jetpack Compose and Compose Desktop</string>
+    <string name="license_desc">developed by Kei (LifeUp Teams)\n\nicon designed by 下車君\n\nusing Honor HONOR Sans
+        Font\n\npowered by Kotlin, Jetpack Compose and Compose Desktop
+    </string>
     <string name="auto_detect">自動檢測</string>
     <string name="auto_detect_dialog_title">自動檢測</string>
-    <string name="auto_detect_dialog_empty_desc">未檢測到《雲人升》服務。\n\n請確認你的《雲人升》處於同一局域網，並且啟動了服務。\n\n你可以嘗試重新開啟服務，或稍後重試。</string>
+    <string name="auto_detect_dialog_empty_desc">
+        未檢測到《雲人升》服務。\n\n請確認你的《雲人升》處於同一局域網，並且啟動了服務。\n\n你可以嘗試重新開啟服務，或稍後重試。
+    </string>
     <string name="feelings_export_group_by_day">按天分組</string>
     <string name="feelings_export_group_by_month">按月分組</string>
     <string name="feelings_export_group_by_year">按年分組</string>
     <string name="feelings_export_dialog_title">導出為 Markdown 格式？</string>
-    <string name="feelings_export_dialog_desc">將所有感想的內容和圖片導出為 markdown 格式。\n\n通過 markdown 格式，你可以輕鬆地將感想渲染成不同樣式的文檔格式，詳情可以查閱網上資料。\n\n請選擇導出的目的地，盡量不要選擇系統盤的系統相關文件夾，因為LifeUp可能權限不足。</string>
+    <string name="feelings_export_dialog_desc">將所有感想的內容和圖片導出為 markdown 格式。\n\n通過 markdown
+        格式，你可以輕鬆地將感想渲染成不同樣式的文檔格式，詳情可以查閱網上資料。\n\n請選擇導出的目的地，盡量不要選擇系統盤的系統相關文件夾，因為LifeUp可能權限不足。
+    </string>
     <string name="feelings_export_progress_dialog_title">導出中...</string>
     <string name="feelings_export_progress_dialog_desc">進度: %1$s%</string>
     <string name="common_dir_select_title">選擇文件夾</string>
@@ -88,7 +96,7 @@
     <string name="save_export_button">匯出</string>
     <string name="save_choose_directory_for_backup">選擇備份匯出目錄</string>
     <string name="save_select_backup_file">選擇備份文件</string>
-    
+
     <string name="task_details_title">任務詳情</string>
     <string name="task_details_name">任務名稱</string>
     <string name="task_details_notes">備註</string>
