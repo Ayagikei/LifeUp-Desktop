@@ -77,10 +77,10 @@
     <string name="save_export">导出备份</string>
     <string name="save_choose_export_directory">选择导出目录</string>
     <string name="save_include_media_files">在备份中包含媒体文件</string>
-    <string name="save_export_path">导出路径：%s</string>
+    <string name="save_export_path">导出路径：%1$s</string>
     <string name="save_import">导入备份</string>
     <string name="save_drag_drop_instruction">将备份文件拖放到这里</string>
-    <string name="save_imported_file">已导入：%s</string>
+    <string name="save_imported_file">已导入：%1$s</string>
     <string name="save_or">或者</string>
     <string name="save_choose_backup_file">选择备份文件</string>
     <string name="save_select_export_directory">选择导出目录</string>

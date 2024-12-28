@@ -77,10 +77,10 @@
     <string name="save_export">匯出備份</string>
     <string name="save_choose_export_directory">選擇匯出目錄</string>
     <string name="save_include_media_files">在備份中包含媒體文件</string>
-    <string name="save_export_path">匯出路徑：%s</string>
+    <string name="save_export_path">匯出路徑：%1$s</string>
     <string name="save_import">匯入備份</string>
     <string name="save_drag_drop_instruction">將備份文件拖放到這裡</string>
-    <string name="save_imported_file">已匯入：%s</string>
+    <string name="save_imported_file">已匯入：%1$s</string>
     <string name="save_or">或者</string>
     <string name="save_choose_backup_file">選擇備份文件</string>
     <string name="save_select_export_directory">選擇匯出目錄</string>

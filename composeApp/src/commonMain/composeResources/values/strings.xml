@@ -77,10 +77,10 @@
     <string name="save_export">Export Backup</string>
     <string name="save_choose_export_directory">Choose Export Directory</string>
     <string name="save_include_media_files">Include media files in backup</string>
-    <string name="save_export_path">Export Path: %s</string>
+    <string name="save_export_path">Export Path: %1$s</string>
     <string name="save_import">Import Backup</string>
     <string name="save_drag_drop_instruction">Drag and drop your backup file here</string>
-    <string name="save_imported_file">Imported: %s</string>
+    <string name="save_imported_file">Imported: %1$s</string>
     <string name="save_or">OR</string>
     <string name="save_choose_backup_file">Choose Backup File</string>
     <string name="save_select_export_directory">Select Export Directory</string>
