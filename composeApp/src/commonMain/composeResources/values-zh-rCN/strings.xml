@@ -12,9 +12,7 @@
     <string name="cancel">取消</string>
     <string name="yes">确定</string>
     <string name="base_config">基础</string>
-    <string name="base_config_desc">你需要输入云人升运行的 IP 地址以及端口，以便《人升-桌面版》可以读取你的手机上的《人升》数据。IP
-        地址形如：192.168.1.1，你可以在《云人升》app 上看到手机的 IP 地址和端口。端口一般为 13276。
-    </string>
+    <string name="base_config_desc">要连接手机数据，请输入在《云人升》app 中显示的 IP 地址和端口（如 192.168.1.1:13276，意味着 IP 地址是 192.168.1.1，端口是 13276）。</string>
     <string name="base_version">版本</string>
     <string name="version_desc">桌面版本: %1$s\n\n适配云人升版本: %2$s\n\n适配人升安卓版本: %3$s</string>
     <string name="ip_address">IP 地址</string>
@@ -35,21 +33,15 @@
     <string name="snackbar_complete_task">完成了任务！\n桌面版暂时不支持撤销，如果需要请去手机上操作。</string>
     <string name="snackbar_purchase_item">购买成功！</string>
     <string name="license">许可</string>
-    <string name="license_desc">developed by Kei (LifeUp Teams)\n\nicon designed by 下车君\n\nusing Honor HONOR Sans
-        Font\n\npowered by Kotlin, Jetpack Compose and Compose Desktop
-    </string>
+    <string name="license_desc">developed by Kei (LifeUp Teams)\n\nicon designed by 下车君\n\nusing Honor HONOR Sans Font\n\npowered by Kotlin, Jetpack Compose and Compose Desktop</string>
     <string name="auto_detect">自动检测</string>
     <string name="auto_detect_dialog_title">自动检测</string>
-    <string name="auto_detect_dialog_empty_desc">
-        未检测到《云人升》服务。\n\n请确认你的《云人升》处于同一局域网，并且启动了服务。\n\n你可以尝试重新开启服务，或稍后重试。
-    </string>
+    <string name="auto_detect_dialog_empty_desc">未检测到《云人升》服务。\n\n请确认你的《云人升》处于同一局域网，并且启动了服务。\n\n你可以尝试重新开启服务，或稍后重试。</string>
     <string name="feelings_export_group_by_day">按天分组</string>
     <string name="feelings_export_group_by_month">按月分组</string>
     <string name="feelings_export_group_by_year">按年分组</string>
     <string name="feelings_export_dialog_title">导出为 Markdown 格式？</string>
-    <string name="feelings_export_dialog_desc">将所有感想的内容和图片导出为 markdown 格式。\n\n通过 markdown
-        格式，你可以轻松地将感想渲染成不同样式的文档格式，详情可以查阅网上资料。\n\n请选择导出的目的地，尽量不要选择系统盘的系统相关文件夹，因为LifeUp可能权限不足。
-    </string>
+    <string name="feelings_export_dialog_desc">将所有感想的内容和图片导出为 markdown 格式。\n\n通过 markdown 格式，你可以轻松地将感想渲染成不同样式的文档格式，详情可以查阅网上资料。\n\n请选择导出的目的地，尽量不要选择系统盘的系统相关文件夹，因为LifeUp可能权限不足。</string>
     <string name="feelings_export_progress_dialog_title">导出中...</string>
     <string name="feelings_export_progress_dialog_desc">进度: %1$s%</string>
     <string name="common_dir_select_title">选择文件夹</string>
@@ -81,7 +73,6 @@
     <string name="add_tasks_success">添加成功</string>
     <string name="add_tasks_failed">添加任务失败，请稍后再试并检查你的《云人升》状态。</string>
     <string name="add_tasks_dialog_title">添加任务</string>
-
     <string name="save_and_restore">备份和恢复</string>
     <string name="save_export">导出备份</string>
     <string name="save_choose_export_directory">选择导出目录</string>
@@ -96,7 +87,6 @@
     <string name="save_export_button">导出</string>
     <string name="save_choose_directory_for_backup">选择备份导出目录</string>
     <string name="save_select_backup_file">选择备份文件</string>
-
     <string name="task_details_title">任务详情</string>
     <string name="task_details_name">任务名称</string>
     <string name="task_details_notes">备注</string>
@@ -120,7 +110,6 @@
     <string name="task_details_frequency_yearly">每年</string>
     <string name="task_details_frequency_unlimited">无限制</string>
     <string name="task_details_frequency_custom">自定义：%d 天</string>
-
     <string name="feelings_input_dialog_title">添加新感想</string>
     <string name="feelings_input_dialog_submit">提交</string>
     <string name="feelings_input_content_label">你现在感觉如何？</string>
@@ -137,12 +126,9 @@
     <string name="feelings_input_attachment_desc">附件 %1$d</string>
     <string name="feelings_input_delete_image">删除图片</string>
     <string name="feelings_input_select_images">选择图片</string>
-
     <string name="api_check_network_error">网络连接失败，请检查网络、IP 地址或端口配置</string>
     <string name="api_check_auth_error">身份验证失败，请检查 API Token</string>
-    <string name="api_check_lifeup_not_running">✅已连接上「云人升」app\n\n❌无法连接「人升」app。\n\n请确认「人升」app
-        是否在后台运行。
-    </string>
+    <string name="api_check_lifeup_not_running">✅已连接上「云人升」app\n\n❌无法连接「人升」app。\n\n请确认「人升」app 是否在后台运行。</string>
     <string name="api_check_unknown_error">未知错误 (代码：%1$d)</string>
     <string name="api_check_general_unknown_error">未知错误</string>
     <string name="api_check_timeout_error">请求超时，请检查网络连接</string>
