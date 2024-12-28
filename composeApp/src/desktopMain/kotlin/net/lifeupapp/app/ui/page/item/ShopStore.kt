@@ -94,14 +94,14 @@ internal class ShopStore(
             }
             runCatching {
                 apiService.getCoin()
-            }.onSuccess { it ->
+            }.onSuccess {
                 setState {
-                    copy(coin = it)
+                    copy(coin = it.getOrNull())
                 }
             }.onFailure {
                 logger.log(Level.SEVERE, it.stackTraceToString())
                 delay(2000L)
-                fetchCategories()
+                fetchCoin()
             }
         }
     }

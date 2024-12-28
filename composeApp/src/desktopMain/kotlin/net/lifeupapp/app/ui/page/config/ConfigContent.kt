@@ -2,28 +2,11 @@ package ui.page.config
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.VerticalScrollbar
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
-import androidx.compose.material.TextField
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Warning
@@ -36,11 +19,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
+import lifeupdesktop.composeapp.generated.resources.Res
+import lifeupdesktop.composeapp.generated.resources.api_token_label
 import net.lifeupapp.app.base.Val
 import net.lifeupapp.app.ui.AppStore
 import net.lifeupapp.app.ui.ScaffoldState
 import net.lifeupapp.app.ui.Strings
+import net.lifeupapp.app.ui.page.config.ConfigStore
 import net.lifeupapp.app.ui.theme.unimportantText
+import org.jetbrains.compose.resources.stringResource
 import service.MdnsServiceDiscovery
 import ui.page.list.Dialog
 import java.awt.Desktop
@@ -58,14 +45,22 @@ fun ConfigScreen(modifier: Modifier = Modifier) {
             modifier.padding(24.dp).verticalScroll(scrollState),
         ) {
             Subtitle(Strings.base_config)
-            Spacer24dpH()
+            Spacer16dpH()
             Text(
-                text = Strings.base_config_desc, color = MaterialTheme.colors.unimportantText
+                text = Strings.base_config_desc,
+                color = MaterialTheme.colors.unimportantText,
+                style = MaterialTheme.typography.body2
             )
             Spacer16dpH()
-            TextField(modifier = modifier.fillMaxWidth(), value = globalStore.ip, onValueChange = {
-                globalStore.updateIpOrPort(ip = it)
-            }, label = { Text(Strings.ip_address) })
+            TextField(
+                modifier = modifier.fillMaxWidth(),
+                value = globalStore.ip,
+                onValueChange = {
+                    globalStore.updateIpOrPort(ip = it)
+                },
+                label = { Text(Strings.ip_address) },
+                textStyle = MaterialTheme.typography.body2
+            )
             Spacer16dpH()
             TextField(
                 modifier = modifier.fillMaxWidth(),
@@ -73,9 +68,22 @@ fun ConfigScreen(modifier: Modifier = Modifier) {
                 onValueChange = {
                     globalStore.updateIpOrPort(port = it)
                 },
-                label = { Text(Strings.server_port) })
+                label = { Text(Strings.server_port) },
+                textStyle = MaterialTheme.typography.body2
+            )
+            Spacer16dpH()
+            TextField(
+                modifier = modifier.fillMaxWidth(),
+                value = state.apiToken,
+                onValueChange = {
+                    model.updateApiToken(it)
+                },
+                label = { Text(stringResource(Res.string.api_token_label)) },
+                textStyle = MaterialTheme.typography.body2,
+            )
             Spacer16dpH()
             val coin = globalStore.coinValue
+            val lastError = globalStore.lastError
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -92,15 +100,24 @@ fun ConfigScreen(modifier: Modifier = Modifier) {
                             contentDescription = null,
                             tint = MaterialTheme.colors.error
                         )
-                        Text(
-                            modifier = Modifier.padding(start = 8.dp),
-                            text = Strings.not_connected
-                        )
+                        Column(modifier = Modifier.padding(start = 8.dp)) {
+                            Text(
+                                text = Strings.not_connected,
+                                style = MaterialTheme.typography.body2
+                            )
+                            if (lastError != null) {
+                                Text(
+                                    text = lastError,
+                                    style = MaterialTheme.typography.caption,
+                                    color = MaterialTheme.colors.error
+                                )
+                            }
+                        }
                     }
                     OutlinedButton(onClick = {
                         globalStore.fetchCoin()
                     }, modifier = Modifier.padding(start = 8.dp)) {
-                        Text(Strings.test_connection)
+                        Text(Strings.test_connection, style = MaterialTheme.typography.body2)
                     }
                     Button(onClick = {
                         // show dialog
@@ -108,7 +125,7 @@ fun ConfigScreen(modifier: Modifier = Modifier) {
                             this.copy(isDialogShowing = true)
                         }
                     }, modifier = Modifier.padding(start = 8.dp)) {
-                        Text(Strings.auto_detect)
+                        Text(Strings.auto_detect, style = MaterialTheme.typography.body2)
                     }
                 } else {
                     Row(
@@ -122,13 +139,14 @@ fun ConfigScreen(modifier: Modifier = Modifier) {
                         )
                         Text(
                             modifier = Modifier.padding(start = 8.dp),
-                            text = Strings.connected.format(coin)
+                            text = Strings.connected.format(coin),
+                            style = MaterialTheme.typography.body2
                         )
                     }
                     TextButton(onClick = {
                         globalStore.fetchCoin()
                     }, modifier = Modifier.padding(start = 8.dp)) {
-                        Text(Strings.test_connection)
+                        Text(Strings.test_connection, style = MaterialTheme.typography.body2)
                     }
                     OutlinedButton(onClick = {
                         // show dialog
@@ -136,7 +154,7 @@ fun ConfigScreen(modifier: Modifier = Modifier) {
                             this.copy(isDialogShowing = true)
                         }
                     }, modifier = Modifier.padding(start = 8.dp)) {
-                        Text(Strings.auto_detect)
+                        Text(Strings.auto_detect, style = MaterialTheme.typography.body2)
                     }
                 }
             }

@@ -1,8 +1,14 @@
 package net.lifeupapp.app.datasource.net
 
-import datasource.net.HttpException
 import kotlinx.serialization.Serializable
 
+sealed class ApiError {
+    data object NetworkError : ApiError()
+    data object AuthenticationError : ApiError()
+    data object LifeUpNotRunning : ApiError()
+    data class ServerError(val msg: String) : ApiError()
+    data class UnknownError(val code: Int) : ApiError()
+}
 
 @Serializable
 data class HttpResponse<T>(
@@ -13,6 +19,7 @@ data class HttpResponse<T>(
     companion object {
         const val SUCCESS = 200
         const val ERROR = 500
+        const val LIFEUP_NOT_RUNNING = 10001
 
         fun <T> success(data: T?): HttpResponse<T?> {
             return HttpResponse(SUCCESS, "success", data)
@@ -25,7 +32,6 @@ data class HttpResponse<T>(
         fun <T> error(throwable: Throwable): HttpResponse<T?> {
             return HttpResponse(ERROR, throwable.message ?: "unknown error", null)
         }
-
     }
 
     fun dataOrThrow(): T {
@@ -34,7 +40,6 @@ data class HttpResponse<T>(
         }
         return data
     }
-
 
     fun successOrThrow(): T? {
         if (code != SUCCESS) {

@@ -1,4 +1,4 @@
-package ui.page.config
+package net.lifeupapp.app.ui.page.config
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -11,14 +11,28 @@ internal class ConfigStore(
     private val globalStore: AppStoreImpl
 ) {
 
-    var state: TemplateState by mutableStateOf(TemplateState(isDialogShowing = false))
+    var state: ConfigState by mutableStateOf(
+        ConfigState(
+            isDialogShowing = false,
+            apiToken = globalStore.apiToken
+        )
+    )
         private set
 
-    data class TemplateState(
-        val isDialogShowing: Boolean
+    data class ConfigState(
+        val isDialogShowing: Boolean,
+        val apiToken: String
     )
 
-    fun updateState(block: TemplateState.() -> TemplateState) {
+    fun updateState(block: ConfigState.() -> ConfigState) {
         state = state.block()
+    }
+
+    fun updateApiToken(token: String) {
+        updateState {
+            copy(apiToken = token).also {
+                globalStore.updateApiToken(token)
+            }
+        }
     }
 }

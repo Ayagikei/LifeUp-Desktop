@@ -12,6 +12,8 @@ import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.long
 import logger
 import net.lifeupapp.app.datasource.data.Feelings
+import net.lifeupapp.app.datasource.net.ApiError
+import net.lifeupapp.app.datasource.net.HttpException
 import net.lifeupapp.app.datasource.net.HttpResponse
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -20,6 +22,7 @@ import okhttp3.MultipartBody
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
+import java.io.IOException
 import java.util.*
 import java.util.logging.Level
 
@@ -60,13 +63,41 @@ object ApiServiceImpl : ApiService {
         }
     }
 
-    override suspend fun getCoin(): Long {
+    private suspend fun <T> makeRequest(
+        path: String,
+        transform: (HttpResponse<JsonObject>) -> T
+    ): Result<T> {
         return withContext(Dispatchers.IO) {
-            val request = Request.Builder().url(OkHttpClientHolder.host + "/coin").build()
-            val response = okHttpClient.newCall(request).execute()
-            json.decodeFromString<HttpResponse<JsonObject>>(
-                response.body?.string() ?: ""
-            ).data!!.getValue("value").jsonPrimitive.long
+            try {
+                val request = Request.Builder().url(OkHttpClientHolder.host + path).build()
+                val response = okHttpClient.newCall(request).execute()
+
+                when (response.code) {
+                    401 -> Result.failure(HttpException(ApiError.AuthenticationError))
+                    200 -> {
+                        val httpResponse = json.decodeFromString<HttpResponse<JsonObject>>(
+                            response.body?.string() ?: ""
+                        )
+
+                        when (httpResponse.code) {
+                            HttpResponse.SUCCESS -> Result.success(transform(httpResponse))
+                            HttpResponse.ERROR -> Result.failure(HttpException(ApiError.ServerError(httpResponse.message)))
+                            HttpResponse.LIFEUP_NOT_RUNNING -> Result.failure(HttpException(ApiError.LifeUpNotRunning))
+                            else -> Result.failure(HttpException(ApiError.UnknownError(httpResponse.code)))
+                        }
+                    }
+
+                    else -> Result.failure(HttpException(ApiError.UnknownError(response.code)))
+                }
+            } catch (e: IOException) {
+                Result.failure(HttpException(ApiError.NetworkError))
+            }
+        }
+    }
+
+    override suspend fun getCoin(): Result<Long> {
+        return makeRequest("/coin") { response ->
+            response.data!!.getValue("value").jsonPrimitive.long
         }
     }
 

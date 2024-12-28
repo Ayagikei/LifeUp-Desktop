@@ -12,9 +12,13 @@
     <string name="cancel">Cancel</string>
     <string name="yes">Yes</string>
     <string name="base_config">Base</string>
-    <string name="base_config_desc">In order for LifeUp Desktop to connect to your mobile phone data, you need to enter the IP address and port, such as xxx.xxx.xxx.xxx</string>
+    <string name="base_config_desc">In order for LifeUp Desktop to connect to your mobile phone data, you need to enter
+        the IP address and port, such as xxx.xxx.xxx.xxx
+    </string>
     <string name="base_version">Version</string>
-    <string name="version_desc">LifeUp Desktop version: %1$s\nDesigned for LifeUp Cloud version: %2$s\nDesigned for LifeUp Android version: %3$s</string>
+    <string name="version_desc">LifeUp Desktop version: %1$s\nDesigned for LifeUp Cloud version: %2$s\nDesigned for
+        LifeUp Android version: %3$s
+    </string>
     <string name="ip_address">IP address</string>
     <string name="server_port">Server port</string>
     <string name="not_connected">Not connected to the server</string>
@@ -30,18 +34,29 @@
     <string name="purchase_desc">Purchase %1$s from LifeUp desktop</string>
     <string name="item_own_number">Owned: %1$d</string>
     <string name="item_price">Price: %1$d</string>
-    <string name="snackbar_complete_task">Task completed!\nDesktop does not support undo at the moment, if needed, please go to the mobile phone to operate.</string>
+    <string name="snackbar_complete_task">Task completed!\nDesktop does not support undo at the moment, if needed,
+        please go to the mobile phone to operate.
+    </string>
     <string name="snackbar_purchase_item">Purchase success!</string>
     <string name="license">License</string>
-    <string name="license_desc">developed by Kei (LifeUp Teams)\n\nicon designed by 下车君\n\nusing Honor HONOR Sans Font\n\npowered by Kotlin, Jetpack Compose and Compose Desktop</string>
+    <string name="license_desc">developed by Kei (LifeUp Teams)\n\nicon designed by 下车君\n\nusing Honor HONOR Sans
+        Font\n\npowered by Kotlin, Jetpack Compose and Compose Desktop
+    </string>
     <string name="auto_detect">Auto Detect</string>
     <string name="auto_detect_dialog_title">Auto Detect</string>
-    <string name="auto_detect_dialog_empty_desc">The LifeUp Cloud service was not detected.\n\nPlease make sure that your "LifeUp Cloud" is in the same local area network, and the service has been activated.\n\nYou can try restarting the service, or try again later.</string>
+    <string name="auto_detect_dialog_empty_desc">The LifeUp Cloud service was not detected.\n\nPlease make sure that
+        your "LifeUp Cloud" is in the same local area network, and the service has been activated.\n\nYou can try
+        restarting the service, or try again later.
+    </string>
     <string name="feelings_export_group_by_day">Group by day</string>
     <string name="feelings_export_group_by_month">Group by month</string>
     <string name="feelings_export_group_by_year">Group by year</string>
     <string name="feelings_export_dialog_title">Export to Markdown format?</string>
-    <string name="feelings_export_dialog_desc">Export all feelings and pictures to markdown format.\n\nThrough the markdown format, you can easily render your feelings into different document formats. For details, please refer to the online information.\n\nPlease select the export destination, try not to select the system-related folder of the system disk, because LifeUp may have insufficient permissions.</string>
+    <string name="feelings_export_dialog_desc">Export all feelings and pictures to markdown format.\n\nThrough the
+        markdown format, you can easily render your feelings into different document formats. For details, please refer
+        to the online information.\n\nPlease select the export destination, try not to select the system-related folder
+        of the system disk, because LifeUp may have insufficient permissions.
+    </string>
     <string name="feelings_export_progress_dialog_title">Exporting...</string>
     <string name="feelings_export_progress_dialog_desc">Progress: %1$s%</string>
     <string name="common_dir_select_title">Select a folder</string>
@@ -71,7 +86,8 @@
     <string name="add_tasks_frequency_unlimited">Unlimited</string>
     <string name="add_tasks_frequency_desc">Frequency: %1$s</string>
     <string name="add_tasks_success">Added successfully</string>
-    <string name="add_tasks_failed">Failed to add task, please try again later and check your LifeUp Cloud state.</string>
+    <string name="add_tasks_failed">Failed to add task, please try again later and check your LifeUp Cloud state.
+    </string>
     <string name="add_tasks_dialog_title">Add Tasks</string>
 
     <string name="save_and_restore">Backup and Restore</string>
@@ -129,4 +145,16 @@
     <string name="feelings_input_attachment_desc">Attachment %1$d</string>
     <string name="feelings_input_delete_image">Delete Image</string>
     <string name="feelings_input_select_images">Select Images</string>
+
+    <string name="api_check_network_error">Network connection failed. Please check your network, IP address, or port
+        configuration
+    </string>
+    <string name="api_check_auth_error">Authentication failed. Please check your API Token</string>
+    <string name="api_check_lifeup_not_running">✅Connected to LifeUp Cloud app\n\n❌Unable to connect to LifeUp
+        app.\n\nPlease make sure LifeUp app is running in the background.
+    </string>
+    <string name="api_check_unknown_error">Unknown error (code: %1$d)</string>
+    <string name="api_check_general_unknown_error">Unknown error</string>
+    <string name="api_check_timeout_error">Request timeout. Please check your network connection</string>
+    <string name="api_token_label">API Token (optional, used for authentication)</string>
 </resources>

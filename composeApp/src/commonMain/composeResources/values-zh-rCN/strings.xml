@@ -137,4 +137,14 @@
     <string name="feelings_input_attachment_desc">附件 %1$d</string>
     <string name="feelings_input_delete_image">删除图片</string>
     <string name="feelings_input_select_images">选择图片</string>
+
+    <string name="api_check_network_error">网络连接失败，请检查网络、IP 地址或端口配置</string>
+    <string name="api_check_auth_error">身份验证失败，请检查 API Token</string>
+    <string name="api_check_lifeup_not_running">✅已连接上「云人升」app\n\n❌无法连接「人升」app。\n\n请确认「人升」app
+        是否在后台运行。
+    </string>
+    <string name="api_check_unknown_error">未知错误 (代码：%1$d)</string>
+    <string name="api_check_general_unknown_error">未知错误</string>
+    <string name="api_check_timeout_error">请求超时，请检查网络连接</string>
+    <string name="api_token_label">API Token（可选，用于身份验证）</string>
 </resources>

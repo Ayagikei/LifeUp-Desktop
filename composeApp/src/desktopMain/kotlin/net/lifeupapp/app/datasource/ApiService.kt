@@ -23,7 +23,7 @@ interface ApiService {
 
     suspend fun completeTask(id: Long)
 
-    suspend fun getCoin(): Long
+    suspend fun getCoin(): Result<Long>
 
     suspend fun getSkills(): List<Skill>
 

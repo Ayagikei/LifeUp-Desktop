@@ -9,17 +9,18 @@ import androidx.compose.runtime.setValue
 import base.OkHttpClientHolder
 import datasource.ApiService
 import datasource.ApiServiceImpl
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.launch
+import lifeupdesktop.composeapp.generated.resources.*
 import logger
+import net.lifeupapp.app.datasource.net.ApiError
+import net.lifeupapp.app.datasource.net.HttpException
 import net.lifeupapp.app.ui.text.Localization
 import net.lifeupapp.app.ui.text.StringText
 import net.lifeupapp.app.utils.ifNullOrBlank
 import okhttp3.HttpUrl
+import org.jetbrains.compose.resources.getString
 import service.MdnsServiceDiscovery
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
@@ -63,6 +64,8 @@ class AppStoreImpl(
 
     var ip by mutableStateOf(preferences.get("ip", ""))
     var port by mutableStateOf(preferences.get("port", "13276"))
+    var apiToken by mutableStateOf(preferences.get("apiToken", ""))
+        private set
 
     var isReadyToCall = false
         private set
@@ -70,6 +73,8 @@ class AppStoreImpl(
     private val fetching = AtomicBoolean(false)
     private val mdnsServiceDiscovery = MdnsServiceDiscovery()
 
+    var lastError: String? by mutableStateOf(null)
+        private set
 
     private fun initStrings(): StringText {
         return Localization.get()
@@ -140,7 +145,7 @@ class AppStoreImpl(
         this.port = port
 
         if (ip.isEmpty() || port.isEmpty()) {
-            Preferences.userRoot().apply {
+            preferences.apply {
                 put("ip", ip)
                 put("port", port)
             }
@@ -157,7 +162,7 @@ class AppStoreImpl(
         isReadyToCall = validHost
         if (isReadyToCall) {
             OkHttpClientHolder.updateHost(ip, port)
-            Preferences.userRoot().apply {
+            preferences.apply {
                 put("ip", ip)
                 put("port", port)
             }
@@ -173,15 +178,51 @@ class AppStoreImpl(
         coroutineScope.launch {
             kotlin.runCatching {
                 fetching.set(true)
-                apiService.getCoin()
-            }.onSuccess {
-                coinValue = it
-            }.onFailure {
+                withTimeout(5000) {
+                    apiService.getCoin()
+                }
+            }.onSuccess { result ->
+                result.fold(
+                    onSuccess = { coin ->
+                        coinValue = coin
+                        lastError = null
+                    },
+                    onFailure = { error ->
+                        coinValue = null
+                        val httpException = error as? HttpException
+
+                        lastError = when (httpException?.error) {
+                            ApiError.NetworkError -> getString(Res.string.api_check_network_error)
+                            ApiError.AuthenticationError -> getString(Res.string.api_check_auth_error)
+                            ApiError.LifeUpNotRunning -> getString(Res.string.api_check_lifeup_not_running)
+                            is ApiError.ServerError -> getString(
+                                Res.string.api_check_general_unknown_error,
+                                (httpException.error as ApiError.ServerError).msg
+                            )
+
+                            is ApiError.UnknownError -> getString(
+                                Res.string.api_check_unknown_error,
+                                (httpException.error as ApiError.UnknownError).code
+                            )
+
+                            null -> getString(Res.string.api_check_general_unknown_error) + "\n\n${error.javaClass.name} : ${error.message}"
+                        }
+                        logger.log(Level.SEVERE, "get coin error", error)
+                    }
+                )
+            }.onFailure { error ->
                 coinValue = null
-                logger.log(Level.SEVERE, "get coin error", it)
+                lastError = getString(Res.string.api_check_timeout_error)
+                logger.log(Level.SEVERE, "get coin error", error)
             }
             fetching.set(false)
         }
+    }
+
+    fun updateApiToken(token: String) {
+        this.apiToken = token
+        preferences.put("apiToken", token)
+        OkHttpClientHolder.updateApiToken(token)
     }
 
 

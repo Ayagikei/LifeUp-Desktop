@@ -57,7 +57,7 @@ internal class StatusStore(
                 val coin = async {
                     apiService.getCoin()
                 }
-                RequestResult(skills.await(), coin.await())
+                RequestResult(skills.await(), coin.await().getOrThrow())
             }.onSuccess { it ->
                 val skills = it.skills
                 val coin = it.coin
