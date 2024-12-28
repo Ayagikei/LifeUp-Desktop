@@ -4,34 +4,15 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.draganddrop.dragAndDropTarget
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.Checkbox
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -41,30 +22,22 @@ import androidx.compose.ui.draganddrop.awtTransferable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import lifeupdesktop.composeapp.generated.resources.Res
-import lifeupdesktop.composeapp.generated.resources.save_and_restore
-import lifeupdesktop.composeapp.generated.resources.save_choose_backup_file
-import lifeupdesktop.composeapp.generated.resources.save_choose_directory_for_backup
-import lifeupdesktop.composeapp.generated.resources.save_choose_export_directory
-import lifeupdesktop.composeapp.generated.resources.save_drag_drop_instruction
-import lifeupdesktop.composeapp.generated.resources.save_export
-import lifeupdesktop.composeapp.generated.resources.save_export_button
-import lifeupdesktop.composeapp.generated.resources.save_export_path
-import lifeupdesktop.composeapp.generated.resources.save_import
-import lifeupdesktop.composeapp.generated.resources.save_imported_file
-import lifeupdesktop.composeapp.generated.resources.save_include_media_files
-import lifeupdesktop.composeapp.generated.resources.save_or
-import lifeupdesktop.composeapp.generated.resources.save_select_backup_file
-import lifeupdesktop.composeapp.generated.resources.save_select_export_directory
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
+import lifeupdesktop.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import ui.page.list.VerticalScrollbar
 import ui.page.list.rememberScrollbarAdapter
+import java.awt.EventQueue
 import java.awt.datatransfer.DataFlavor
 import java.io.File
 import javax.swing.JFileChooser
 import javax.swing.filechooser.FileNameExtensionFilter
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 @OptIn(
     ExperimentalFoundationApi::class,
@@ -248,15 +221,24 @@ suspend fun showDirectoryChooser(
     dialogTitle: String,
     approveButtonText: String,
     approveButtonToolTip: String
-): File? {
-    val fileChooser = JFileChooser("/").apply {
-        fileSelectionMode = JFileChooser.DIRECTORIES_ONLY
-        this.dialogTitle = dialogTitle
-        this.approveButtonText = approveButtonText
-        approveButtonToolTipText = approveButtonToolTip
+): File? = withContext(Dispatchers.Main) {
+    suspendCancellableCoroutine { continuation ->
+        EventQueue.invokeLater {
+            try {
+                val fileChooser = JFileChooser("/").apply {
+                    fileSelectionMode = JFileChooser.DIRECTORIES_ONLY
+                    this.dialogTitle = dialogTitle
+                    this.approveButtonText = approveButtonText
+                    approveButtonToolTipText = approveButtonToolTip
+                }
+                val result = fileChooser.showDialog(null, approveButtonText)
+                val file = if (result == JFileChooser.APPROVE_OPTION) fileChooser.selectedFile else null
+                continuation.resume(file)
+            } catch (e: Exception) {
+                continuation.resumeWithException(e)
+            }
+        }
     }
-    val result = fileChooser.showDialog(null, approveButtonText)
-    return if (result == JFileChooser.APPROVE_OPTION) fileChooser.selectedFile else null
 }
 
 suspend fun showBackupFileChooser(): List<String> {
