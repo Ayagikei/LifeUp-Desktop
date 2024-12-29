@@ -1,36 +1,15 @@
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.NavigationRail
-import androidx.compose.material.NavigationRailItem
-import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -39,18 +18,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.LocalWindowExceptionHandlerFactory
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.WindowExceptionHandler
-import androidx.compose.ui.window.WindowExceptionHandlerFactory
-import androidx.compose.ui.window.WindowPosition
-import androidx.compose.ui.window.WindowState
-import androidx.compose.ui.window.application
-import androidx.compose.ui.window.rememberWindowState
-import androidx.compose.ui.window.singleWindowApplication
+import androidx.compose.ui.window.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import lifeupdesktop.composeapp.generated.resources.Res
+import lifeupdesktop.composeapp.generated.resources.book_24px
 import lifeupdesktop.composeapp.generated.resources.icon
 import lifeupdesktop.composeapp.generated.resources.module_save
 import net.lifeupapp.app.base.navcontroller.NavController
@@ -66,6 +38,7 @@ import net.lifeupapp.app.ui.text.StringText
 import net.lifeupapp.app.ui.theme.AppTheme
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 import ui.page.achievement.AchievementScreen
 import ui.page.config.ConfigScreen
 import ui.page.feelings.FeelingsScreen
@@ -92,11 +65,11 @@ fun app() {
 
         val navController by rememberNavController(
             startDestination =
-            if (globalStore.isReadyToCall) {
-                Screen.Tasks.route
-            } else {
-                Screen.Config.route
-            }
+                if (globalStore.isReadyToCall) {
+                    Screen.Tasks.route
+                } else {
+                    Screen.Config.route
+                }
         )
         var selectedItem by remember { mutableStateOf(0) }
 
@@ -114,11 +87,11 @@ fun app() {
                 StringText.module_settings
             )
             val icons = listOf(
-                Icons.Filled.List,
+                Icons.AutoMirrored.Filled.List,
                 Icons.Filled.Person,
                 Icons.Filled.ShoppingCart,
                 Icons.Filled.Star,
-                Icons.Filled.Build, //FIXME: BOOK
+                vectorResource(Res.drawable.book_24px),
                 Icons.Filled.Info,
                 Icons.Filled.Settings
             )
