@@ -3,31 +3,14 @@ package ui.page.achievement
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredSizeIn
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Divider
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -44,7 +27,7 @@ import androidx.compose.ui.unit.sp
 import datasource.data.Achievement
 import datasource.data.AchievementCategory
 import lifeupdesktop.composeapp.generated.resources.Res
-import lifeupdesktop.composeapp.generated.resources.ic_pic_loading_cir
+import lifeupdesktop.composeapp.generated.resources.ic_badge_v2_circle
 import logger
 import net.lifeupapp.app.ui.text.Localization.dateTimeFormatterWithNewLine
 import net.lifeupapp.app.ui.text.StringText
@@ -77,7 +60,7 @@ internal fun AchievementContent(
             Row(
                 modifier = Modifier.clickable(
                     onClick =
-                    onCategoryExpended
+                        onCategoryExpended
                 )
             ) {
                 if (selectedCategory == null) {
@@ -174,7 +157,7 @@ private fun Item(
             modifier = Modifier.size(40.dp),
             onError = {
                 Image(
-                    painter = org.jetbrains.compose.resources.painterResource(Res.drawable.ic_pic_loading_cir),
+                    painter = org.jetbrains.compose.resources.painterResource(Res.drawable.ic_badge_v2_circle),
                     contentDescription = "skill icon",
                     modifier = Modifier.size(40.dp)
                 )
@@ -220,7 +203,7 @@ private fun Item(
                     )
                 )
             )
-            if (item.unlockedTime != 0L) {
+            if (item.unlockedTime != null && item.unlockedTime != 0L) {
                 Spacer4dpH()
                 Text(
                     dateTimeFormatterWithNewLine.format(item.unlockedTime),
