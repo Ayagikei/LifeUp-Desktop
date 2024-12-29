@@ -191,7 +191,7 @@ fun SaveScreen(modifier: Modifier = Modifier) {
                 Button(
                     onClick = {
                         coroutineScope.launch {
-                            val files = showBackupFileChooser()
+                            val files = showBackupFileChooser(getString(Res.string.save_select_backup_file))
                             if (files.isNotEmpty()) {
                                 importedFileName = File(files.first()).name
                                 saveStore.onImportBackup(File(files.first()))
@@ -241,19 +241,30 @@ suspend fun showDirectoryChooser(
     }
 }
 
-suspend fun showBackupFileChooser(): List<String> {
-    val fileChooser = JFileChooser().apply {
-        fileSelectionMode = JFileChooser.FILES_ONLY
-        isMultiSelectionEnabled = false
-        dialogTitle = getString(Res.string.save_select_backup_file)
-        fileFilter = FileNameExtensionFilter("Backup files", "lfbak")
-    }
+suspend fun showBackupFileChooser(
+    dialogTitle: String
+): List<String> = withContext(Dispatchers.Main) {
+    suspendCancellableCoroutine { continuation ->
+        EventQueue.invokeLater {
+            try {
+                val fileChooser = JFileChooser().apply {
+                    fileSelectionMode = JFileChooser.FILES_ONLY
+                    isMultiSelectionEnabled = false
+                    this.dialogTitle = dialogTitle
+                    fileFilter = FileNameExtensionFilter("Backup files", "lfbak")
+                }
 
-    val result = fileChooser.showOpenDialog(null)
-    return if (result == JFileChooser.APPROVE_OPTION) {
-        listOf(fileChooser.selectedFile.absolutePath)
-    } else {
-        emptyList()
+                val result = fileChooser.showOpenDialog(null)
+                val files = if (result == JFileChooser.APPROVE_OPTION) {
+                    listOf(fileChooser.selectedFile.absolutePath)
+                } else {
+                    emptyList()
+                }
+                continuation.resume(files)
+            } catch (e: Exception) {
+                continuation.resumeWithException(e)
+            }
+        }
     }
 }
 
