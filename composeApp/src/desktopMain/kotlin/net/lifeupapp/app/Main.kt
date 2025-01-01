@@ -33,6 +33,7 @@ import net.lifeupapp.app.ui.AppStore
 import net.lifeupapp.app.ui.AppStoreImpl
 import net.lifeupapp.app.ui.ScaffoldState
 import net.lifeupapp.app.ui.page.Screen
+import net.lifeupapp.app.ui.page.item.ShopScreen
 import net.lifeupapp.app.ui.page.save.SaveScreen
 import net.lifeupapp.app.ui.text.StringText
 import net.lifeupapp.app.ui.theme.AppTheme
@@ -42,7 +43,6 @@ import org.jetbrains.compose.resources.vectorResource
 import ui.page.achievement.AchievementScreen
 import ui.page.config.ConfigScreen
 import ui.page.feelings.FeelingsScreen
-import ui.page.item.ShopScreen
 import ui.page.list.TasksScreen
 import ui.page.list.VerticalScrollbar
 import ui.page.list.rememberScrollbarAdapter

@@ -133,4 +133,10 @@
     <string name="api_check_general_unknown_error">未知错误</string>
     <string name="api_check_timeout_error">请求超时，请检查网络连接</string>
     <string name="api_token_label">API Token（可选，用于身份验证）</string>
+    <string name="purchase_success">✅ 购买成功！</string>
+    <string name="purchase_database_error">❌ 数据库错误</string>
+    <string name="purchase_not_enough_coin">💰 金币不足</string>
+    <string name="purchase_item_not_found">🔍 物品未找到</string>
+    <string name="purchase_and_use_success">✅ 购买并使用成功</string>
+    <string name="purchase_success_use_failure">⚠️ 购买成功，但使用失败</string>
 </resources>

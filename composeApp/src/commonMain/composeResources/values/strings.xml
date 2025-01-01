@@ -133,4 +133,10 @@
     <string name="api_check_general_unknown_error">Unknown error</string>
     <string name="api_check_timeout_error">Request timeout. Please check your network connection</string>
     <string name="api_token_label">API Token (optional, used for authentication)</string>
+    <string name="purchase_success">✅ Purchase Success!</string>
+    <string name="purchase_database_error">❌ Database Error</string>
+    <string name="purchase_not_enough_coin">💰 Not Enough Coins</string>
+    <string name="purchase_item_not_found">🔍 Item Not Found</string>
+    <string name="purchase_and_use_success">✅ Purchase and Use Success</string>
+    <string name="purchase_success_use_failure">⚠️ Purchase Success, But Use Failed</string>
 </resources>

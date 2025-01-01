@@ -2,7 +2,9 @@ package datasource
 
 import datasource.data.*
 import kotlinx.serialization.json.JsonElement
+import net.lifeupapp.app.datasource.constants.ItemPurchaseResult
 import net.lifeupapp.app.datasource.data.Feelings
+import net.lifeupapp.app.datasource.data.ShopItem
 import net.lifeupapp.app.datasource.net.HttpResponse
 import java.io.File
 
@@ -43,7 +45,7 @@ interface ApiService {
 
     suspend fun rawCall(api: String): JsonElement?
 
-    suspend fun purchaseItem(id: Long?, price: Long, desc: String)
+    suspend fun purchaseItem(id: Long?, price: Long, desc: String): ItemPurchaseResult
 
     suspend fun checkUpdate(): ApiServiceImpl.LocalizedUpdateInfo?
 

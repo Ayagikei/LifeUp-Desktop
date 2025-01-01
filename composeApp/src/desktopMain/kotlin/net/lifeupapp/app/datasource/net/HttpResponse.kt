@@ -1,6 +1,18 @@
 package net.lifeupapp.app.datasource.net
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
+
+@Serializable
+data class ApiBatchResult(
+    val url: String,
+    val result: Map<String, JsonElement>
+) {
+    // 将 result Map 转换为 ApiResult
+    val apiResult: ApiResult by lazy {
+        ApiResult(result)
+    }
+}
 
 sealed class ApiError {
     data object NetworkError : ApiError()

@@ -2,7 +2,6 @@ package net.lifeupapp.app.ui.page.item
 
 import datasource.ApiServiceImpl
 import datasource.data.ShopCategory
-import datasource.data.ShopItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -11,6 +10,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import logger
 import net.lifeupapp.app.base.launchSafely
+import net.lifeupapp.app.datasource.constants.ItemPurchaseResult
+import net.lifeupapp.app.datasource.data.ShopItem
 import net.lifeupapp.app.ui.AppStoreImpl
 import java.util.logging.Level
 
@@ -21,8 +22,8 @@ internal class ShopStore(
 
     private val apiService = ApiServiceImpl
 
-    private val purchaseSuccessEvent = Channel<Unit>()
-    val purchaseSuccessEventFlow = purchaseSuccessEvent.receiveAsFlow()
+    private val purchaseResultEvent = Channel<ItemPurchaseResult>()
+    val purchaseResultEventFlow = purchaseResultEvent.receiveAsFlow()
 
     var state = MutableStateFlow(
         ShopState(
@@ -159,16 +160,14 @@ internal class ShopStore(
 
 
     fun onPurchased(shopItem: ShopItem, desc: String) {
-        //
         setState {
             copy(isReadyToBuyNext = false)
         }
         coroutineScope.launchSafely {
             runCatching {
-                apiService.purchaseItem(shopItem.id, shopItem.price, desc)
-            }.onSuccess {
+                val result = apiService.purchaseItem(shopItem.id, shopItem.price, desc)
+                purchaseResultEvent.send(result)
                 onRefresh()
-                purchaseSuccessEvent.send(Unit)
             }.onFailure {
                 logger.log(Level.SEVERE, it.stackTraceToString())
             }

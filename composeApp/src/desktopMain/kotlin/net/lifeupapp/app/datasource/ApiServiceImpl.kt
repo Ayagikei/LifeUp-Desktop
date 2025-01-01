@@ -6,15 +6,12 @@ import datasource.data.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.jsonPrimitive
-import kotlinx.serialization.json.long
+import kotlinx.serialization.json.*
 import logger
+import net.lifeupapp.app.datasource.constants.ItemPurchaseResult
 import net.lifeupapp.app.datasource.data.Feelings
-import net.lifeupapp.app.datasource.net.ApiError
-import net.lifeupapp.app.datasource.net.HttpException
-import net.lifeupapp.app.datasource.net.HttpResponse
+import net.lifeupapp.app.datasource.data.ShopItem
+import net.lifeupapp.app.datasource.net.*
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.MediaType.Companion.toMediaType
@@ -174,22 +171,40 @@ object ApiServiceImpl : ApiService {
         }
     }
 
-    override suspend fun purchaseItem(id: Long?, price: Long, desc: String) {
+    override suspend fun purchaseItem(id: Long?, price: Long, desc: String): ItemPurchaseResult {
         return withContext(Dispatchers.IO) {
-            val url = (OkHttpClientHolder.host + "/api/contentprovider").toHttpUrl().newBuilder()
-                .addQueryParameter(
-                    "url",
-                    "lifeup://api/item?id=${id}&own_number=1&own_number_type=relative"
-                )
-                .addQueryParameter(
-                    "url",
-                    "lifeup://api/penalty?type=coin&content=${desc}&number=${price}&silent=true"
-                )
-                .build()
-            val request = Request.Builder().url(url).build()
-            okHttpClient.newCall(request).execute()
+            val params = listOfNotNull(
+                id?.let { "id" to it.toString() },
+                "purchase_quantity" to "1"
+            )
+
+            val apiResult = callApiWithResult("purchase_item", params)
+
+            val resultCode = apiResult.getValueAs("result") { it.jsonPrimitive.int }
+                ?: throw IllegalStateException("No result code found in API response")
+
+            val purchaseResult = ItemPurchaseResult.fromCode(resultCode)
+
+            println("Purchase result: $purchaseResult")
+            purchaseResult
         }
     }
+
+    fun parseBatchResults(
+        body: String?
+    ): List<ApiBatchResult> {
+        if (body.isNullOrBlank()) {
+            throw IllegalStateException("Response body is null or blank")
+        }
+
+        return try {
+            val httpResponse = json.decodeFromString<HttpResponse<List<ApiBatchResult>>>(body)
+            httpResponse.dataOrThrow()
+        } catch (e: Exception) {
+            throw IllegalStateException("Failed to parse batch results: ${e.message}", e)
+        }
+    }
+
 
     override suspend fun rawCall(api: String): JsonElement? {
         return withContext(Dispatchers.IO) {
@@ -397,6 +412,43 @@ object ApiServiceImpl : ApiService {
             val response = okHttpClient.newCall(request).execute()
             json.decodeFromString<HttpResponse<JsonElement?>>(response.body?.string() ?: "")
                 .successOrThrow()
+        }
+    }
+
+    suspend fun callApiWithResult(
+        api: String,
+        params: List<Pair<String, String>> = emptyList()
+    ): ApiResult {
+        return withContext(Dispatchers.IO) {
+            val lifeUpUrl = buildLifeUpUrl(api, params)
+            val url = (OkHttpClientHolder.host + "/api/contentprovider").toHttpUrl().newBuilder()
+                .addQueryParameter("url", lifeUpUrl)
+                .build()
+
+            val request = Request.Builder().url(url).build()
+            val response = okHttpClient.newCall(request).execute()
+            val body = response.body?.string()
+
+            val batchResults = parseBatchResults(body)
+            batchResults.first().apiResult
+        }
+    }
+
+    suspend fun callApiBatch(
+        api: String,
+        params: List<Pair<String, String>> = emptyList()
+    ): List<ApiBatchResult> {
+        return withContext(Dispatchers.IO) {
+            val lifeUpUrl = buildLifeUpUrl(api, params)
+            val url = (OkHttpClientHolder.host + "/api/contentprovider").toHttpUrl().newBuilder()
+                .addQueryParameter("url", lifeUpUrl)
+                .build()
+
+            val request = Request.Builder().url(url).build()
+            val response = okHttpClient.newCall(request).execute()
+            val body = response.body?.string()
+
+            parseBatchResults(body)
         }
     }
 }
