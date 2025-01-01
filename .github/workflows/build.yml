@@ -48,28 +48,28 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: windows-distribution
-          path: build/compose/binaries/main/msi/*.msi
+          path: composeApp/build/compose/binaries/main/msi/*.msi
 
       - name: Upload macOS x64 artifact
         if: matrix.target == 'macos-x64'
         uses: actions/upload-artifact@v3
         with:
           name: macos-x64-distribution
-          path: build/compose/binaries/main/dmg/*.dmg
+          path: composeApp/build/compose/binaries/main/dmg/*.dmg
 
       - name: Upload macOS ARM64 artifact
         if: matrix.target == 'macos-arm64'
         uses: actions/upload-artifact@v3
         with:
           name: macos-arm64-distribution
-          path: build/compose/binaries/main/dmg/*.dmg
+          path: composeApp/build/compose/binaries/main/dmg/*.dmg
 
       - name: Upload Linux artifact
         if: matrix.target == 'linux'
         uses: actions/upload-artifact@v3
         with:
           name: linux-distribution
-          path: build/compose/binaries/main/deb/*.deb
+          path: composeApp/build/compose/binaries/main/deb/*.deb
 
   create-release:
     needs: build
