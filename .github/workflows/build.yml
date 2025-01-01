@@ -22,7 +22,7 @@ jobs:
             target: macos-arm64
             gradle-args: "-Pcompose.desktop.mac.target=arm64"
     runs-on: ${{ matrix.os }}
-
+    
     steps:
       - uses: actions/checkout@v3
 
@@ -42,6 +42,10 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew packageDistributionForCurrentOS ${{ matrix.gradle-args }}
+
+      # 添加文件列表步骤
+      - name: List files
+        run: ls -R composeApp/build/compose/binaries/main/
 
       - name: Upload Windows artifact
         if: matrix.target == 'windows'
@@ -74,19 +78,37 @@ jobs:
   create-release:
     needs: build
     runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v3
-
-      - uses: actions/download-artifact@v3
+      
+      # 下载构建产物
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
         with:
-          path: artifacts
-
+          path: dist
+      
+      # 检查下载的文件
+      - name: List downloaded files
+        run: ls -R dist/
+      
+      # 获取版本号
       - name: Get version
         id: get_version
         run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-
+      
+      # 准备发布文件
+      - name: Prepare release files
+        run: |
+          mkdir release
+          find dist -type f -name "*.msi" -exec cp {} release/ \;
+          find dist -type f -name "*.dmg" -exec cp {} release/ \;
+          find dist -type f -name "*.deb" -exec cp {} release/ \;
+          ls -la release/
+      
+      # 创建 Release
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
@@ -95,16 +117,12 @@ jobs:
           name: Release ${{ steps.get_version.outputs.VERSION }}
           draft: false
           prerelease: true
-          files: |
-            artifacts/windows-distribution/*.msi
-            artifacts/macos-x64-distribution/*.dmg
-            artifacts/macos-arm64-distribution/*.dmg
-            artifacts/linux-distribution/*.deb
+          files: release/*
           body: |
-            ## LifeUp Desktop Release ${{ steps.get_version.outputs.VERSION }}
+            ## Compose Desktop Application Release ${{ steps.get_version.outputs.VERSION }}
             
             ### Downloads
-            - Windows: [.msi installer](artifacts/windows-distribution/*.msi)
-            - macOS Intel (x64): [.dmg image](artifacts/macos-x64-distribution/*.dmg)
-            - macOS Apple Silicon (ARM64): [.dmg image](artifacts/macos-arm64-distribution/*.dmg)
-            - Linux: [.deb package](artifacts/linux-distribution/*.deb)
+            - Windows (.msi)
+            - macOS Intel x64 (.dmg)
+            - macOS Apple Silicon ARM64 (.dmg)
+            - Linux (.deb)
