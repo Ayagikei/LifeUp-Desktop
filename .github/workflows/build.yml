@@ -101,7 +101,7 @@ jobs:
             artifacts/macos-arm64-distribution/*.dmg
             artifacts/linux-distribution/*.deb
           body: |
-            ## Compose Desktop Application Release ${{ steps.get_version.outputs.VERSION }}
+            ## LifeUp Desktop Release ${{ steps.get_version.outputs.VERSION }}
             
             ### Downloads
             - Windows: [.msi installer](artifacts/windows-distribution/*.msi)
