@@ -22,7 +22,7 @@ jobs:
             target: macos-arm64
             gradle-args: "-Pcompose.desktop.mac.target=arm64"
     runs-on: ${{ matrix.os }}
-    
+
     steps:
       - uses: actions/checkout@v3
 
@@ -102,10 +102,16 @@ jobs:
       # 准备发布文件
       - name: Prepare release files
         run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
           mkdir release
-          find dist -type f -name "*.msi" -exec cp {} release/ \;
-          find dist -type f -name "*.dmg" -exec cp {} release/ \;
-          find dist -type f -name "*.deb" -exec cp {} release/ \;
+          
+          # 复制并重命名文件
+          find dist/windows-distribution -name "*.msi" -exec cp {} release/LifeUp-Desktop-${VERSION}-windows.msi \;
+          find dist/macos-x64-distribution -name "*.dmg" -exec cp {} release/LifeUp-Desktop-${VERSION}-macos-x64.dmg \;
+          find dist/macos-arm64-distribution -name "*.dmg" -exec cp {} release/LifeUp-Desktop-${VERSION}-macos-arm64.dmg \;
+          find dist/linux-distribution -name "*.deb" -exec cp {} release/lifeup-desktop_${VERSION}_amd64.deb \;
+          
+          echo "Release contents:"
           ls -la release/
       
       # 创建 Release
@@ -122,7 +128,7 @@ jobs:
             ## Compose Desktop Application Release ${{ steps.get_version.outputs.VERSION }}
             
             ### Downloads
-            - Windows (.msi)
-            - macOS Intel x64 (.dmg)
-            - macOS Apple Silicon ARM64 (.dmg)
-            - Linux (.deb)
+            - Windows: LifeUp Desktop.msi
+            - macOS Intel (x64): LifeUp-Desktop-x64.dmg
+            - macOS Apple Silicon (ARM64): LifeUp-Desktop-arm64.dmg
+            - Linux: lifeup-desktop.deb
