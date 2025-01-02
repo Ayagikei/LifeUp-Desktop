@@ -13,7 +13,10 @@ on:
 
 jobs:
   build:
+    permissions:
+      contents: write
     strategy:
+      fail-fast: false
       matrix:
         include:
           - os: ubuntu-latest
@@ -35,6 +38,9 @@ jobs:
       - name: Create tag if workflow_dispatch
         if: github.event_name == 'workflow_dispatch'
         run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git remote set-url origin https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}
           git tag ${{ github.event.inputs.tag_name }}
           git push origin ${{ github.event.inputs.tag_name }}
 
@@ -53,7 +59,9 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew packageDistributionForCurrentOS ${{ matrix.gradle-args }}
+        run: |
+          echo "Running: ./gradlew packageDistributionForCurrentOS ${{ matrix.gradle-args }}"
+          ./gradlew packageDistributionForCurrentOS ${{ matrix.gradle-args }} --stacktrace --info
 
       - name: List files
         run: ls -R composeApp/build/compose/binaries/main/
@@ -137,7 +145,7 @@ jobs:
           prerelease: true
           files: release/*
           body: |
-            ## LifeUp Desktop Release ${{ steps.get_version.outputs.VERSION }}
+            ## Compose Desktop Application Release ${{ steps.get_version.outputs.VERSION }}
             
             ### Downloads
             - Windows: LifeUp Desktop.msi
