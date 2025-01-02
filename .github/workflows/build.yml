@@ -2,6 +2,11 @@ name: Build Compose Desktop App
 
 on:
   workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag name (e.g., v1.0.0)'
+        required: true
+        type: string
   push:
     tags:
       - "v*"
@@ -26,6 +31,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      # 如果是手动触发，创建tag
+      - name: Create tag if workflow_dispatch
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          git tag ${{ github.event.inputs.tag_name }}
+          git push origin ${{ github.event.inputs.tag_name }}
+
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
@@ -43,7 +55,6 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew packageDistributionForCurrentOS ${{ matrix.gradle-args }}
 
-      # 添加文件列表步骤
       - name: List files
         run: ls -R composeApp/build/compose/binaries/main/
 
@@ -78,34 +89,36 @@ jobs:
   create-release:
     needs: build
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v3
       
-      # 下载构建产物
       - name: Download all artifacts
         uses: actions/download-artifact@v3
         with:
           path: dist
       
-      # 检查下载的文件
       - name: List downloaded files
         run: ls -R dist/
       
-      # 获取版本号
       - name: Get version
         id: get_version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "VERSION=${{ github.event.inputs.tag_name }}" >> $GITHUB_OUTPUT
+          else
+            echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          fi
       
-      # 准备发布文件
       - name: Prepare release files
         run: |
-          VERSION=${GITHUB_REF#refs/tags/v}
+          VERSION=${{ steps.get_version.outputs.VERSION }}
+          VERSION=${VERSION#v}  # Remove 'v' prefix if present
           mkdir release
           
-          # 复制并重命名文件
+          # Copy and rename files
           find dist/windows-distribution -name "*.msi" -exec cp {} release/LifeUp-Desktop-${VERSION}-windows.msi \;
           find dist/macos-x64-distribution -name "*.dmg" -exec cp {} release/LifeUp-Desktop-${VERSION}-macos-x64.dmg \;
           find dist/macos-arm64-distribution -name "*.dmg" -exec cp {} release/LifeUp-Desktop-${VERSION}-macos-arm64.dmg \;
@@ -114,18 +127,17 @@ jobs:
           echo "Release contents:"
           ls -la release/
       
-      # 创建 Release
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag_name: ${{ github.ref }}
+          tag_name: ${{ steps.get_version.outputs.VERSION }}
           name: Release ${{ steps.get_version.outputs.VERSION }}
           draft: false
           prerelease: true
           files: release/*
           body: |
-            ## Compose Desktop Application Release ${{ steps.get_version.outputs.VERSION }}
+            ## LifeUp Desktop Release ${{ steps.get_version.outputs.VERSION }}
             
             ### Downloads
             - Windows: LifeUp Desktop.msi
