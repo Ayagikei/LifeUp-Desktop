@@ -28,7 +28,7 @@ import net.lifeupapp.app.ui.Strings
 import net.lifeupapp.app.ui.page.config.ConfigStore
 import net.lifeupapp.app.ui.theme.unimportantText
 import org.jetbrains.compose.resources.stringResource
-import service.MdnsServiceDiscovery
+import net.lifeupapp.app.service.MdnsServiceDiscovery
 import ui.page.list.Dialog
 import java.awt.Desktop
 import java.net.URI

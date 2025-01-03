@@ -1,3 +1,5 @@
+package net.lifeupapp.app
+
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -270,7 +272,3 @@ fun main() {
     }
 }
 
-val AppScope = GlobalScope
-
-val Any?.logger: Logger
-    get() = Logger.getLogger((this?.javaClass ?: Any::class.java).toGenericString())

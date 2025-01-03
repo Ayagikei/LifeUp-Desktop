@@ -1,4 +1,4 @@
-package service
+package net.lifeupapp.app.service
 
 
 /**

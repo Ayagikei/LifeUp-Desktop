@@ -36,3 +36,6 @@
 -keep class org.jmdns.** { *; }
 
 -keep class kotlinx.coroutines.swing.** { *; }
+
+# Keep MainKt
+-keep class net.lifeupapp.app.MainKt {*;}

@@ -45,7 +45,7 @@ compose.desktop {
             modules("java.instrument", "java.prefs", "jdk.unsupported")
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "LifeUp Desktop"
-            packageVersion = "1.2.0"
+            packageVersion = "1.2.1"
             macOS {
                 iconFile.set(project.file("icon.icns"))
             }

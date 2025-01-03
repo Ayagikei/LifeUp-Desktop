@@ -21,7 +21,7 @@ import net.lifeupapp.app.ui.text.StringText
 import net.lifeupapp.app.utils.ifNullOrBlank
 import okhttp3.HttpUrl
 import org.jetbrains.compose.resources.getString
-import service.MdnsServiceDiscovery
+import net.lifeupapp.app.service.MdnsServiceDiscovery
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.logging.Level
