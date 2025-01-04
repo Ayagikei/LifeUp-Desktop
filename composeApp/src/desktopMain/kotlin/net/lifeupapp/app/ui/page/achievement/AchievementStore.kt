@@ -11,6 +11,7 @@ import net.lifeupapp.app.datasource.ApiServiceImpl
 import net.lifeupapp.app.datasource.data.Achievement
 import net.lifeupapp.app.datasource.data.AchievementCategory
 import net.lifeupapp.app.ui.AppStoreImpl
+import net.lifeupapp.app.ui.view.PageState
 import net.lifeupapp.app.utils.logger
 
 internal class AchievementStore(
@@ -23,7 +24,7 @@ internal class AchievementStore(
     private val apiService = ApiServiceImpl
     var state: AchievementState by mutableStateOf(
         AchievementState(
-            0,
+            pageState = PageState.Loading,
             achievements = emptyList(),
             categories = emptyList()
         )
@@ -31,7 +32,7 @@ internal class AchievementStore(
         private set
 
     data class AchievementState(
-        val state: Int,
+        val pageState: PageState,
         val categories: List<AchievementCategory>,
         val achievements: List<Achievement> = emptyList(),
         val currentCategoryId: Long? = null,
@@ -44,6 +45,7 @@ internal class AchievementStore(
     }
 
     fun onRefresh() {
+        setState { copy(pageState = PageState.Loading) }
         fetchCategories()
     }
 
@@ -61,7 +63,12 @@ internal class AchievementStore(
 
     fun onCategoryClicked(id: Long) {
         setState {
-            copy(categoryExpanded = false, currentCategoryId = id, achievements = emptyList())
+            copy(
+                categoryExpanded = false,
+                currentCategoryId = id,
+                achievements = emptyList(),
+                pageState = PageState.Loading
+            )
         }
         fetchAchievement(id)
     }
@@ -82,7 +89,6 @@ internal class AchievementStore(
         state = state.update()
     }
 
-
     private fun fetchCategories() {
         coroutineScope.launchSafely(Dispatchers.IO) {
             while (globalStore.isReadyToCall.not()) {
@@ -97,8 +103,8 @@ internal class AchievementStore(
                     setState {
                         copy(
                             categories = categories,
-                            currentCategoryId = categories
-                                .firstOrNull()?.id
+                            currentCategoryId = categories.firstOrNull()?.id,
+                            pageState = PageState.Loading
                         )
                     }
                 }
@@ -107,29 +113,34 @@ internal class AchievementStore(
                 log.error(it) {
                     "fetchCategories"
                 }
+                setState { copy(pageState = PageState.Error(it.message ?: "未知错误")) }
                 delay(2000L)
                 fetchCategories()
             }
         }
     }
 
-    // FIXME: hare may be exist a concurrent problem
     private fun fetchAchievement(categoryId: Long) {
         coroutineScope.launchSafely(Dispatchers.IO) {
             runCatching {
                 apiService.getAchievement(categoryId)
-            }.onSuccess { it ->
+            }.onSuccess { achievements ->
+                val mappedAchievements = achievements.map {
+                    it.copy(
+                        iconUri = apiService.getIconUrl(it.iconUri)
+                    )
+                }
                 setState {
-                    copy(achievements = it.map {
-                        it.copy(
-                            iconUri = apiService.getIconUrl(it.iconUri)
-                        )
-                    })
+                    copy(
+                        achievements = mappedAchievements,
+                        pageState = if (mappedAchievements.isEmpty()) PageState.Empty else PageState.Content
+                    )
                 }
             }.onFailure {
                 log.error(it) {
                     "fetchAchievement"
                 }
+                setState { copy(pageState = PageState.Error(it.message ?: "未知错误")) }
                 delay(2000L)
                 fetchCategories()
             }

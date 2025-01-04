@@ -28,14 +28,15 @@ fun AchievementScreen(modifier: Modifier = Modifier) {
     AchievementContent(
         modifier = modifier,
         categoryExpanded = state.categoryExpanded,
-        selectedCategory = state.categories.find { it.id == state.currentCategoryId && it.id != null },
-        categories = state.categories,
         items = state.achievements,
+        categories = state.categories,
+        selectedCategory = state.categories.find { it.id == state.currentCategoryId },
         onItemClicked = model::onItemClicked,
         onCategoryClicked = model::onCategoryClicked,
         onCategoryExpended = model::onCategoryExpended,
         onCategoryDismissed = model::onCategoryDismissed,
-        onRefreshClick = model::onRefresh
+        onRefreshClick = model::onRefresh,
+        pageState = state.pageState
     )
 
     state.editingItem?.also { item ->
