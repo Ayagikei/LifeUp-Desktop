@@ -36,6 +36,8 @@ import net.lifeupapp.app.ui.text.StringText
 import net.lifeupapp.app.ui.theme.important
 import net.lifeupapp.app.ui.theme.unimportantText
 import net.lifeupapp.app.ui.view.AsyncImage
+import net.lifeupapp.app.ui.view.PageState
+import net.lifeupapp.app.ui.view.StateLayout
 import net.lifeupapp.app.ui.view.loadImageBitmap
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
@@ -48,9 +50,9 @@ internal fun FeelingsContent(
     onExportClicked: () -> Unit,
     onRefreshClick: () -> Unit,
     onAttachmentClicked: (attachment: String) -> Unit,
-    onAddClicked: () -> Unit
+    onAddClicked: () -> Unit,
+    pageState: PageState
 ) {
-
     Column(modifier) {
         TopAppBar(title = {
             Text(text = StringText.module_feelings)
@@ -66,13 +68,18 @@ internal fun FeelingsContent(
             }
         })
 
-
         Box(Modifier.weight(1F)) {
-            ListContent(
-                items = items,
-                onItemClicked = onItemClicked,
-                onAttachmentClicked = onAttachmentClicked
-            )
+            StateLayout(
+                state = pageState,
+                emptyText = "暂无感想 📝\n点击右上角记录新的感想吧！",
+                modifier = Modifier.fillMaxSize()
+            ) {
+                ListContent(
+                    items = items,
+                    onItemClicked = onItemClicked,
+                    onAttachmentClicked = onAttachmentClicked
+                )
+            }
         }
     }
 }

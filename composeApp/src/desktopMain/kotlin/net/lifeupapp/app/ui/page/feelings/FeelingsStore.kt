@@ -13,6 +13,7 @@ import net.lifeupapp.app.datasource.ApiServiceImpl
 import net.lifeupapp.app.datasource.data.Feelings
 import net.lifeupapp.app.ui.AppStoreImpl
 import net.lifeupapp.app.ui.text.Localization
+import net.lifeupapp.app.ui.view.PageState
 import net.lifeupapp.app.utils.logger
 import net.lifeupapp.app.utils.md5
 import java.io.File
@@ -34,11 +35,11 @@ internal class FeelingsStore(
     private val mutex = Mutex()
 
     private val apiService = ApiServiceImpl
-    var state: FeelingsState by mutableStateOf(FeelingsState(0))
+    var state: FeelingsState by mutableStateOf(FeelingsState(pageState = PageState.Loading))
         private set
 
     data class FeelingsState(
-        val state: Int,
+        val pageState: PageState,
         val feelings: List<Feelings> = emptyList(),
         val showingDialog: Boolean = false,
         val exportProgress: Float = -1f,
@@ -55,7 +56,7 @@ internal class FeelingsStore(
                 offset = 0
                 end = false
                 setState {
-                    copy(feelings = emptyList())
+                    copy(feelings = emptyList(), pageState = PageState.Loading)
                 }
                 fetchFeelings()
             }
@@ -175,11 +176,14 @@ internal class FeelingsStore(
                     end = it.size < limit
 
                     setState {
-                        copy(feelings = feelings + it.map {
-                            it.copy(attachments = it.attachments.map {
-                                apiService.getIconUrl(it)
-                            })
-                        })
+                        copy(
+                            feelings = feelings + it.map {
+                                it.copy(attachments = it.attachments.map {
+                                    apiService.getIconUrl(it)
+                                })
+                            },
+                            pageState = if (feelings.isEmpty() && offset == 0) PageState.Empty else PageState.Content
+                        )
                     }
 
                     if (!end) {
@@ -189,6 +193,7 @@ internal class FeelingsStore(
                     log.error(it) {
                         "fetchFeelings"
                     }
+                    setState { copy(pageState = PageState.Error(it.message ?: "未知错误")) }
                     delay(2000L)
                     fetchFeelings()
                 }

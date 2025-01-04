@@ -53,7 +53,7 @@ fun FeelingsScreen(modifier: Modifier = Modifier) {
                 Desktop.getDesktop().open(destFile)
             }
         }
-    }, onAddClicked = model::onAdd)
+    }, onAddClicked = model::onAdd, pageState = state.pageState)
 
     if (state.showAddedDialog) {
         FeelingsInputDialog(
