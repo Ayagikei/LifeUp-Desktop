@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -12,7 +13,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import datasource.data.Skill
 import datasource.data.TaskCategory
@@ -25,6 +29,8 @@ import org.jetbrains.compose.resources.stringResource
 import ui.page.list.EnhancedLargeDialog
 import ui.view.AsyncImage
 import ui.view.loadImageBitmap
+import java.awt.Desktop
+import java.net.URI
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -97,9 +103,64 @@ internal fun TaskDetailsViewDialog(
 private fun DetailItem(label: String, value: String) {
     Column(modifier = Modifier.padding(vertical = 4.dp)) {
         Text(label, style = MaterialTheme.typography.caption.copy(color = Color.Gray))
-        Text(value, style = MaterialTheme.typography.body1)
+        ClickableTextWithUrlDetection(value)
     }
     Spacer(modifier = Modifier.height(8.dp))
+}
+
+@Composable
+private fun ClickableTextWithUrlDetection(text: String) {
+    val urlPattern = Regex("""(\w+://\S+)""")
+    val matches = urlPattern.findAll(text)
+
+    if (matches.any()) {
+        val annotatedString = buildAnnotatedString {
+            var lastIndex = 0
+            for (match in matches) {
+                // Add non-URL part
+                append(text.substring(lastIndex, match.range.first))
+
+                // Add clickable URL
+                addStyle(
+                    style = SpanStyle(color = Color.Blue, textDecoration = TextDecoration.Underline),
+                    start = length,
+                    end = length + match.value.length
+                )
+                addStringAnnotation(
+                    tag = "URL",
+                    annotation = match.value,
+                    start = length,
+                    end = length + match.value.length
+                )
+                append(match.value)
+
+                lastIndex = match.range.last + 1
+            }
+
+            // Add the last part of the text
+            if (lastIndex < text.length) {
+                append(text.substring(lastIndex))
+            }
+        }
+
+        ClickableText(
+            text = annotatedString,
+            style = MaterialTheme.typography.body1,
+            onClick = { offset ->
+                annotatedString.getStringAnnotations(tag = "URL", start = offset, end = offset)
+                    .firstOrNull()?.let { annotation ->
+                        try {
+                            Desktop.getDesktop().browse(URI(annotation.item))
+                        } catch (e: Exception) {
+                            println("Unable to open link: ${annotation.item}")
+                        }
+                    }
+            }
+        )
+    } else {
+        // If there is no URL, display the text normally
+        Text(text, style = MaterialTheme.typography.body1)
+    }
 }
 
 @OptIn(ExperimentalResourceApi::class)
