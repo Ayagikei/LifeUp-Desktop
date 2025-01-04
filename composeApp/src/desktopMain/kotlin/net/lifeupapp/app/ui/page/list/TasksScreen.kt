@@ -47,7 +47,8 @@ fun TasksScreen(modifier: Modifier = Modifier) {
         onRefreshClick = model::onRefresh,
         onAddClicked = {
             model.showAddWindow()
-        }
+        },
+        pageState = state.pageState
     )
 
     if (state.showAddWindow) {

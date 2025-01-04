@@ -9,6 +9,7 @@ import net.lifeupapp.app.base.launchSafely
 import net.lifeupapp.app.datasource.ApiServiceImpl
 import net.lifeupapp.app.datasource.data.TaskCategory
 import net.lifeupapp.app.ui.AppStoreImpl
+import net.lifeupapp.app.ui.view.PageState
 import net.lifeupapp.app.utils.logger
 
 internal class TaskStore(
@@ -80,7 +81,8 @@ internal class TaskStore(
                             }
                             copy(
                                 items = tasks,
-                                editingState = updatedEditingState
+                                editingState = updatedEditingState,
+                                pageState = if (tasks.isEmpty()) PageState.Empty else PageState.Content
                             )
                         }
                     }
@@ -183,7 +185,7 @@ internal class TaskStore(
 
     fun onCategoryClicked(id: Long) {
         setState {
-            copy(categoryExpanded = false, currentCategoryId = id, items = emptyList())
+            copy(categoryExpanded = false, currentCategoryId = id, items = emptyList(), pageState = PageState.Loading)
         }
         fetchTasks()
     }
@@ -254,5 +256,6 @@ internal class TaskStore(
         val editingState: EditingTaskState? = null,
         val snackbarText: String? = null,
         val showAddWindow: Boolean = false,
+        val pageState: PageState = PageState.Loading
     )
 }

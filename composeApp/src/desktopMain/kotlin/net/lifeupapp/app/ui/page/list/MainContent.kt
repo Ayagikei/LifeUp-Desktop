@@ -25,6 +25,8 @@ import androidx.compose.ui.unit.dp
 import lifeupdesktop.composeapp.generated.resources.*
 import net.lifeupapp.app.datasource.data.TaskCategory
 import net.lifeupapp.app.ui.text.StringText
+import net.lifeupapp.app.ui.view.PageState
+import net.lifeupapp.app.ui.view.StateLayout
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -41,9 +43,9 @@ internal fun TaskContent(
     onCategoryExpended: () -> Unit,
     onCategoryDismissed: () -> Unit,
     onRefreshClick: () -> Unit,
-    onAddClicked: () -> Unit
+    onAddClicked: () -> Unit,
+    pageState: PageState
 ) {
-
     Column(modifier) {
         TopAppBar(title = {
             Row(
@@ -83,18 +85,18 @@ internal fun TaskContent(
         })
 
         Box(Modifier.weight(1F)) {
-            TaskListContent(
-                items = items,
-                onItemClicked = onItemClicked,
-                onItemDoneChanged = onItemDoneChanged
-            )
+            StateLayout(
+                state = pageState,
+                emptyText = "暂无任务 📝\n点击右上角添加新任务吧！",
+                modifier = Modifier.fillMaxSize()
+            ) {
+                TaskListContent(
+                    items = items,
+                    onItemClicked = onItemClicked,
+                    onItemDoneChanged = onItemDoneChanged
+                )
+            }
         }
-
-//        Input(
-//            text = inputText,
-//            onAddClicked = onAddItemClicked,
-//            onTextChanged = onInputTextChanged
-//        )
     }
 }
 
