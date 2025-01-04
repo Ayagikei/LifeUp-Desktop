@@ -75,6 +75,7 @@ fun ShopScreen(modifier: Modifier = Modifier) {
                 model.onPurchased(it, StringText.getPurchaseDesc(it.name))
             }
         },
+        pageState = state.pageState
     )
 
     state.editingItem?.also { item ->

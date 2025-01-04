@@ -12,6 +12,7 @@ import net.lifeupapp.app.datasource.constants.ItemPurchaseResult
 import net.lifeupapp.app.datasource.data.ShopCategory
 import net.lifeupapp.app.datasource.data.ShopItem
 import net.lifeupapp.app.ui.AppStoreImpl
+import net.lifeupapp.app.ui.view.PageState
 import net.lifeupapp.app.utils.logger
 
 internal class ShopStore(
@@ -27,14 +28,14 @@ internal class ShopStore(
 
     var state = MutableStateFlow(
         ShopState(
-            0,
+            pageState = PageState.Loading,
             shopItems = emptyList(),
             categories = emptyList()
         )
     )
 
     data class ShopState(
-        val state: Int,
+        val pageState: PageState,
         val categories: List<ShopCategory>,
         val shopItems: List<ShopItem> = emptyList(),
         val currentCategoryId: Long? = null,
@@ -49,6 +50,7 @@ internal class ShopStore(
     }
 
     fun onRefresh() {
+        setState { copy(pageState = PageState.Loading) }
         fetchCategories()
         fetchCoin()
     }
@@ -67,7 +69,12 @@ internal class ShopStore(
 
     fun onCategoryClicked(id: Long) {
         setState {
-            copy(categoryExpanded = false, currentCategoryId = id, shopItems = emptyList())
+            copy(
+                categoryExpanded = false,
+                currentCategoryId = id,
+                shopItems = emptyList(),
+                pageState = PageState.Loading
+            )
         }
         fetchItems(id)
     }
@@ -103,6 +110,7 @@ internal class ShopStore(
                 log.error(it) {
                     "fetchCoin"
                 }
+                setState { copy(pageState = PageState.Error(it.message ?: "未知错误")) }
                 delay(2000L)
                 fetchCoin()
             }
@@ -122,8 +130,8 @@ internal class ShopStore(
                     setState {
                         copy(
                             categories = categories,
-                            currentCategoryId = categories
-                                .firstOrNull()?.id
+                            currentCategoryId = categories.firstOrNull()?.id,
+                            pageState = PageState.Loading
                         )
                     }
                 }
@@ -132,38 +140,40 @@ internal class ShopStore(
                 log.error(it) {
                     "fetchCategories"
                 }
+                setState { copy(pageState = PageState.Error(it.message ?: "未知错误")) }
                 delay(2000L)
                 fetchCategories()
             }
         }
     }
 
-    // FIXME: hare may be exist a concurrent problem
     private fun fetchItems(categoryId: Long) {
         coroutineScope.launchSafely(Dispatchers.IO) {
             runCatching {
                 apiService.getShopItems(categoryId)
-            }.onSuccess { it ->
+            }.onSuccess { items ->
+                val mappedItems = items.map {
+                    it.copy(
+                        icon = apiService.getIconUrl(it.icon),
+                    )
+                }
                 setState {
                     copy(
-                        shopItems = it.map {
-                            it.copy(
-                                icon = apiService.getIconUrl(it.icon),
-                            )
-                        },
-                        isReadyToBuyNext = true
+                        shopItems = mappedItems,
+                        isReadyToBuyNext = true,
+                        pageState = if (mappedItems.isEmpty()) PageState.Empty else PageState.Content
                     )
                 }
             }.onFailure {
                 log.error(it) {
                     "fetchItems"
                 }
+                setState { copy(pageState = PageState.Error(it.message ?: "未知错误")) }
                 delay(2000L)
                 fetchCategories()
             }
         }
     }
-
 
     fun onPurchased(shopItem: ShopItem, desc: String) {
         setState {

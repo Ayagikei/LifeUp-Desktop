@@ -34,6 +34,8 @@ import net.lifeupapp.app.ui.text.StringText
 import net.lifeupapp.app.ui.theme.subTitle3
 import net.lifeupapp.app.ui.theme.unimportantText
 import net.lifeupapp.app.ui.view.AsyncImage
+import net.lifeupapp.app.ui.view.PageState
+import net.lifeupapp.app.ui.view.StateLayout
 import net.lifeupapp.app.ui.view.loadImageBitmap
 import org.jetbrains.compose.resources.painterResource
 
@@ -50,9 +52,9 @@ internal fun ShopContent(
     onCategoryExpended: () -> Unit,
     onCategoryDismissed: () -> Unit,
     onRefreshClick: () -> Unit,
-    onPurchased: (ShopItem) -> Unit
+    onPurchased: (ShopItem) -> Unit,
+    pageState: PageState
 ) {
-
     Column(modifier) {
         TopAppBar(title = {
             Row(
@@ -88,14 +90,19 @@ internal fun ShopContent(
             }
         })
 
-
         Box(Modifier.weight(1F)) {
-            ListContent(
-                items = items,
-                coin = coin,
-                onItemClicked = onItemClicked,
-                onPurchased = onPurchased
-            )
+            StateLayout(
+                state = pageState,
+                emptyText = "暂无商品 🛍️\n敬请期待更多商品上架！",
+                modifier = Modifier.fillMaxSize()
+            ) {
+                ListContent(
+                    items = items,
+                    coin = coin,
+                    onItemClicked = onItemClicked,
+                    onPurchased = onPurchased
+                )
+            }
         }
     }
 }
