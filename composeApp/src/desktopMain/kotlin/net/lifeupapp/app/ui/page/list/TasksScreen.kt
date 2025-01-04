@@ -14,7 +14,6 @@ import net.lifeupapp.app.ui.AppStore
 import net.lifeupapp.app.ui.ScaffoldState
 import net.lifeupapp.app.ui.Strings
 import net.lifeupapp.app.ui.page.item.ShopStore
-import net.lifeupapp.app.ui.page.list.TaskStore.TaskState
 import net.lifeupapp.app.ui.page.list.add.AddTaskScreen
 import net.lifeupapp.app.ui.page.status.StatusStore
 import java.awt.Toolkit
@@ -68,36 +67,20 @@ fun TasksScreen(modifier: Modifier = Modifier) {
         })
     }
 
-//    Button(onClick = {
-//        coroutineScope.launch {
-//            val snackbarResult = scaffoldState.snackbarHostState.showSnackbar(
-//                message = "This is your message",
-//                actionLabel = "Do something"
-//            )
-//            when (snackbarResult) {
-//                SnackbarResult.Dismissed -> TODO()
-//                SnackbarResult.ActionPerformed -> TODO()
-//            }
-//        }
-//    }) {
-//        Text(text = "Click me!")
-//    }
-
-    state.editingItem?.also { item ->
+    state.editingState?.also { editingState ->
         // we need skill lists
         val statusStore = remember { StatusStore(coroutineScope, globalStore) }
         // we need item list
         val shopStore = remember { ShopStore(coroutineScope, globalStore) }
-        val taskStore = remember { TaskStore(coroutineScope, globalStore) }
         val statusState by statusStore.state.collectAsState(Dispatchers.Main)
         val shopState by shopStore.state.collectAsState(Dispatchers.Main)
-        val taskStatus by taskStore.state.collectAsState(Dispatchers.Main)
 
         TaskDetailsViewDialog(
-            item = item,
+            item = editingState.task,
             skills = statusState.skills,
             shopItems = shopState.shopItems,
-            taskCategories = taskStatus.categories,
+            taskCategories = state.categories,
+            taskStore = model,
             onCloseClicked = model::onEditorCloseClicked,
         )
     }
@@ -131,9 +114,6 @@ private fun showAddDialog(
         )
     }
 }
-
-private val TaskState.editingItem: TodoItem?
-    get() = editingItemId?.let(items::firstById)
 
 private fun List<TodoItem>.firstById(id: Long): TodoItem =
     first { it.id == id }

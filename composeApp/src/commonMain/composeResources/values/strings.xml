@@ -139,4 +139,9 @@
     <string name="purchase_item_not_found">🔍 Item Not Found</string>
     <string name="purchase_and_use_success">✅ Purchase and Use Success</string>
     <string name="purchase_success_use_failure">⚠️ Purchase Success, But Use Failed</string>
+    <string name="task_details_subtasks">Subtasks</string>
+    <string name="task_details_exp_reward">%1$d EXP</string>
+    <string name="task_details_coin_reward">%1$d Coins</string>
+    <string name="task_details_item_count_reward">%1$d Items</string>
+    <string name="task_details_item_count">x%1$d</string>
 </resources>

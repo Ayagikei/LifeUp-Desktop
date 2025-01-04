@@ -3,6 +3,7 @@ package net.lifeupapp.app.ui.page.list
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import net.lifeupapp.app.base.launchSafely
 import net.lifeupapp.app.datasource.ApiServiceImpl
@@ -23,6 +24,9 @@ internal class TaskStore(
 
     private val completeSuccessEvent = Channel<Unit>()
     val completeSuccessEventFlow = completeSuccessEvent.receiveAsFlow()
+
+    private val _subTaskLoadingId = MutableStateFlow<Long?>(null)
+    val subTaskLoadingId = _subTaskLoadingId.asStateFlow()
 
     private fun fetchCategories() {
         coroutineScope.launchSafely(Dispatchers.IO) {
@@ -66,8 +70,18 @@ internal class TaskStore(
                             it.startTime >= System.currentTimeMillis()
                         }?.map { TodoItem(it.id ?: 0L, it.nameExtended, it, false, it) }
                             ?: emptyList()
+
                         setState {
-                            copy(items = tasks)
+                            // 更新编辑状态中的任务
+                            val updatedEditingState = editingState?.let { editState ->
+                                tasks.firstOrNull { it.id == editState.taskId }?.let { updatedTask ->
+                                    editState.copy(task = updatedTask)
+                                }
+                            }
+                            copy(
+                                items = tasks,
+                                editingState = updatedEditingState
+                            )
                         }
                     }
                 }.onFailure {
@@ -83,7 +97,10 @@ internal class TaskStore(
     val state = MutableStateFlow<TaskState>(initialState())
 
     fun onItemClicked(id: Long) {
-        setState { copy(editingItemId = id) }
+        val item = state.value.items.firstOrNull { it.id == id } ?: return
+        setState {
+            copy(editingState = EditingTaskState(id, item))
+        }
     }
 
     fun onItemDoneChanged(id: Long, isDone: Boolean) {
@@ -131,18 +148,18 @@ internal class TaskStore(
     }
 
     fun onEditorCloseClicked() {
-        setState { copy(editingItemId = null) }
+        setState { copy(editingState = null) }
     }
 
     fun onEditorTextChanged(text: String) {
         setState {
-            updateItem(id = requireNotNull(editingItemId)) { it.copy(text = text) }
+            updateItem(id = requireNotNull(editingState?.taskId)) { it.copy(text = text) }
         }
     }
 
     fun onEditorDoneChanged(isDone: Boolean) {
         setState {
-            updateItem(id = requireNotNull(editingItemId)) { it.copy(isDone = isDone) }
+            updateItem(id = requireNotNull(editingState?.taskId)) { it.copy(isDone = isDone) }
         }
     }
 
@@ -199,6 +216,34 @@ internal class TaskStore(
         }
     }
 
+    fun onSubTaskStatusChanged(mainTaskId: Long, subTaskId: Long, isComplete: Boolean) {
+        coroutineScope.launch {
+            _subTaskLoadingId.value = subTaskId
+            runCatching {
+                val operation = if (isComplete) "complete" else "undo_complete"
+                ApiServiceImpl.callApi(
+                    "subtask_operation",
+                    listOf(
+                        "main_id" to mainTaskId.toString(),
+                        "edit_id" to subTaskId.toString(),
+                        "operation" to operation
+                    )
+                )
+            }.onSuccess {
+                fetchTasks()
+            }.onFailure {
+                log.error(it) {
+                    "onSubTaskStatusChanged"
+                }
+            }
+            _subTaskLoadingId.value = null
+        }
+    }
+
+    data class EditingTaskState(
+        val taskId: Long,
+        val task: TodoItem
+    )
 
     data class TaskState(
         val categories: List<TaskCategory> = emptyList(),
@@ -206,7 +251,7 @@ internal class TaskStore(
         val categoryExpanded: Boolean = false,
         val items: List<TodoItem> = emptyList(),
         val inputText: String = "",
-        val editingItemId: Long? = null,
+        val editingState: EditingTaskState? = null,
         val snackbarText: String? = null,
         val showAddWindow: Boolean = false,
     )

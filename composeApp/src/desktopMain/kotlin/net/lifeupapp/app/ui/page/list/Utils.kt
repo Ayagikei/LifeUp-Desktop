@@ -110,7 +110,7 @@ fun EnhancedLargeDialog(
                             .padding(end = 12.dp) // Make room for scrollbar
                             .verticalScroll(scrollState)
                     ) {
-                        Box(modifier = Modifier.padding(16.dp)) {
+                        Box(modifier = Modifier.padding(16.dp).heightIn(max = 600.dp)) {
                             content()
                         }
                     }
