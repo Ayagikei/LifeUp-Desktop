@@ -130,7 +130,7 @@ internal fun TaskDetailsViewDialog(
                 item {
                     DetailItem(
                         stringResource(Res.string.task_details_coins),
-                        if (item.task.coin == item.task.coinVariable) item.task.coin.toString()
+                        if (item.task.coinVariable == 0L) item.task.coin.toString()
                         else "${item.task.coin} - ${item.task.coin + item.task.coinVariable}"
                     )
                 }

@@ -197,6 +197,14 @@ private fun Item(
                 fontSize = 12.sp,
                 color = MaterialTheme.colors.unimportantText
             )
+            Spacer4dpH()
+            Box(modifier = Modifier.width(120.dp)) {
+                LinearProgressIndicator(
+                    progress = (item.exp - item.currentLevelExp).toFloat() / (item.exp - item.currentLevelExp + item.untilNextLevelExp).toFloat(),
+                    modifier = Modifier.fillMaxWidth().height(4.dp),
+                    color = color
+                )
+            }
         }
 
 

@@ -5,6 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import net.lifeupapp.app.base.Cache
 import net.lifeupapp.app.base.launchSafely
 import net.lifeupapp.app.datasource.ApiServiceImpl
 import net.lifeupapp.app.datasource.data.Skill
@@ -29,11 +30,22 @@ internal class StatusStore(
         val coin: Long
     )
 
+    private val skillsCache = Cache {
+        apiService.getSkills().map {
+            it.copy(
+                icon = if (it.icon.isBlank()) "" else {
+                    apiService.getIconUrl(it.icon)
+                }
+            )
+        }
+    }
+
     init {
         fetchSkills()
     }
 
     fun onRefresh() {
+        skillsCache.clear()
         fetchSkills()
     }
 
@@ -53,7 +65,7 @@ internal class StatusStore(
             }
             runCatching {
                 val skills = async {
-                    apiService.getSkills()
+                    skillsCache.get()
                 }
                 val coin = async {
                     apiService.getCoin()
@@ -63,13 +75,7 @@ internal class StatusStore(
                 val skills = it.skills
                 val coin = it.coin
                 setState {
-                    copy(skills = skills.map {
-                        it.copy(
-                            icon = if (it.icon.isBlank()) "" else {
-                                apiService.getIconUrl(it.icon)
-                            }
-                        )
-                    }, coin = coin)
+                    copy(skills = skills, coin = coin)
                 }
             }.onFailure {
                 log.error(it) {

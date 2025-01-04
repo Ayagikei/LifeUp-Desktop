@@ -300,7 +300,7 @@ private fun Task(
                                     )
                                     Spacer(modifier = Modifier.width(2.dp))
                                     Text(
-                                        text = if (item.task.coin == item.task.coinVariable)
+                                        text = if (item.task.coinVariable == 0L)
                                             "${item.task.coin}"
                                         else
                                             "${item.task.coin}-${item.task.coin + item.task.coinVariable}",

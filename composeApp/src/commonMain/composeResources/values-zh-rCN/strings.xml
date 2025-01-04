@@ -63,7 +63,7 @@
     <string name="add_tasks_title_base">基础</string>
     <string name="add_tasks_todo">待办</string>
     <string name="add_tasks_notes">备注</string>
-    <string name="add_tasks_frequency_none">无</string>
+    <string name="add_tasks_frequency_none">非重复</string>
     <string name="add_tasks_frequency_daily">每日</string>
     <string name="add_tasks_frequency_weekly">每周</string>
     <string name="add_tasks_frequency_monthly">每月</string>
@@ -103,7 +103,7 @@
     <string name="task_details_item_reward">物品奖励</string>
     <string name="task_details_item_icon">物品图标</string>
     <string name="task_details_no_item_reward">无物品奖励</string>
-    <string name="task_details_frequency_none">无</string>
+    <string name="task_details_frequency_none">非重复</string>
     <string name="task_details_frequency_daily">每日</string>
     <string name="task_details_frequency_weekly">每周</string>
     <string name="task_details_frequency_monthly">每月</string>
