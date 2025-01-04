@@ -10,6 +10,7 @@ import net.lifeupapp.app.base.launchSafely
 import net.lifeupapp.app.datasource.ApiServiceImpl
 import net.lifeupapp.app.datasource.data.Skill
 import net.lifeupapp.app.ui.AppStoreImpl
+import net.lifeupapp.app.ui.view.PageState
 import net.lifeupapp.app.utils.logger
 
 internal class StatusStore(
@@ -18,14 +19,18 @@ internal class StatusStore(
 ) {
 
     private val apiService = ApiServiceImpl
-
     private val log = this.logger
 
-    val state =
-        MutableStateFlow(StatusState(0, skills = emptyList(), coin = globalStore.coinValue ?: 0))
+    val state = MutableStateFlow(
+        StatusState(
+            pageState = PageState.Loading,
+            skills = emptyList(),
+            coin = globalStore.coinValue ?: 0
+        )
+    )
 
     data class StatusState(
-        val state: Int,
+        val pageState: PageState,
         val skills: List<Skill> = emptyList(),
         val coin: Long
     )
@@ -46,6 +51,7 @@ internal class StatusStore(
 
     fun onRefresh() {
         skillsCache.clear()
+        setState { copy(pageState = PageState.Loading) }
         fetchSkills()
     }
 
@@ -75,12 +81,17 @@ internal class StatusStore(
                 val skills = it.skills
                 val coin = it.coin
                 setState {
-                    copy(skills = skills, coin = coin)
+                    copy(
+                        skills = skills,
+                        coin = coin,
+                        pageState = if (skills.isEmpty()) PageState.Empty else PageState.Content
+                    )
                 }
             }.onFailure {
                 log.error(it) {
                     "fetchSkills"
                 }
+                setState { copy(pageState = PageState.Error(it.message ?: "未知错误")) }
                 delay(2000L)
                 fetchSkills()
             }

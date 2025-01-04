@@ -15,7 +15,6 @@ fun StatusScreen(modifier: Modifier = Modifier) {
     val model = remember { StatusStore(coroutineScope, globalStore) }
     val state = model.state.collectAsState(Dispatchers.Main).value
 
-
     StatusContent(
         modifier = modifier,
         items = state.skills,
@@ -23,6 +22,7 @@ fun StatusScreen(modifier: Modifier = Modifier) {
         onItemClicked = {
             // TODO
         },
-        onRefreshClick = model::onRefresh
+        onRefreshClick = model::onRefresh,
+        pageState = state.pageState
     )
 }

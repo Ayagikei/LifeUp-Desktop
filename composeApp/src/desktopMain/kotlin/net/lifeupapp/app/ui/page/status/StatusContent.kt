@@ -28,16 +28,18 @@ import net.lifeupapp.app.ui.page.config.Spacer4dpH
 import net.lifeupapp.app.ui.page.list.MARGIN_SCROLLBAR
 import net.lifeupapp.app.ui.page.list.rememberScrollbarAdapter
 import net.lifeupapp.app.ui.theme.unimportantText
+import net.lifeupapp.app.ui.view.PageState
+import net.lifeupapp.app.ui.view.StateLayout
 
 @Composable
 internal fun StatusContent(
     modifier: Modifier = Modifier,
-    coin: Long,
     items: List<Skill>,
+    coin: Long,
     onItemClicked: (id: Long) -> Unit,
-    onRefreshClick: () -> Unit
+    onRefreshClick: () -> Unit,
+    pageState: PageState
 ) {
-
     Column(modifier) {
         TopAppBar(title = {
             Text(text = Strings.status)
@@ -53,12 +55,17 @@ internal fun StatusContent(
                 addAll(items.map { ListItem.SkillType(it) })
             }
 
-
         Box(Modifier.weight(1F)) {
-            ListContent(
-                items = listItem,
-                onItemClicked = onItemClicked
-            )
+            StateLayout(
+                state = pageState,
+                emptyText = "暂无技能 🎯\n快去完成任务升级吧！",
+                modifier = Modifier.fillMaxSize()
+            ) {
+                ListContent(
+                    items = listItem,
+                    onItemClicked = onItemClicked
+                )
+            }
         }
     }
 }
