@@ -55,7 +55,7 @@ internal fun TaskDetailsViewDialog(
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(8.dp)
         ) {
             // 基础信息区域
             if (item.task.name.isNotBlank()) {
@@ -64,8 +64,36 @@ internal fun TaskDetailsViewDialog(
                 }
             }
 
+            // 子任务区域 - 移动到任务名称后面
+            if (item.task.subTasks.isNotEmpty()) {
+                item {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        stringResource(Res.string.task_details_subtasks),
+                        style = MaterialTheme.typography.caption.copy(color = Color.Gray)
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+
+                items(item.task.subTasks) { subTask ->
+                    SubTaskItem(
+                        subTask = subTask,
+                        mainTaskId = item.task.id ?: 0L,
+                        isLoading = subTaskLoadingId == subTask.id,
+                        onStatusChange = { isComplete ->
+                            taskStore.onSubTaskStatusChanged(
+                                mainTaskId = item.task.id ?: 0L,
+                                subTaskId = subTask.id,
+                                isComplete = isComplete
+                            )
+                        }
+                    )
+                }
+            }
+
             if (item.task.notes.isNotBlank()) {
                 item {
+                    Spacer(modifier = Modifier.height(16.dp))
                     DetailItem(stringResource(Res.string.task_details_notes), item.task.notes)
                 }
             }
@@ -143,33 +171,8 @@ internal fun TaskDetailsViewDialog(
                     }
                 }
             }
-
-            // 子任务区域
-            if (item.task.subTasks.isNotEmpty()) {
-                item {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        stringResource(Res.string.task_details_subtasks),
-                        style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.Bold)
-                    )
-                }
-
-                items(item.task.subTasks) { subTask ->
-                    SubTaskItem(
-                        subTask = subTask,
-                        mainTaskId = item.task.id ?: 0L,
-                        isLoading = subTaskLoadingId == subTask.id,
-                        onStatusChange = { isComplete ->
-                            taskStore.onSubTaskStatusChanged(
-                                mainTaskId = item.task.id ?: 0L,
-                                subTaskId = subTask.id,
-                                isComplete = isComplete
-                            )
-                        }
-                    )
-                }
-            }
         }
+
     }
 }
 
@@ -183,7 +186,7 @@ private fun SubTaskItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Checkbox(
@@ -193,23 +196,24 @@ private fun SubTaskItem(
                     onStatusChange(isChecked)
                 }
             },
-            enabled = !isLoading
+            enabled = !isLoading,
+            modifier = Modifier.padding(end = 4.dp)
         )
 
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 8.dp)
+        Box(
+            modifier = Modifier.weight(1f)
         ) {
+            // 主文本
             Text(
                 text = subTask.todo,
-                style = MaterialTheme.typography.body1.copy(
+                style = MaterialTheme.typography.body2.copy(
                     textDecoration = if (subTask.status == 1) TextDecoration.LineThrough else TextDecoration.None
-                )
+                ),
+                modifier = Modifier.fillMaxWidth()
             )
 
-            // 子任务奖励展示
-            if (subTask.exp > 0 || subTask.coin != null || subTask.items.isNotEmpty()) {
+            // 奖励文本
+            if (subTask.exp > 0 || (subTask.coin ?: 0 > 0) || subTask.items.isNotEmpty()) {
                 Text(
                     text = buildString {
                         if (subTask.exp > 0) {
@@ -225,14 +229,19 @@ private fun SubTaskItem(
                         }
                     },
                     style = MaterialTheme.typography.caption,
-                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
+                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomStart) // 将奖励文本对齐到底部
                 )
             }
         }
 
         if (isLoading) {
             CircularProgressIndicator(
-                modifier = Modifier.size(16.dp),
+                modifier = Modifier
+                    .padding(start = 8.dp)
+                    .size(16.dp),
                 strokeWidth = 2.dp
             )
         }
