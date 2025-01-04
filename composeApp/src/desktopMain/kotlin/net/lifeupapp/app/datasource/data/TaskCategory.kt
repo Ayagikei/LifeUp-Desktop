@@ -1,4 +1,4 @@
-package datasource.data
+package net.lifeupapp.app.datasource.data
 
 import kotlinx.serialization.Serializable
 
@@ -50,7 +50,7 @@ data class TaskCategory(
     }
 
     fun isNormalList(): Boolean {
-        return (id ?: 0 > 0L) && type == 0
+        return ((id ?: 0) > 0L) && type == 0
     }
 
     fun isNotArchived(): Boolean {

@@ -1,4 +1,4 @@
-package ui.page.item
+package net.lifeupapp.app.ui.page.item
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.VerticalScrollbar
@@ -22,21 +22,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import datasource.data.ShopCategory
 import lifeupdesktop.composeapp.generated.resources.Res
 import lifeupdesktop.composeapp.generated.resources.ic_coin
 import lifeupdesktop.composeapp.generated.resources.ic_pic_loading_cir
-import logger
+import net.lifeupapp.app.datasource.data.ShopCategory
 import net.lifeupapp.app.datasource.data.ShopItem
+import net.lifeupapp.app.ui.page.config.Spacer4dpH
+import net.lifeupapp.app.ui.page.list.MARGIN_SCROLLBAR
+import net.lifeupapp.app.ui.page.list.rememberScrollbarAdapter
 import net.lifeupapp.app.ui.text.StringText
 import net.lifeupapp.app.ui.theme.subTitle3
 import net.lifeupapp.app.ui.theme.unimportantText
-import ui.page.config.Spacer4dpH
-import ui.page.list.MARGIN_SCROLLBAR
-import ui.page.list.rememberScrollbarAdapter
-import ui.view.AsyncImage
-import ui.view.loadImageBitmap
-import java.util.logging.Level
+import net.lifeupapp.app.ui.view.AsyncImage
+import net.lifeupapp.app.ui.view.loadImageBitmap
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 internal fun ShopContent(
@@ -196,8 +195,6 @@ private fun Item(
     ) {
         Spacer(modifier = Modifier.width(8.dp))
 
-
-        logger.log(Level.INFO, "item.icon: ${item.icon}")
         AsyncImage(
             condition = item.icon.isNotBlank() && item.icon.endsWith("/").not(),
             load = {
@@ -210,7 +207,7 @@ private fun Item(
             modifier = Modifier.size(56.dp),
             onError = {
                 Image(
-                    painter = org.jetbrains.compose.resources.painterResource(Res.drawable.ic_pic_loading_cir),
+                    painter = painterResource(Res.drawable.ic_pic_loading_cir),
                     contentDescription = "item icon",
                     modifier = Modifier.size(56.dp)
                 )

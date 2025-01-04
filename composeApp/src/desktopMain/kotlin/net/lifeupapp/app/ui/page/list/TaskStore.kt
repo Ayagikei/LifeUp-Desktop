@@ -1,25 +1,21 @@
 package net.lifeupapp.app.ui.page.list
 
-import datasource.ApiServiceImpl
-import datasource.data.TaskCategory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import logger
 import net.lifeupapp.app.base.launchSafely
+import net.lifeupapp.app.datasource.ApiServiceImpl
+import net.lifeupapp.app.datasource.data.TaskCategory
 import net.lifeupapp.app.ui.AppStoreImpl
-import java.util.logging.Level
-import java.util.logging.Logger
+import net.lifeupapp.app.utils.logger
 
 internal class TaskStore(
     private val coroutineScope: CoroutineScope,
     private val globalStore: AppStoreImpl
 ) {
+
+    private val log = this.logger
 
     init {
         fetchCategories()
@@ -49,7 +45,9 @@ internal class TaskStore(
                     fetchTasks()
                 }
             }.onFailure {
-                logger.log(Level.SEVERE, it.stackTraceToString())
+                log.error(it) {
+                    "fetchCategories"
+                }
                 delay(2000L)
             }
         }
@@ -73,7 +71,9 @@ internal class TaskStore(
                         }
                     }
                 }.onFailure {
-                    logger.log(Level.SEVERE, it.stackTraceToString())
+                    log.error(it) {
+                        "fetchTasks"
+                    }
                     delay(2000L)
                 }
             }
@@ -101,7 +101,9 @@ internal class TaskStore(
                     delay(500)
                     fetchTasks()
                 }.onFailure {
-                    Logger.getLogger("ApiServiceImpl").log(Level.SEVERE, it.stackTraceToString())
+                    log.error(it) {
+                        "completeTask"
+                    }
                     onItemDoneChanged(id, false)
                 }
             }

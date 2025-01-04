@@ -28,10 +28,13 @@ kotlin {
             implementation(libs.okhttp.logging.interceptor)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.jmdns)
+
+            api("org.lighthousegames:logging:1.5.0")
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
+            implementation("ch.qos.logback:logback-classic:1.4.11")
         }
     }
 }

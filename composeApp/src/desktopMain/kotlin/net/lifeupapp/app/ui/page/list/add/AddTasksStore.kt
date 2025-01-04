@@ -1,16 +1,15 @@
 package net.lifeupapp.app.ui.page.list.add
 
-import datasource.ApiService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import logger
+import net.lifeupapp.app.datasource.ApiService
 import net.lifeupapp.app.ui.AppStoreImpl
 import net.lifeupapp.app.ui.Strings
-import java.util.logging.Level
+import org.lighthousegames.logging.logging
 
 internal class AddTasksStore(
     private val coroutineScope: CoroutineScope,
@@ -18,8 +17,12 @@ internal class AddTasksStore(
     defaultCategoryId: Long
 ) {
 
+    private val logger = logging("AddTasksStore")
+
     init {
-        logger.log(Level.INFO, "default category id: $defaultCategoryId")
+        logger.info {
+            "default category id: $defaultCategoryId"
+        }
     }
 
     var state = MutableStateFlow(AddTaskState(defaultCategoryId, ""))

@@ -1,31 +1,32 @@
-package ui.page.feelings
+package net.lifeupapp.app.ui.page.feelings
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import datasource.ApiServiceImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import logger
 import net.lifeupapp.app.base.launchSafely
+import net.lifeupapp.app.datasource.ApiServiceImpl
 import net.lifeupapp.app.datasource.data.Feelings
 import net.lifeupapp.app.ui.AppStoreImpl
 import net.lifeupapp.app.ui.text.Localization
-import utils.md5
+import net.lifeupapp.app.utils.logger
+import net.lifeupapp.app.utils.md5
 import java.io.File
 import java.net.URL
 import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.logging.Level
+import java.util.*
 
 
 internal class FeelingsStore(
     private val coroutineScope: CoroutineScope,
     private val globalStore: AppStoreImpl
 ) {
+
+    private val log = this.logger
 
     private val limit = 30
     private var offset = 0
@@ -185,7 +186,9 @@ internal class FeelingsStore(
                         fetchFeelings()
                     }
                 }.onFailure {
-                    logger.log(Level.SEVERE, it.stackTraceToString())
+                    log.error(it) {
+                        "fetchFeelings"
+                    }
                     delay(2000L)
                     fetchFeelings()
                 }
@@ -196,11 +199,15 @@ internal class FeelingsStore(
     fun addFeeling(content: String, time: Long, attachments: List<String>) {
         coroutineScope.launchSafely {
             val finalFiles = attachments.map { File(it) }.filter { it.exists() }
-            logger.info("addFeeling finalFiles: $finalFiles")
+            log.info {
+                "addFeeling finalFiles: $finalFiles"
+            }
             val transformUris = if (finalFiles.isEmpty()) emptyList<String>() else {
                 apiService.uploadFilesToUris(finalFiles)
             }
-            logger.info("addFeeling transformUris: $transformUris")
+            log.info {
+                "addFeeling transformUris: $transformUris"
+            }
             apiService.createOrUpdateFeeling(
                 content = content,
                 time = time,

@@ -3,17 +3,17 @@ package net.lifeupapp.app.ui.page.save
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import datasource.ApiServiceImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import logger
+import net.lifeupapp.app.datasource.ApiServiceImpl
+import org.lighthousegames.logging.logging
 import java.io.File
 import java.net.URL
-import java.util.logging.Level
 
 internal class SaveStore(
     private val coroutineScope: CoroutineScope,
 ) {
+    private val log = logging("SaveStore")
 
     private val apiService = ApiServiceImpl
 
@@ -30,7 +30,9 @@ internal class SaveStore(
                 apiService.exportDataToDir(withMedia)
             }.onSuccess {
                 runCatching {
-                    logger.log(Level.INFO, "Export data with url: $it")
+                    log.info {
+                        "Export data with url: $it"
+                    }
                     URL(it).openStream().use { input ->
                         val file = File(dir, "backup_${System.currentTimeMillis()}.lfbak")
                         if (file.exists()) {
@@ -43,12 +45,18 @@ internal class SaveStore(
                         }
                     }
                 }.onSuccess {
-                    logger.log(Level.INFO, "Export data success")
+                    log.info {
+                        "Export data success"
+                    }
                 }.onFailure {
-                    logger.log(Level.SEVERE, "Failed to export data", it)
+                    log.error(it) {
+                        "Failed to export data"
+                    }
                 }
             }.onFailure {
-                logger.log(Level.SEVERE, "Failed to export data", it)
+                log.error(it) {
+                    "Failed to export data"
+                }
             }
         }
     }
@@ -58,9 +66,13 @@ internal class SaveStore(
             runCatching {
                 apiService.importData(file)
             }.onSuccess {
-
+                log.info {
+                    "Import data success"
+                }
             }.onFailure {
-
+                log.error(it) {
+                    "Failed to import data"
+                }
             }
         }
     }

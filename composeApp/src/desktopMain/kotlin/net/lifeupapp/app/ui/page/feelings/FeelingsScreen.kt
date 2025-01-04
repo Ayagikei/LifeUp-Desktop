@@ -1,4 +1,4 @@
-package ui.page.feelings
+package net.lifeupapp.app.ui.page.feelings
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -13,15 +13,14 @@ import kotlinx.coroutines.withContext
 import net.lifeupapp.app.base.launchSafely
 import net.lifeupapp.app.ui.AppStore
 import net.lifeupapp.app.ui.page.feelings.add.FeelingsInputDialog
+import net.lifeupapp.app.ui.page.list.Dialog
 import net.lifeupapp.app.ui.text.StringText
-import ui.page.list.Dialog
-import utils.md5
+import net.lifeupapp.app.utils.md5
 import java.awt.Desktop
 import java.io.File
 import java.net.URL
 import javax.swing.JFileChooser
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun FeelingsScreen(modifier: Modifier = Modifier) {
     val coroutineScope = rememberCoroutineScope()

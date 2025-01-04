@@ -4,16 +4,18 @@ package net.lifeupapp.app.service
 /**
  * Service to discover the lifeup cloud server
  */
-import logger
+import net.lifeupapp.app.utils.logger
 import java.net.Inet4Address
 import java.net.InetAddress
 import java.net.NetworkInterface
-import java.util.logging.Level
 import javax.jmdns.JmDNS
 import javax.jmdns.ServiceEvent
 import javax.jmdns.ServiceListener
 
 class MdnsServiceDiscovery {
+
+    private val log = this.logger
+
 
     data class IpAndPort(val ip: String, val port: String) {
         override fun toString(): String {
@@ -26,30 +28,42 @@ class MdnsServiceDiscovery {
 
     private val listener = object : ServiceListener {
         override fun serviceAdded(event: ServiceEvent?) {
-            logger.log(Level.INFO, "Service added: ${event?.info}")
+            log.info {
+                "Service added: ${event?.info}"
+            }
         }
 
         override fun serviceRemoved(event: ServiceEvent?) {
-            logger.log(Level.INFO, "Service removed: ${event?.info}")
+            log.info {
+                "Service removed: ${event?.info}"
+            }
             event?.info?.inetAddresses?.firstOrNull()?.hostAddress?.let {
                 ipAndPorts.remove(it)
             }
         }
 
         override fun serviceResolved(event: ServiceEvent?) {
-            logger.log(Level.INFO, "Service resolved: ${event?.info}")
+            log.info {
+                "Service resolved: ${event?.info}"
+            }
             runCatching {
                 if (event?.name?.contains("lifeup_cloud") == true) {
-                    logger.log(Level.INFO, "Service resolved, address: ${event.info.inetAddresses}")
+                    log.info {
+                        "Service resolved, address: ${event.info.inetAddresses}"
+                    }
 
                     val port = event.info.getPropertyString("port")
                     if (port.isNullOrEmpty()) {
-                        logger.log(Level.INFO, "Service resolved, but data has no port")
+                        log.info {
+                            "Service resolved, but data has no port"
+                        }
                         return@runCatching
                     }
 
                     val ip = event.info.inetAddresses.first().hostAddress
-                    logger.log(Level.INFO, "Service resolved, ip: $ip")
+                    log.info {
+                        "Service resolved, ip: $ip"
+                    }
                     ipAndPorts[ip] = IpAndPort(ip, port)
                 }
             }.onFailure {
@@ -61,19 +75,16 @@ class MdnsServiceDiscovery {
 
     private fun logNetworkInterfaces() {
         NetworkInterface.getNetworkInterfaces().asSequence().forEach { networkInterface ->
-            logger.log(
-                Level.INFO,
+            log.info {
                 "Interface: ${networkInterface.displayName}, Name: ${networkInterface.name}"
-            )
-            logger.log(
-                Level.INFO,
+            }
+            log.info {
                 "  Is up: ${networkInterface.isUp}, Is loopback: ${networkInterface.isLoopback}, Is point to point: ${networkInterface.isPointToPoint}"
-            )
+            }
             networkInterface.inetAddresses.asSequence().forEach { address ->
-                logger.log(
-                    Level.INFO,
+                log.info {
                     "  Address: ${address.hostAddress}, Is IPv4: ${address is Inet4Address}"
-                )
+                }
             }
         }
     }
@@ -93,14 +104,15 @@ class MdnsServiceDiscovery {
         logNetworkInterfaces()
 
         val (networkInterface, address) = findSuitableNetworkInterface() ?: run {
-            logger.log(Level.SEVERE, "No suitable network interface and IPv4 address found")
+            log.error {
+                "No suitable network interface and IPv4 address found"
+            }
             return@runCatching
         }
 
-        logger.log(
-            Level.INFO,
+        log.info {
             "Selected interface: ${networkInterface.displayName}, address: ${address.hostAddress}"
-        )
+        }
 
         // Create a JmDNS instance
         jmdns = JmDNS.create(address)
@@ -108,10 +120,9 @@ class MdnsServiceDiscovery {
         // Add a service listener
         jmdns?.addServiceListener("_lifeup._tcp.local.", listener)
 
-        logger.log(
-            Level.INFO,
+        log.info {
             "JmDNS started on interface: ${networkInterface.displayName}, address: ${address.hostAddress}"
-        )
+        }
     }
 
     fun unregister() {

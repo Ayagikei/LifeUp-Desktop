@@ -1,4 +1,4 @@
-package ui.page.config
+package net.lifeupapp.app.ui.page.config
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.VerticalScrollbar
@@ -22,14 +22,13 @@ import kotlinx.coroutines.launch
 import lifeupdesktop.composeapp.generated.resources.Res
 import lifeupdesktop.composeapp.generated.resources.api_token_label
 import net.lifeupapp.app.base.Val
+import net.lifeupapp.app.service.MdnsServiceDiscovery
 import net.lifeupapp.app.ui.AppStore
 import net.lifeupapp.app.ui.ScaffoldState
 import net.lifeupapp.app.ui.Strings
-import net.lifeupapp.app.ui.page.config.ConfigStore
+import net.lifeupapp.app.ui.page.list.Dialog
 import net.lifeupapp.app.ui.theme.unimportantText
 import org.jetbrains.compose.resources.stringResource
-import net.lifeupapp.app.service.MdnsServiceDiscovery
-import ui.page.list.Dialog
 import java.awt.Desktop
 import java.net.URI
 

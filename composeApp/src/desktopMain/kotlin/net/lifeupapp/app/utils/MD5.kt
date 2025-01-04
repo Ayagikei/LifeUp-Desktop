@@ -1,4 +1,4 @@
-package utils
+package net.lifeupapp.app.utils
 
 import java.security.MessageDigest
 

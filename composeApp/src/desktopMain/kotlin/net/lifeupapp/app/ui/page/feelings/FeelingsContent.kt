@@ -1,4 +1,4 @@
-package ui.page.feelings
+package net.lifeupapp.app.ui.page.feelings
 
 import androidx.compose.foundation.HorizontalScrollbar
 import androidx.compose.foundation.Image
@@ -27,17 +27,18 @@ import lifeupdesktop.composeapp.generated.resources.download_24px
 import lifeupdesktop.composeapp.generated.resources.ic_coin
 import lifeupdesktop.composeapp.generated.resources.ic_pic_loading_cir
 import net.lifeupapp.app.datasource.data.Feelings
+import net.lifeupapp.app.ui.page.config.Spacer4dpH
+import net.lifeupapp.app.ui.page.config.Spacer8dpH
+import net.lifeupapp.app.ui.page.list.MARGIN_SCROLLBAR
+import net.lifeupapp.app.ui.page.list.rememberScrollbarAdapter
 import net.lifeupapp.app.ui.text.Localization
 import net.lifeupapp.app.ui.text.StringText
 import net.lifeupapp.app.ui.theme.important
 import net.lifeupapp.app.ui.theme.unimportantText
+import net.lifeupapp.app.ui.view.AsyncImage
+import net.lifeupapp.app.ui.view.loadImageBitmap
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
-import ui.page.config.Spacer4dpH
-import ui.page.config.Spacer8dpH
-import ui.page.list.MARGIN_SCROLLBAR
-import ui.page.list.rememberScrollbarAdapter
-import ui.view.AsyncImage
-import ui.view.loadImageBitmap
 
 @Composable
 internal fun FeelingsContent(
@@ -186,7 +187,7 @@ private fun Item(
                                 modifier = Modifier.size(156.dp),
                                 onError = {
                                     Image(
-                                        painter = org.jetbrains.compose.resources.painterResource(
+                                        painter = painterResource(
                                             Res.drawable.ic_pic_loading_cir
                                         ),
                                         contentDescription = "skill icon",

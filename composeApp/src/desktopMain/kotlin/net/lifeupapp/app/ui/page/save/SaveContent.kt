@@ -27,10 +27,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import lifeupdesktop.composeapp.generated.resources.*
+import net.lifeupapp.app.ui.page.list.VerticalScrollbar
+import net.lifeupapp.app.ui.page.list.rememberScrollbarAdapter
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
-import ui.page.list.VerticalScrollbar
-import ui.page.list.rememberScrollbarAdapter
 import java.awt.EventQueue
 import java.awt.datatransfer.DataFlavor
 import java.io.File

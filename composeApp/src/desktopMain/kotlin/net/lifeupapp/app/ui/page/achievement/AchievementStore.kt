@@ -1,23 +1,24 @@
-package ui.page.achievement
+package net.lifeupapp.app.ui.page.achievement
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import datasource.ApiServiceImpl
-import datasource.data.Achievement
-import datasource.data.AchievementCategory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import logger
 import net.lifeupapp.app.base.launchSafely
+import net.lifeupapp.app.datasource.ApiServiceImpl
+import net.lifeupapp.app.datasource.data.Achievement
+import net.lifeupapp.app.datasource.data.AchievementCategory
 import net.lifeupapp.app.ui.AppStoreImpl
-import java.util.logging.Level
+import net.lifeupapp.app.utils.logger
 
 internal class AchievementStore(
     private val coroutineScope: CoroutineScope,
     private val globalStore: AppStoreImpl
 ) {
+
+    private val log = this.logger
 
     private val apiService = ApiServiceImpl
     var state: AchievementState by mutableStateOf(
@@ -103,7 +104,9 @@ internal class AchievementStore(
                 }
                 fetchAchievement(state.currentCategoryId ?: return@launchSafely)
             }.onFailure {
-                logger.log(Level.SEVERE, it.stackTraceToString())
+                log.error(it) {
+                    "fetchCategories"
+                }
                 delay(2000L)
                 fetchCategories()
             }
@@ -124,7 +127,9 @@ internal class AchievementStore(
                     })
                 }
             }.onFailure {
-                logger.log(Level.SEVERE, it.stackTraceToString())
+                log.error(it) {
+                    "fetchAchievement"
+                }
                 delay(2000L)
                 fetchCategories()
             }

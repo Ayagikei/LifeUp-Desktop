@@ -18,21 +18,19 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import datasource.data.Skill
-import datasource.data.TaskCategory
 import lifeupdesktop.composeapp.generated.resources.*
 import net.lifeupapp.app.datasource.data.ShopItem
+import net.lifeupapp.app.datasource.data.Skill
+import net.lifeupapp.app.datasource.data.TaskCategory
 import net.lifeupapp.app.ui.page.status.getLocalIconFilePathBySkillType
+import net.lifeupapp.app.ui.view.AsyncImage
+import net.lifeupapp.app.ui.view.loadImageBitmap
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import ui.page.list.EnhancedLargeDialog
-import ui.view.AsyncImage
-import ui.view.loadImageBitmap
 import java.awt.Desktop
 import java.net.URI
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun TaskDetailsViewDialog(
     item: TodoItem,

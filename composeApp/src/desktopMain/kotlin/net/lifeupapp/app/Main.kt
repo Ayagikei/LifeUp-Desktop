@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
 import lifeupdesktop.composeapp.generated.resources.Res
 import lifeupdesktop.composeapp.generated.resources.book_24px
 import lifeupdesktop.composeapp.generated.resources.icon
@@ -35,24 +34,23 @@ import net.lifeupapp.app.ui.AppStore
 import net.lifeupapp.app.ui.AppStoreImpl
 import net.lifeupapp.app.ui.ScaffoldState
 import net.lifeupapp.app.ui.page.Screen
+import net.lifeupapp.app.ui.page.achievement.AchievementScreen
+import net.lifeupapp.app.ui.page.config.ConfigScreen
+import net.lifeupapp.app.ui.page.feelings.FeelingsScreen
 import net.lifeupapp.app.ui.page.item.ShopScreen
+import net.lifeupapp.app.ui.page.list.TasksScreen
+import net.lifeupapp.app.ui.page.list.VerticalScrollbar
+import net.lifeupapp.app.ui.page.list.rememberScrollbarAdapter
 import net.lifeupapp.app.ui.page.save.SaveScreen
+import net.lifeupapp.app.ui.page.status.StatusScreen
 import net.lifeupapp.app.ui.text.StringText
 import net.lifeupapp.app.ui.theme.AppTheme
+import net.lifeupapp.app.ui.view.fakeDialog
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
-import ui.page.achievement.AchievementScreen
-import ui.page.config.ConfigScreen
-import ui.page.feelings.FeelingsScreen
-import ui.page.list.TasksScreen
-import ui.page.list.VerticalScrollbar
-import ui.page.list.rememberScrollbarAdapter
-import ui.page.status.StatusScreen
-import ui.view.fakeDialog
 import java.awt.Toolkit
 import java.awt.event.WindowEvent
-import java.util.logging.Logger
 import javax.swing.UIManager
 import kotlin.system.exitProcess
 
@@ -210,7 +208,6 @@ fun CustomNavigationHost(
 
 @OptIn(ExperimentalUnitApi::class, ExperimentalComposeUiApi::class)
 fun main() {
-
     var lastError: Throwable? by mutableStateOf(null)
 
     application(exitProcessOnExit = false) {

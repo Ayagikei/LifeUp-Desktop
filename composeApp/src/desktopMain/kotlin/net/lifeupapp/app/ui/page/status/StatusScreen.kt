@@ -1,4 +1,4 @@
-package ui.page.status
+package net.lifeupapp.app.ui.page.status
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -7,8 +7,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.Dispatchers
 import net.lifeupapp.app.ui.AppStore
-import net.lifeupapp.app.ui.page.status.StatusContent
-import net.lifeupapp.app.ui.page.status.StatusStore
 
 @Composable
 fun StatusScreen(modifier: Modifier = Modifier) {

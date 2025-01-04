@@ -15,6 +15,6 @@ class HttpException : RuntimeException {
         }
     }
 
-    override val message: String?
+    override val message: String
         get() = "Unexpected http error: $error"
 }

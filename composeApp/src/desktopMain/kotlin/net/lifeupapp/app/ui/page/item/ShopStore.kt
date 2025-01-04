@@ -1,25 +1,25 @@
 package net.lifeupapp.app.ui.page.item
 
-import datasource.ApiServiceImpl
-import datasource.data.ShopCategory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
-import logger
 import net.lifeupapp.app.base.launchSafely
+import net.lifeupapp.app.datasource.ApiServiceImpl
 import net.lifeupapp.app.datasource.constants.ItemPurchaseResult
+import net.lifeupapp.app.datasource.data.ShopCategory
 import net.lifeupapp.app.datasource.data.ShopItem
 import net.lifeupapp.app.ui.AppStoreImpl
-import java.util.logging.Level
+import net.lifeupapp.app.utils.logger
 
 internal class ShopStore(
     private val coroutineScope: CoroutineScope,
     private val globalStore: AppStoreImpl
 ) {
 
+    private val log = this.logger
     private val apiService = ApiServiceImpl
 
     private val purchaseResultEvent = Channel<ItemPurchaseResult>()
@@ -100,7 +100,9 @@ internal class ShopStore(
                     copy(coin = it.getOrNull())
                 }
             }.onFailure {
-                logger.log(Level.SEVERE, it.stackTraceToString())
+                log.error(it) {
+                    "fetchCoin"
+                }
                 delay(2000L)
                 fetchCoin()
             }
@@ -127,7 +129,9 @@ internal class ShopStore(
                 }
                 fetchItems(state.value.currentCategoryId ?: return@launchSafely)
             }.onFailure {
-                logger.log(Level.SEVERE, it.stackTraceToString())
+                log.error(it) {
+                    "fetchCategories"
+                }
                 delay(2000L)
                 fetchCategories()
             }
@@ -151,7 +155,9 @@ internal class ShopStore(
                     )
                 }
             }.onFailure {
-                logger.log(Level.SEVERE, it.stackTraceToString())
+                log.error(it) {
+                    "fetchItems"
+                }
                 delay(2000L)
                 fetchCategories()
             }
@@ -169,7 +175,9 @@ internal class ShopStore(
                 purchaseResultEvent.send(result)
                 onRefresh()
             }.onFailure {
-                logger.log(Level.SEVERE, it.stackTraceToString())
+                log.error(it) {
+                    "purchaseItem"
+                }
             }
         }
     }

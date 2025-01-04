@@ -1,4 +1,4 @@
-package utils
+package net.lifeupapp.app.utils
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb

@@ -1,35 +1,36 @@
 package net.lifeupapp.app.ui
 
-import AppScope
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import base.OkHttpClientHolder
-import datasource.ApiService
-import datasource.ApiServiceImpl
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import lifeupdesktop.composeapp.generated.resources.*
-import logger
+import net.lifeupapp.app.base.OkHttpClientHolder
+import net.lifeupapp.app.datasource.ApiService
+import net.lifeupapp.app.datasource.ApiServiceImpl
 import net.lifeupapp.app.datasource.net.ApiError
 import net.lifeupapp.app.datasource.net.HttpException
+import net.lifeupapp.app.service.MdnsServiceDiscovery
 import net.lifeupapp.app.ui.text.Localization
 import net.lifeupapp.app.ui.text.StringText
+import net.lifeupapp.app.utils.AppScope
 import net.lifeupapp.app.utils.ifNullOrBlank
+import net.lifeupapp.app.utils.logger
 import okhttp3.HttpUrl
 import org.jetbrains.compose.resources.getString
-import net.lifeupapp.app.service.MdnsServiceDiscovery
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
-import java.util.logging.Level
 import java.util.prefs.Preferences
 
 class AppStoreImpl(
     private val coroutineScope: CoroutineScope
 ) {
+
+    private val log = this.logger
 
     val resourceDir
         get() = System.getenv("APPDATA").ifNullOrBlank {
@@ -90,7 +91,9 @@ class AppStoreImpl(
                     emit(it)
                 }.onFailure {
                     emit(null)
-                    logger.log(Level.SEVERE, "get coin error", it)
+                    log.error(it) {
+                        "get coin error"
+                    }
                 }
             }
             kotlinx.coroutines.delay(1500)
@@ -156,7 +159,9 @@ class AppStoreImpl(
             HttpUrl.Builder().scheme("http").host(ip).port(port = port.toIntOrNull() ?: 13276)
                 .build()
         }.onFailure {
-            logger.log(Level.SEVERE, "update ip or port error", it)
+            log.error(it) {
+                "update ip or port error"
+            }
         }.isSuccess
 
         isReadyToCall = validHost
@@ -172,6 +177,9 @@ class AppStoreImpl(
 
 
     fun fetchCoin() {
+        log.info {
+            "fetchCoin"
+        }
         if (fetching.get()) {
             return
         }
@@ -207,13 +215,17 @@ class AppStoreImpl(
 
                             null -> getString(Res.string.api_check_general_unknown_error) + "\n\n${error.javaClass.name} : ${error.message}"
                         }
-                        logger.log(Level.SEVERE, "get coin error", error)
+                        log.error(error) {
+                            "get coin error"
+                        }
                     }
                 )
             }.onFailure { error ->
                 coinValue = null
                 lastError = getString(Res.string.api_check_timeout_error)
-                logger.log(Level.SEVERE, "get coin error", error)
+                log.error(error) {
+                    "get coin error"
+                }
             }
             fetching.set(false)
         }

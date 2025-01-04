@@ -31,10 +31,11 @@ import androidx.compose.ui.window.DialogWindow
 import androidx.compose.ui.window.rememberDialogState
 import kotlinx.coroutines.launch
 import lifeupdesktop.composeapp.generated.resources.*
+import net.lifeupapp.app.ui.page.list.rememberScrollbarAdapter
+import net.lifeupapp.app.ui.view.AsyncImage
+import net.lifeupapp.app.ui.view.loadImageBitmap
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import ui.page.list.rememberScrollbarAdapter
-import ui.view.AsyncImage
-import ui.view.loadImageBitmap
 import java.io.File
 import java.time.Instant
 import java.time.LocalDate
@@ -232,7 +233,7 @@ fun FeelingsInputDialog(
                                     contentScale = ContentScale.Crop,
                                     onError = {
                                         Image(
-                                            painter = org.jetbrains.compose.resources.painterResource(
+                                            painter = painterResource(
                                                 Res.drawable.ic_pic_loading_cir
                                             ),
                                             contentDescription = "skill icon",

@@ -1,17 +1,15 @@
-package datasource
+package net.lifeupapp.app.datasource
 
-import base.OkHttpClientHolder
-import base.json
-import datasource.data.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*
-import logger
+import net.lifeupapp.app.base.OkHttpClientHolder
+import net.lifeupapp.app.base.json
 import net.lifeupapp.app.datasource.constants.ItemPurchaseResult
-import net.lifeupapp.app.datasource.data.Feelings
-import net.lifeupapp.app.datasource.data.ShopItem
+import net.lifeupapp.app.datasource.data.*
 import net.lifeupapp.app.datasource.net.*
+import net.lifeupapp.app.utils.logger
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.MediaType.Companion.toMediaType
@@ -21,9 +19,10 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.IOException
 import java.util.*
-import java.util.logging.Level
 
 object ApiServiceImpl : ApiService {
+
+    private val log = this.logger
 
     private val okHttpClient
         get() = OkHttpClientHolder.okHttpClient
@@ -309,7 +308,9 @@ object ApiServiceImpl : ApiService {
         return withContext(Dispatchers.IO) {
             try {
                 val lifeUpUrl = buildLifeUpUrl(api, params)
-                this@ApiServiceImpl.logger.log(Level.INFO, "Calling API: $lifeUpUrl")
+                this@ApiServiceImpl.logger.info {
+                    "Calling API: $lifeUpUrl"
+                }
                 val url =
                     (OkHttpClientHolder.host + "/api/contentprovider").toHttpUrl().newBuilder()
                         .addQueryParameter("url", lifeUpUrl)

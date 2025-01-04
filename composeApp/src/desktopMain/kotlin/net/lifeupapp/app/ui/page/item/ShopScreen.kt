@@ -8,21 +8,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import base.json
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import lifeupdesktop.composeapp.generated.resources.*
+import net.lifeupapp.app.base.json
 import net.lifeupapp.app.base.launchSafely
 import net.lifeupapp.app.datasource.constants.ItemPurchaseResult
 import net.lifeupapp.app.datasource.data.ShopItem
 import net.lifeupapp.app.ui.AppStore
 import net.lifeupapp.app.ui.ScaffoldState
+import net.lifeupapp.app.ui.page.config.Spacer8dpH
+import net.lifeupapp.app.ui.page.list.Dialog
 import net.lifeupapp.app.ui.text.StringText
 import org.jetbrains.compose.resources.stringResource
-import ui.page.config.Spacer8dpH
-import ui.page.item.ListItem
-import ui.page.item.ShopContent
-import ui.page.list.Dialog
 
 @Composable
 fun ShopScreen(modifier: Modifier = Modifier) {

@@ -1,4 +1,4 @@
-package base
+package net.lifeupapp.app.base
 
 import kotlinx.serialization.json.Json
 

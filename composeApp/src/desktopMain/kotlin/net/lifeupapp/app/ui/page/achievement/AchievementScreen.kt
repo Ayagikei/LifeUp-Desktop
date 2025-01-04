@@ -1,4 +1,4 @@
-package ui.page.achievement
+package net.lifeupapp.app.ui.page.achievement
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,13 +10,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import base.json
-import datasource.data.Achievement
 import kotlinx.serialization.encodeToString
+import net.lifeupapp.app.base.json
+import net.lifeupapp.app.datasource.data.Achievement
 import net.lifeupapp.app.ui.AppStore
+import net.lifeupapp.app.ui.page.config.Spacer8dpH
+import net.lifeupapp.app.ui.page.list.Dialog
 import net.lifeupapp.app.ui.text.StringText
-import ui.page.config.Spacer8dpH
-import ui.page.list.Dialog
 
 @Composable
 fun AchievementScreen(modifier: Modifier = Modifier) {

@@ -1,4 +1,4 @@
-package ui.page.template
+package net.lifeupapp.app.ui.page.template
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

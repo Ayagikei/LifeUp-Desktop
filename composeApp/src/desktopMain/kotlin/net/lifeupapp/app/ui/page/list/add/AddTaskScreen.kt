@@ -18,8 +18,6 @@ import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import datasource.data.Skill
-import datasource.data.TaskCategory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import lifeupdesktop.composeapp.generated.resources.Res
@@ -28,19 +26,22 @@ import lifeupdesktop.composeapp.generated.resources.ic_coin
 import lifeupdesktop.composeapp.generated.resources.ic_pic_loading_cir
 import net.lifeupapp.app.base.launchSafely
 import net.lifeupapp.app.datasource.data.ShopItem
+import net.lifeupapp.app.datasource.data.Skill
+import net.lifeupapp.app.datasource.data.TaskCategory
 import net.lifeupapp.app.ui.AppStore
 import net.lifeupapp.app.ui.Strings
+import net.lifeupapp.app.ui.page.config.Spacer16dpH
+import net.lifeupapp.app.ui.page.config.Spacer16dpW
+import net.lifeupapp.app.ui.page.config.Spacer24dpH
+import net.lifeupapp.app.ui.page.config.Subtitle
 import net.lifeupapp.app.ui.page.item.ShopStore
 import net.lifeupapp.app.ui.page.list.TaskStore
 import net.lifeupapp.app.ui.page.status.StatusStore
 import net.lifeupapp.app.ui.page.status.getLocalIconFilePathBySkillType
+import net.lifeupapp.app.ui.view.AsyncImage
+import net.lifeupapp.app.ui.view.loadImageBitmap
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import ui.page.config.Spacer16dpH
-import ui.page.config.Spacer16dpW
-import ui.page.config.Spacer24dpH
-import ui.page.config.Subtitle
-import ui.view.AsyncImage
-import ui.view.loadImageBitmap
 
 @Composable
 fun AddTaskScreen(modifier: Modifier = Modifier, defaultCategoryId: Long, addSuccess: () -> Unit) {
@@ -293,7 +294,7 @@ private fun ItemIcon(selectedItem: ShopItem, size: Dp = 56.dp) {
         modifier = Modifier.size(size),
         onError = {
             Image(
-                painter = org.jetbrains.compose.resources.painterResource(Res.drawable.ic_pic_loading_cir),
+                painter = painterResource(Res.drawable.ic_pic_loading_cir),
                 contentDescription = "item icon",
                 modifier = Modifier.size(size)
             )
@@ -347,7 +348,7 @@ private fun SkillSelector(
                     }),
                     onError = {
                         Image(
-                            painter = org.jetbrains.compose.resources.painterResource(Res.drawable.ic_pic_loading_cir),
+                            painter = painterResource(Res.drawable.ic_pic_loading_cir),
                             contentDescription = "skill icon",
                             modifier = Modifier.size(60.dp),
                             colorFilter = if (selected) null else ColorFilter.colorMatrix(

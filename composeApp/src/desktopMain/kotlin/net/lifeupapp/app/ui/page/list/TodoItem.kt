@@ -1,7 +1,7 @@
 package net.lifeupapp.app.ui.page.list
 
-import datasource.data.Task
 import kotlinx.serialization.Serializable
+import net.lifeupapp.app.datasource.data.Task
 
 @Serializable
 data class TodoItem(

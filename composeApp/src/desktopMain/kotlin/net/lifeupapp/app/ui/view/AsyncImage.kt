@@ -1,4 +1,4 @@
-package ui.view
+package net.lifeupapp.app.ui.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable

@@ -1,4 +1,4 @@
-package base
+package net.lifeupapp.app.base
 
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient

@@ -1,4 +1,4 @@
-package ui.page.achievement
+package net.lifeupapp.app.ui.page.achievement
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.VerticalScrollbar
@@ -24,22 +24,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import datasource.data.Achievement
-import datasource.data.AchievementCategory
 import lifeupdesktop.composeapp.generated.resources.Res
 import lifeupdesktop.composeapp.generated.resources.ic_badge_v2_circle
-import logger
+import net.lifeupapp.app.datasource.data.Achievement
+import net.lifeupapp.app.datasource.data.AchievementCategory
+import net.lifeupapp.app.ui.page.config.Spacer4dpH
+import net.lifeupapp.app.ui.page.list.MARGIN_SCROLLBAR
+import net.lifeupapp.app.ui.page.list.rememberScrollbarAdapter
 import net.lifeupapp.app.ui.text.Localization.dateTimeFormatterWithNewLine
 import net.lifeupapp.app.ui.text.StringText
 import net.lifeupapp.app.ui.theme.subTitle3
 import net.lifeupapp.app.ui.theme.unimportantText
-import ui.page.config.Spacer4dpH
-import ui.page.list.MARGIN_SCROLLBAR
-import ui.page.list.rememberScrollbarAdapter
-import ui.view.AsyncImage
-import ui.view.loadImageBitmap
-import utils.getColorBetween
-import java.util.logging.Level
+import net.lifeupapp.app.ui.view.AsyncImage
+import net.lifeupapp.app.ui.view.loadImageBitmap
+import net.lifeupapp.app.utils.getColorBetween
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 internal fun AchievementContent(
@@ -143,8 +142,6 @@ private fun Item(
     ) {
         Spacer(modifier = Modifier.width(8.dp))
 
-
-        logger.log(Level.INFO, "item.icon: ${item.iconUri}")
         AsyncImage(
             condition = item.iconUri.isNotBlank(),
             load = {
@@ -157,7 +154,7 @@ private fun Item(
             modifier = Modifier.size(40.dp),
             onError = {
                 Image(
-                    painter = org.jetbrains.compose.resources.painterResource(Res.drawable.ic_badge_v2_circle),
+                    painter = painterResource(Res.drawable.ic_badge_v2_circle),
                     contentDescription = "skill icon",
                     modifier = Modifier.size(40.dp)
                 )
@@ -231,27 +228,6 @@ private fun Subcategory(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Spacer(modifier = Modifier.width(8.dp))
-
-//        logger.log(Level.INFO, "item.icon: ${item.iconUri}")
-//        AsyncImage(
-//            condition = item.iconUri.isNotBlank(),
-//            load = {
-//                loadImageBitmap(item.iconUri)
-//            },
-//            painterFor = {
-//                remember { BitmapPainter(it) }
-//            },
-//            contentDescription = "skill icon",
-//            modifier = Modifier.size(40.dp),
-//            onError = {
-//                Image(
-//                    painter = painterResource("icons/xml/ic_pic_loading_cir.xml"),
-//                    contentDescription = "skill icon",
-//                    modifier = Modifier.size(40.dp)
-//                )
-//            }
-//        )
-//
 
         Column(Modifier.weight(1F).align(Alignment.CenterVertically)) {
             Text(

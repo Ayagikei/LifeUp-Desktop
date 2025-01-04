@@ -3,27 +3,13 @@ package net.lifeupapp.app.ui.page.status
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredSizeIn
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -35,26 +21,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import datasource.data.Skill
-import lifeupdesktop.composeapp.generated.resources.Res
-import lifeupdesktop.composeapp.generated.resources.ic_attr_charm
-import lifeupdesktop.composeapp.generated.resources.ic_attr_creative
-import lifeupdesktop.composeapp.generated.resources.ic_attr_endurance
-import lifeupdesktop.composeapp.generated.resources.ic_attr_learning
-import lifeupdesktop.composeapp.generated.resources.ic_attr_strength
-import lifeupdesktop.composeapp.generated.resources.ic_attr_vitality
-import lifeupdesktop.composeapp.generated.resources.ic_coin
-import lifeupdesktop.composeapp.generated.resources.ic_pic_loading_cir
-import logger
+import lifeupdesktop.composeapp.generated.resources.*
+import net.lifeupapp.app.datasource.data.Skill
 import net.lifeupapp.app.ui.Strings
+import net.lifeupapp.app.ui.page.config.Spacer4dpH
+import net.lifeupapp.app.ui.page.list.MARGIN_SCROLLBAR
+import net.lifeupapp.app.ui.page.list.rememberScrollbarAdapter
 import net.lifeupapp.app.ui.theme.unimportantText
+import net.lifeupapp.app.ui.view.AsyncImage
+import net.lifeupapp.app.ui.view.loadImageBitmap
 import org.jetbrains.compose.resources.DrawableResource
-import ui.page.config.Spacer4dpH
-import ui.page.list.MARGIN_SCROLLBAR
-import ui.page.list.rememberScrollbarAdapter
-import ui.view.AsyncImage
-import ui.view.loadImageBitmap
-import java.util.logging.Level
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 internal fun StatusContent(
@@ -187,7 +164,6 @@ private fun Item(
                 modifier = Modifier.size(40.dp)
             )
         } else {
-            logger.log(Level.INFO, "item.icon: ${item.icon}")
             AsyncImage(
                 condition = item.icon.isNotBlank(),
                 load = {
@@ -200,7 +176,7 @@ private fun Item(
                 modifier = Modifier.size(40.dp),
                 onError = {
                     Image(
-                        painter = org.jetbrains.compose.resources.painterResource(Res.drawable.ic_pic_loading_cir),
+                        painter = painterResource(Res.drawable.ic_pic_loading_cir),
                         contentDescription = "skill icon",
                         modifier = Modifier.size(40.dp)
                     )
