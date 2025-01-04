@@ -30,6 +30,7 @@ import net.lifeupapp.app.datasource.data.Skill
 import net.lifeupapp.app.datasource.data.SubTask
 import net.lifeupapp.app.datasource.data.TaskCategory
 import net.lifeupapp.app.ui.view.AsyncImage
+import net.lifeupapp.app.ui.view.ClickableTextWithUrl
 import net.lifeupapp.app.ui.view.loadImageBitmap
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
@@ -287,7 +288,7 @@ private fun ItemDisplay(item: ShopItem, count: Int = 1) {
 private fun DetailItem(label: String, value: String) {
     Column(modifier = Modifier.padding(vertical = 4.dp)) {
         Text(label, style = MaterialTheme.typography.caption.copy(color = Color.Gray))
-        ClickableTextWithUrlDetection(value)
+        ClickableTextWithUrl(value)
     }
     Spacer(modifier = Modifier.height(8.dp))
 }

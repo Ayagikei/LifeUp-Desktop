@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import lifeupdesktop.composeapp.generated.resources.*
 import net.lifeupapp.app.datasource.data.TaskCategory
 import net.lifeupapp.app.ui.text.StringText
+import net.lifeupapp.app.ui.view.ClickableTextWithUrl
 import net.lifeupapp.app.ui.view.PageState
 import net.lifeupapp.app.ui.view.StateLayout
 import org.jetbrains.compose.resources.painterResource
@@ -175,10 +176,12 @@ private fun Task(
 
                 // 备注（如果有）
                 if (item.task.notes.isNotBlank()) {
-                    Text(
+                    ClickableTextWithUrl(
                         text = item.task.notes,
-                        style = MaterialTheme.typography.body2,
-                        color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
+                        style = MaterialTheme.typography.body2.copy(
+                            color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
+                        ),
+                        urlColor = MaterialTheme.colors.primary.copy(alpha = 0.5f),
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.padding(top = 4.dp)
