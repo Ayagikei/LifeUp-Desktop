@@ -1,5 +1,6 @@
 package net.lifeupapp.app.ui.page.list.add
 
+import SkillIcon
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -12,8 +13,6 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
@@ -37,7 +36,6 @@ import net.lifeupapp.app.ui.page.config.Subtitle
 import net.lifeupapp.app.ui.page.item.ShopStore
 import net.lifeupapp.app.ui.page.list.TaskStore
 import net.lifeupapp.app.ui.page.status.StatusStore
-import net.lifeupapp.app.ui.page.status.getLocalIconFilePathBySkillType
 import net.lifeupapp.app.ui.view.AsyncImage
 import net.lifeupapp.app.ui.view.loadImageBitmap
 import org.jetbrains.compose.resources.painterResource
@@ -318,46 +316,14 @@ private fun SkillSelector(
             val skill = skills[index]
             val selected = state.skills.contains(skill.id)
 
-            if (skill.type > Skill.SkillType.USER.type && skill.icon.isBlank()) {
-                Image(
-                    painter = org.jetbrains.compose.resources.painterResource(
-                        getLocalIconFilePathBySkillType(skill.type)
-                    ),
-                    contentDescription = "skill icon",
-                    colorFilter = if (selected) null else ColorFilter.colorMatrix(ColorMatrix().apply {
-                        setToSaturation(0f)
-                    }),
-                    modifier = Modifier.size(60.dp).padding(8.dp).clickable {
-                        onSkillSelected(skill.id!!, !selected)
-                    })
-            } else {
-                AsyncImage(
-                    condition = skill.icon.isNotBlank(),
-                    load = {
-                        loadImageBitmap(skill.icon)
-                    },
-                    painterFor = {
-                        remember { BitmapPainter(it) }
-                    },
-                    contentDescription = skill.name,
-                    modifier = Modifier.size(60.dp).padding(8.dp).clickable {
-                        onSkillSelected(skill.id!!, !selected)
-                    },
-                    colorFilter = if (selected) null else ColorFilter.colorMatrix(ColorMatrix().apply {
-                        setToSaturation(0f)
-                    }),
-                    onError = {
-                        Image(
-                            painter = painterResource(Res.drawable.ic_pic_loading_cir),
-                            contentDescription = "skill icon",
-                            modifier = Modifier.size(60.dp),
-                            colorFilter = if (selected) null else ColorFilter.colorMatrix(
-                                ColorMatrix().apply {
-                                    setToSaturation(0f)
-                                }),
-                        )
-                    })
-            }
+            SkillIcon(
+                skill = skill,
+                modifier = Modifier.size(60.dp).padding(8.dp),
+                selected = selected,
+                onClick = {
+                    onSkillSelected(skill.id!!, !selected)
+                }
+            )
         }
     }
 

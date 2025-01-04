@@ -1,5 +1,6 @@
 package net.lifeupapp.app.ui.page.list
 
+import SkillIcon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -22,7 +23,6 @@ import lifeupdesktop.composeapp.generated.resources.*
 import net.lifeupapp.app.datasource.data.ShopItem
 import net.lifeupapp.app.datasource.data.Skill
 import net.lifeupapp.app.datasource.data.TaskCategory
-import net.lifeupapp.app.ui.page.status.getLocalIconFilePathBySkillType
 import net.lifeupapp.app.ui.view.AsyncImage
 import net.lifeupapp.app.ui.view.loadImageBitmap
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -170,11 +170,7 @@ private fun SkillDisplay(skills: List<Skill>) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(end = 16.dp)
             ) {
-                Image(
-                    painter = painterResource(getLocalIconFilePathBySkillType(skill.type)),
-                    contentDescription = skill.name,
-                    modifier = Modifier.size(40.dp)
-                )
+                SkillIcon(skill)
                 Text(skill.name, style = MaterialTheme.typography.caption)
             }
         }

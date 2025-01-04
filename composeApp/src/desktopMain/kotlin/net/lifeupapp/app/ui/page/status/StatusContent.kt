@@ -1,5 +1,6 @@
 package net.lifeupapp.app.ui.page.status
 
+import SkillIcon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
@@ -11,27 +12,22 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import lifeupdesktop.composeapp.generated.resources.*
+import lifeupdesktop.composeapp.generated.resources.Res
+import lifeupdesktop.composeapp.generated.resources.ic_coin
 import net.lifeupapp.app.datasource.data.Skill
 import net.lifeupapp.app.ui.Strings
 import net.lifeupapp.app.ui.page.config.Spacer4dpH
 import net.lifeupapp.app.ui.page.list.MARGIN_SCROLLBAR
 import net.lifeupapp.app.ui.page.list.rememberScrollbarAdapter
 import net.lifeupapp.app.ui.theme.unimportantText
-import net.lifeupapp.app.ui.view.AsyncImage
-import net.lifeupapp.app.ui.view.loadImageBitmap
-import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.painterResource
 
 @Composable
 internal fun StatusContent(
@@ -143,6 +139,7 @@ private fun CoinRow(
     }
 }
 
+
 @Composable
 private fun Item(
     item: Skill,
@@ -155,34 +152,7 @@ private fun Item(
     ) {
         Spacer(modifier = Modifier.width(8.dp))
 
-        if (item.type > Skill.SkillType.USER.type && item.icon.isBlank()) {
-            Image(
-                painter = org.jetbrains.compose.resources.painterResource(
-                    getLocalIconFilePathBySkillType(item.type)
-                ),
-                contentDescription = "skill icon",
-                modifier = Modifier.size(40.dp)
-            )
-        } else {
-            AsyncImage(
-                condition = item.icon.isNotBlank(),
-                load = {
-                    loadImageBitmap(item.icon)
-                },
-                painterFor = {
-                    remember { BitmapPainter(it) }
-                },
-                contentDescription = "skill icon",
-                modifier = Modifier.size(40.dp),
-                onError = {
-                    Image(
-                        painter = painterResource(Res.drawable.ic_pic_loading_cir),
-                        contentDescription = "skill icon",
-                        modifier = Modifier.size(40.dp)
-                    )
-                }
-            )
-        }
+        SkillIcon(skill = item)
 
         Spacer(modifier = Modifier.width(8.dp))
 
@@ -235,14 +205,3 @@ private fun Item(
     }
 }
 
-fun getLocalIconFilePathBySkillType(type: Int): DrawableResource {
-    return when (type) {
-        Skill.SkillType.DEFAULT_CHARM.type -> Res.drawable.ic_attr_charm
-        Skill.SkillType.DEFAULT_CREATIVE.type -> Res.drawable.ic_attr_creative
-        Skill.SkillType.DEFAULT_ENDURANCE.type -> Res.drawable.ic_attr_endurance
-        Skill.SkillType.DEFAULT_LEARNING.type -> Res.drawable.ic_attr_learning
-        Skill.SkillType.DEFAULT_STRENGTH.type -> Res.drawable.ic_attr_strength
-        Skill.SkillType.DEFAULT_VITALITY.type -> Res.drawable.ic_attr_vitality
-        else -> Res.drawable.ic_pic_loading_cir
-    }
-}
