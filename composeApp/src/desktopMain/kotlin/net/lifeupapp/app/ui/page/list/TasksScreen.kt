@@ -33,18 +33,14 @@ fun TasksScreen(modifier: Modifier = Modifier) {
         }
     }
 
-    MainContent(
+    TaskContent(
         modifier = modifier,
         items = state.items,
         categoryExpanded = state.categoryExpanded,
         categories = state.categories,
         selectedCategory = state.categories.find { it.id == state.currentCategoryId && it.id != null },
-        inputText = state.inputText,
         onItemClicked = model::onItemClicked,
         onItemDoneChanged = model::onItemDoneChanged,
-        onItemDeleteClicked = model::onItemDeleteClicked,
-        onAddItemClicked = model::onAddItemClicked,
-        onInputTextChanged = model::onInputTextChanged,
         onCategoryClicked = model::onCategoryClicked,
         onCategoryExpended = model::onCategoryExpended,
         onCategoryDismissed = model::onCategoryDismissed,
@@ -114,6 +110,3 @@ private fun showAddDialog(
         )
     }
 }
-
-private fun List<TodoItem>.firstById(id: Long): TodoItem =
-    first { it.id == id }

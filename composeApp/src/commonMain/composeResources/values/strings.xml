@@ -144,4 +144,6 @@
     <string name="task_details_coin_reward">%1$d Coins</string>
     <string name="task_details_item_count_reward">%1$d Items</string>
     <string name="task_details_item_count">x%1$d</string>
+    <string name="task_details_more_subtasks">+%1$d more</string>
+
 </resources>

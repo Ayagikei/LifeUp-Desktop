@@ -144,4 +144,5 @@
     <string name="task_details_coin_reward">%1$d 金币</string>
     <string name="task_details_item_count_reward">%1$d 个物品</string>
     <string name="task_details_item_count">x%1$d</string>
+    <string name="task_details_more_subtasks">还有 %1$d 个</string>
 </resources>
