@@ -18,13 +18,11 @@ data class ShopCategory(
         private var sort: String = ""
         private var order: Int = 0
 
-
         fun setId(id: Long?) = apply { this.id = id }
         fun setName(name: String) = apply { this.name = name }
         fun setIsAsc(isAsc: Boolean) = apply { this.isAsc = isAsc }
         fun setSort(sort: String) = apply { this.sort = sort }
         fun setOrder(order: Int) = apply { this.order = order }
-
 
         fun build(): ShopCategory {
             return ShopCategory(

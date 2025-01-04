@@ -1,6 +1,5 @@
 package net.lifeupapp.app.datasource.data
 
-
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -14,9 +13,11 @@ data class Feelings(
     val type: Int
 ) {
 
+    @Suppress("unused")
     enum class FeelingType(val value: Int) {
         TASKS(0),
-        ACHIEVEMENTS(1)
+        ACHIEVEMENTS(1),
+        TYPE_RAW(2)
     }
 
     class Builder {

@@ -2,7 +2,6 @@ package net.lifeupapp.app.datasource.data
 
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 data class ShopItem(
     val id: Long?,
@@ -41,7 +40,8 @@ data class ShopItem(
         fun setDisablePurchase(disablePurchase: Boolean) =
             apply { this.disablePurchase = disablePurchase }
 
-        fun setMaxPurchaseNumber(maxPurchaseNumber: Int?) = apply { this.maxPurchaseNumber = maxPurchaseNumber }
+        fun setMaxPurchaseNumber(maxPurchaseNumber: Int?) =
+            apply { this.maxPurchaseNumber = maxPurchaseNumber }
 
         fun build(): ShopItem {
             return ShopItem(

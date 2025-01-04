@@ -31,7 +31,6 @@ data class AchievementCategory(
         private var order: Int = 0
         private var type: Int = 0
 
-
         fun setId(id: Long?) = apply { this.id = id }
         fun setName(name: String) = apply { this.name = name }
         fun setDesc(notes: String) = apply { this.desc = notes }
@@ -41,7 +40,6 @@ data class AchievementCategory(
         fun setFilter(filter: String) = apply { this.filter = filter }
         fun setOrder(order: Int) = apply { this.order = order }
         fun setType(type: Int) = apply { this.type = type }
-
 
         fun build(): AchievementCategory {
             return AchievementCategory(

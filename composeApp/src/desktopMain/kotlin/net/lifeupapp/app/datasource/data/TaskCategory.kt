@@ -2,7 +2,6 @@ package net.lifeupapp.app.datasource.data
 
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 data class TaskCategory(
     val id: Long?,
@@ -24,7 +23,6 @@ data class TaskCategory(
         private var status: Int = 0
         private var type: Int = 0
 
-
         fun setId(id: Long?) = apply { this.id = id }
         fun setName(name: String) = apply { this.name = name }
         fun setIsAsc(isAsc: Boolean) = apply { this.isAsc = isAsc }
@@ -33,7 +31,6 @@ data class TaskCategory(
         fun setOrder(order: Int) = apply { this.order = order }
         fun setStatus(status: Int) = apply { this.status = status }
         fun setType(type: Int) = apply { this.type = type }
-
 
         fun build(): TaskCategory {
             return TaskCategory(

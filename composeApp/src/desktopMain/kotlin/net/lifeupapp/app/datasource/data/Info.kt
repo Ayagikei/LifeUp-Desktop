@@ -2,7 +2,6 @@ package net.lifeupapp.app.datasource.data
 
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 data class Info(
     val appVersion: Int,
@@ -15,7 +14,9 @@ data class Info(
         private var apiVersion: Int = 0
 
         fun setAppVersion(appVersion: Int) = apply { this.appVersion = appVersion }
-        fun setAppVersionName(appVersionName: String) = apply { this.appVersionName = appVersionName }
+        fun setAppVersionName(appVersionName: String) =
+            apply { this.appVersionName = appVersionName }
+
         fun setApiVersion(apiVersion: Int) = apply { this.apiVersion = apiVersion }
 
         fun build(): Info {
