@@ -22,10 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import lifeupdesktop.composeapp.generated.resources.Res
-import lifeupdesktop.composeapp.generated.resources.download_24px
-import lifeupdesktop.composeapp.generated.resources.ic_coin
-import lifeupdesktop.composeapp.generated.resources.ic_pic_loading_cir
+import lifeupdesktop.composeapp.generated.resources.*
 import net.lifeupapp.app.datasource.data.Feelings
 import net.lifeupapp.app.ui.page.config.Spacer4dpH
 import net.lifeupapp.app.ui.page.config.Spacer8dpH
@@ -40,6 +37,7 @@ import net.lifeupapp.app.ui.view.PageState
 import net.lifeupapp.app.ui.view.StateLayout
 import net.lifeupapp.app.ui.view.loadImageBitmap
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 
 @Composable
@@ -71,7 +69,7 @@ internal fun FeelingsContent(
         Box(Modifier.weight(1F)) {
             StateLayout(
                 state = pageState,
-                emptyText = "暂无感想 📝\n点击右上角记录新的感想吧！",
+                emptyText = stringResource(Res.string.empty_feelings),
                 modifier = Modifier.fillMaxSize()
             ) {
                 ListContent(

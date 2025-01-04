@@ -87,7 +87,7 @@ internal fun TaskContent(
         Box(Modifier.weight(1F)) {
             StateLayout(
                 state = pageState,
-                emptyText = "暂无任务 📝\n点击右上角添加新任务吧！",
+                emptyText = stringResource(Res.string.empty_tasks),
                 modifier = Modifier.fillMaxSize()
             ) {
                 TaskListContent(
@@ -228,7 +228,7 @@ private fun Task(
                         }
 
                         // 优化子任务剩余数量显示
-                        if (item.task.subTasks.size > 3) {
+                        if (item.task.subTasks.size > 15) {
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -246,9 +246,9 @@ private fun Task(
                                 Text(
                                     text = stringResource(
                                         Res.string.task_details_more_subtasks,
-                                        item.task.subTasks.size - 3
+                                        item.task.subTasks.size - 15
                                     ),
-                                    style = MaterialTheme.typography.body2,
+                                    style = MaterialTheme.typography.caption,
                                     color = MaterialTheme.colors.primary.copy(alpha = 0.8f),
                                     modifier = Modifier.padding(start = 8.dp)
                                 )

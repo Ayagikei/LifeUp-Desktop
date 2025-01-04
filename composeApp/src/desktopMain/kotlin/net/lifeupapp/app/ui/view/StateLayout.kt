@@ -10,6 +10,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import lifeupdesktop.composeapp.generated.resources.Res
+import lifeupdesktop.composeapp.generated.resources.empty_tasks
+import lifeupdesktop.composeapp.generated.resources.state_error
+import lifeupdesktop.composeapp.generated.resources.state_loading
+import org.jetbrains.compose.resources.stringResource
 
 sealed class PageState {
     data object Loading : PageState()
@@ -22,7 +27,7 @@ sealed class PageState {
 fun StateLayout(
     state: PageState,
     modifier: Modifier = Modifier,
-    emptyText: String = "暂无数据 🤔",
+    emptyText: String = stringResource(Res.string.empty_tasks),
     content: @Composable () -> Unit
 ) {
     Box(
@@ -38,7 +43,7 @@ fun StateLayout(
                     CircularProgressIndicator()
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        "加载中... ⏳",
+                        stringResource(Res.string.state_loading),
                         color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
                         fontSize = 14.sp
                     )
@@ -67,7 +72,7 @@ fun StateLayout(
                     modifier = Modifier.padding(32.dp)
                 ) {
                     Text(
-                        "出错啦 😢\n${state.message}",
+                        stringResource(Res.string.state_error, state.message),
                         color = MaterialTheme.colors.error,
                         fontSize = 16.sp,
                         textAlign = TextAlign.Center

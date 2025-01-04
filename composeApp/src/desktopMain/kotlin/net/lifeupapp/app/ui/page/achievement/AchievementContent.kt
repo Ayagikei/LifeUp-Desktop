@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import lifeupdesktop.composeapp.generated.resources.Res
+import lifeupdesktop.composeapp.generated.resources.empty_achievements
 import lifeupdesktop.composeapp.generated.resources.ic_badge_v2_circle
 import net.lifeupapp.app.datasource.data.Achievement
 import net.lifeupapp.app.datasource.data.AchievementCategory
@@ -41,6 +42,7 @@ import net.lifeupapp.app.ui.view.StateLayout
 import net.lifeupapp.app.ui.view.loadImageBitmap
 import net.lifeupapp.app.utils.getColorBetween
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun AchievementContent(
@@ -94,7 +96,7 @@ internal fun AchievementContent(
         Box(Modifier.weight(1F)) {
             StateLayout(
                 state = pageState,
-                emptyText = "暂无成就 🏆\n继续努力吧！",
+                emptyText = stringResource(Res.string.empty_achievements),
                 modifier = Modifier.fillMaxSize()
             ) {
                 ListContent(

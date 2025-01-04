@@ -139,4 +139,14 @@
     <string name="purchase_item_not_found">🔍 物品未找到</string>
     <string name="purchase_and_use_success">✅ 购买并使用成功</string>
     <string name="purchase_success_use_failure">⚠️ 购买成功，但使用失败</string>
+    <!-- State Layout -->
+    <string name="state_loading">加载中... ⏳</string>
+    <string name="state_error">出错啦 😢\n%1$s</string>
+
+    <!-- Empty States -->
+    <string name="empty_tasks">暂无任务 📝\n点击右上角添加新任务吧！</string>
+    <string name="empty_skills">暂无技能 🎯\n快去完成任务升级吧！</string>
+    <string name="empty_shop">暂无商品 🛍️\n敬请期待更多商品上架！</string>
+    <string name="empty_feelings">暂无感想 📝\n点击右上角记录新的感想吧！</string>
+    <string name="empty_achievements">暂无成就 🏆\n继续努力吧！</string>
 </resources>

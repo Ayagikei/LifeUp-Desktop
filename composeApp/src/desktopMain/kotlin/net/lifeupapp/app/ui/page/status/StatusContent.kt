@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import lifeupdesktop.composeapp.generated.resources.Res
+import lifeupdesktop.composeapp.generated.resources.empty_skills
 import lifeupdesktop.composeapp.generated.resources.ic_coin
 import net.lifeupapp.app.datasource.data.Skill
 import net.lifeupapp.app.ui.Strings
@@ -30,6 +31,7 @@ import net.lifeupapp.app.ui.page.list.rememberScrollbarAdapter
 import net.lifeupapp.app.ui.theme.unimportantText
 import net.lifeupapp.app.ui.view.PageState
 import net.lifeupapp.app.ui.view.StateLayout
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun StatusContent(
@@ -58,7 +60,7 @@ internal fun StatusContent(
         Box(Modifier.weight(1F)) {
             StateLayout(
                 state = pageState,
-                emptyText = "暂无技能 🎯\n快去完成任务升级吧！",
+                emptyText = stringResource(Res.string.empty_skills),
                 modifier = Modifier.fillMaxSize()
             ) {
                 ListContent(

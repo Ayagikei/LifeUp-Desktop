@@ -145,5 +145,15 @@
     <string name="task_details_item_count_reward">%1$d Items</string>
     <string name="task_details_item_count">x%1$d</string>
     <string name="task_details_more_subtasks">+%1$d more</string>
+    <!-- State Layout -->
+    <string name="state_loading">Loading... ⏳</string>
+    <string name="state_error">Error 😢\n%1$s</string>
+
+    <!-- Empty States -->
+    <string name="empty_tasks">No tasks 📝\nClick the plus button to add a new task!</string>
+    <string name="empty_skills">No skills 🎯\nComplete tasks to level up!</string>
+    <string name="empty_shop">No items 🛍️\nStay tuned for more items!</string>
+    <string name="empty_feelings">No feelings 📝\nClick the plus button to record your feelings!</string>
+    <string name="empty_achievements">No achievements 🏆\nKeep going!</string>
 
 </resources>

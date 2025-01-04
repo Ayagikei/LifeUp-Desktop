@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import lifeupdesktop.composeapp.generated.resources.Res
+import lifeupdesktop.composeapp.generated.resources.empty_shop
 import lifeupdesktop.composeapp.generated.resources.ic_coin
 import lifeupdesktop.composeapp.generated.resources.ic_pic_loading_cir
 import net.lifeupapp.app.datasource.data.ShopCategory
@@ -38,6 +39,7 @@ import net.lifeupapp.app.ui.view.PageState
 import net.lifeupapp.app.ui.view.StateLayout
 import net.lifeupapp.app.ui.view.loadImageBitmap
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun ShopContent(
@@ -93,7 +95,7 @@ internal fun ShopContent(
         Box(Modifier.weight(1F)) {
             StateLayout(
                 state = pageState,
-                emptyText = "暂无商品 🛍️\n敬请期待更多商品上架！",
+                emptyText = stringResource(Res.string.empty_shop),
                 modifier = Modifier.fillMaxSize()
             ) {
                 ListContent(
