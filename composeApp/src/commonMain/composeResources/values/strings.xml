@@ -127,6 +127,7 @@
     <string name="feelings_input_delete_image">Delete Image</string>
     <string name="feelings_input_select_images">Select Images</string>
     <string name="api_check_network_error">Network connection failed. Please check your network, IP address, or port configuration</string>
+    <string name="connection_lost_error">There is no connection to the LifeCloud server.\nPlease go to the Settings and check if the IP address is correct and if you are connected to the same network.</string>
     <string name="api_check_auth_error">Authentication failed. Please check your API Token</string>
     <string name="api_check_lifeup_not_running">✅Connected to LifeUp Cloud app\n\n❌Unable to connect to LifeUp app.\n\nPlease make sure LifeUp app is running in the background.</string>
     <string name="api_check_unknown_error">Unknown error (code: %1$d)</string>
